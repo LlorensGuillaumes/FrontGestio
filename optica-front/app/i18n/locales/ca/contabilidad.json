@@ -1,0 +1,24 @@
+{
+  "title": "Comptabilitat",
+  "cashRegister": {
+    "title": "Caixa",
+    "movements": "Moviments",
+    "income": "Ingres",
+    "expense": "Despesa",
+    "balance": "Saldo",
+    "opening": "Obertura",
+    "closing": "Tancament"
+  },
+  "salesInvoices": {
+    "title": "Factures de Venda"
+  },
+  "purchaseInvoices": {
+    "title": "Factures de Compra"
+  },
+  "fields": {
+    "date": "Data",
+    "concept": "Concepte",
+    "amount": "Import",
+    "paymentMethod": "Mode de pagament"
+  }
+}

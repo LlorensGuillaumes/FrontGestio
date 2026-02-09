@@ -1,0 +1,91 @@
+{
+  "title": "Productes",
+  "newProduct": "Nou Producte",
+  "editProduct": "Editar Producte",
+  "detailProduct": "Detall Producte",
+  "fields": {
+    "code": "Codi",
+    "name": "Nom",
+    "description": "Descripcio",
+    "pvp": "PVP",
+    "stock": "Estoc",
+    "initialStock": "Estoc inicial",
+    "minStock": "Estoc Minim",
+    "brand": "Marca",
+    "noBrand": "Sense marca",
+    "vatType": "Tipus IVA",
+    "location": "Ubicacio",
+    "observations": "Observacions",
+    "activeProduct": "Producte actiu",
+    "familiesSubfamilies": "Families / Subfamilies"
+  },
+  "vat": {
+    "general": "21% General",
+    "reduced": "10% Reduit",
+    "superReduced": "4% Superreduit",
+    "exempt": "0% Exempt"
+  },
+  "suppliers": {
+    "title": "Proveidors",
+    "selectSupplier": "Seleccionar proveidor...",
+    "reference": "Referencia",
+    "price": "Preu",
+    "noSuppliers": "Sense proveidors assignats"
+  },
+  "messages": {
+    "nameRequired": "El nom es obligatori"
+  },
+  "families": {
+    "title": "Families",
+    "subfamilies": "Subfamilies"
+  },
+  "stock": {
+    "title": "Estoc"
+  },
+  "stockMovements": {
+    "title": "Historial de Moviments",
+    "currentStock": "Estoc actual",
+    "loading": "Carregant historial...",
+    "errorLoading": "Error carregant historial",
+    "noMovements": "No hi ha moviments registrats",
+    "date": "Data",
+    "type": "Tipus",
+    "quantity": "Quantitat",
+    "stock": "Estoc",
+    "source": "Origen",
+    "movementsCount": "{{count}} moviment registrat",
+    "movementsCountPlural": "{{count}} moviments registrats"
+  },
+  "catalog": {
+    "title": "Gestionar Cataleg de Productes",
+    "subtitle": "Families, subfamilies i marques",
+    "familiesAndSubfamilies": "Families i Subfamilies",
+    "brands": "Marques",
+    "families": "Families",
+    "subfamilies": "Subfamilies",
+    "searchFamily": "Cercar familia...",
+    "searchSubfamily": "Cercar subfamilia...",
+    "searchBrand": "Cercar marca...",
+    "newFamily": "Nova familia...",
+    "newSubfamily": "Nova subfamilia...",
+    "newBrand": "Nova marca...",
+    "editName": "Editar nom...",
+    "selectFamily": "Selecciona una familia",
+    "noFamilies": "Sense families",
+    "noSubfamilies": "Sense subfamilies",
+    "noBrands": "Sense marques",
+    "confirmDeleteFamily": "Eliminar aquesta familia?",
+    "confirmDeleteSubfamily": "Eliminar aquesta subfamilia?",
+    "confirmDeleteBrand": "Eliminar aquesta marca?",
+    "errorLoading": "Error carregant dades",
+    "errorCreatingFamily": "Error creant familia",
+    "errorUpdatingFamily": "Error actualitzant familia",
+    "errorDeletingFamily": "Error eliminant familia",
+    "errorCreatingSubfamily": "Error creant subfamilia",
+    "errorUpdatingSubfamily": "Error actualitzant subfamilia",
+    "errorDeletingSubfamily": "Error eliminant subfamilia",
+    "errorCreatingBrand": "Error creant marca",
+    "errorUpdatingBrand": "Error actualitzant marca",
+    "errorDeletingBrand": "Error eliminant marca"
+  }
+}

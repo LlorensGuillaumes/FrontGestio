@@ -1,0 +1,24 @@
+{
+  "title": "Contabilidad",
+  "cashRegister": {
+    "title": "Caja",
+    "movements": "Movimientos",
+    "income": "Ingreso",
+    "expense": "Gasto",
+    "balance": "Saldo",
+    "opening": "Apertura",
+    "closing": "Cierre"
+  },
+  "salesInvoices": {
+    "title": "Facturas de Venta"
+  },
+  "purchaseInvoices": {
+    "title": "Facturas de Compra"
+  },
+  "fields": {
+    "date": "Fecha",
+    "concept": "Concepto",
+    "amount": "Importe",
+    "paymentMethod": "Modo de pago"
+  }
+}

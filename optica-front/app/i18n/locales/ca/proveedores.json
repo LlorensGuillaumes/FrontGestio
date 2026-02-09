@@ -1,0 +1,70 @@
+{
+  "title": "Proveidors",
+  "newSupplier": "Nou Proveidor",
+  "editSupplier": "Editar Proveidor",
+  "supplierDetail": "Detall Proveidor",
+  "supplierFile": "Fitxa de proveidor",
+  "fields": {
+    "name": "Nom",
+    "nameRequired": "Nom *",
+    "fiscalDocument": "Document fiscal",
+    "commercialName": "Nom comercial",
+    "nif": "NIF/CIF",
+    "address": "Adreca",
+    "postalCode": "C.P.",
+    "city": "Poblacio",
+    "province": "Provincia",
+    "country": "Pais",
+    "phone": "Telefon",
+    "phones": "Telefons",
+    "email": "Correu electronic",
+    "web": "Web",
+    "contact": "Persona de contacte",
+    "contacts": "Contactes",
+    "contactName": "Nom",
+    "contactPosition": "Carrec",
+    "observations": "Observacions",
+    "active": "Actiu",
+    "families": "Families / Subfamilies"
+  },
+  "phoneTypes": {
+    "main": "Principal",
+    "mobile": "Mobil",
+    "fax": "Fax"
+  },
+  "empty": {
+    "noSuppliers": "No hi ha proveidors.",
+    "noSuppliersFiltered": "No s'han trobat proveidors amb aquests filtres.",
+    "noPhones": "Sense telefons",
+    "noContacts": "Sense contactes"
+  },
+  "messages": {
+    "loading": "Carregant...",
+    "errorLoading": "Error carregant proveidor",
+    "errorSaving": "Error desant proveidor"
+  },
+  "catalog": {
+    "title": "Gestionar Families de Proveidors",
+    "subtitle": "Alta de families i subfamilies de proveidors.",
+    "families": "Families",
+    "subfamilies": "Subfamilies",
+    "addFamily": "+ Afegir familia",
+    "addSubfamily": "+ Afegir subfamilia",
+    "searchFamily": "Cercar familia...",
+    "searchSubfamily": "Cercar subfamilia...",
+    "noFamilies": "Sense families.",
+    "selectFamily": "Selecciona una familia.",
+    "noSubfamiliesInFamily": "No hi ha subfamilies en aquesta familia.",
+    "addFamiliesTitle": "Afegir families",
+    "addFamiliesSubtitle": "Pots afegir diverses de cop.",
+    "addSubfamiliesTitle": "Afegir subfamilies",
+    "addSubfamiliesSubtitle": "Es crearan dins de la familia seleccionada.",
+    "name": "Nom",
+    "familyPlaceholder": "Ex: Lents, Muntures, Accessoris...",
+    "subfamilyPlaceholder": "Ex: Progressives, Monofocals...",
+    "errorLoading": "Error carregant dades",
+    "errorCreatingFamilies": "Error creant families",
+    "errorCreatingSubfamilies": "Error creant subfamilies",
+    "selectFamilyFirst": "Selecciona una familia abans de crear subfamilies."
+  }
+}

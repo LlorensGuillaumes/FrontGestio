@@ -1,0 +1,144 @@
+{
+  "buttons": {
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "new": "Nuevo",
+    "edit": "Editar",
+    "modify": "Modificar",
+    "delete": "Eliminar",
+    "search": "Buscar",
+    "apply": "Aplicar",
+    "clear": "Limpiar",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "loadMore": "Cargar mas",
+    "add": "Anadir",
+    "manage": "Gestionar",
+    "print": "Imprimir",
+    "downloadPdf": "Descargar PDF",
+    "send": "Enviar",
+    "retry": "Reintentar"
+  },
+  "messages": {
+    "loading": "Cargando...",
+    "noResults": "No se encontraron resultados.",
+    "noRecords": "No hay registros.",
+    "error": "Error",
+    "errorLoading": "Error cargando datos",
+    "errorSaving": "Error guardando",
+    "confirmDelete": "Esta seguro de eliminar?",
+    "confirmDeleteDetail": "Esta accion no se puede deshacer.",
+    "success": "Exito",
+    "required": "Obligatorio"
+  },
+  "pagination": {
+    "page": "Pagina {{current}} de {{total}}",
+    "showing": "Mostrando {{count}} de {{total}}",
+    "items": "{{count}} elementos"
+  },
+  "filters": {
+    "all": "Todos",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "enabled": "Activado"
+  },
+  "fields": {
+    "name": "Nombre",
+    "description": "Descripcion",
+    "code": "Codigo",
+    "date": "Fecha",
+    "status": "Estado",
+    "type": "Tipo",
+    "total": "Total",
+    "price": "Precio",
+    "quantity": "Cantidad",
+    "observations": "Observaciones",
+    "address": "Direccion",
+    "postalCode": "Codigo postal",
+    "city": "Poblacion",
+    "country": "Pais",
+    "phone": "Telefono",
+    "phones": "Telefonos",
+    "email": "Email",
+    "extension": "Extension",
+    "optional": "Opcional",
+    "main": "Principal",
+    "reference": "Referencia"
+  },
+  "modes": {
+    "reading": "Modo lectura",
+    "editing": "Modo edicion",
+    "creating": "Modo creacion"
+  },
+  "person": {
+    "person": "Persona",
+    "company": "Empresa"
+  },
+  "statuses": {
+    "pending": "PENDIENTE",
+    "confirmed": "CONFIRMADO",
+    "inProcess": "EN_PROCESO",
+    "ready": "LISTO",
+    "delivered": "ENTREGADO",
+    "expired": "CADUCADO"
+  },
+  "language": {
+    "language": "Idioma",
+    "spanish": "Castellano",
+    "catalan": "Catalan"
+  },
+  "pdf": {
+    "documentGenerated": "Documento generado el {{date}} a las {{time}}",
+    "clientData": "Datos del Cliente",
+    "clientSignature": "Firma del cliente:",
+    "companySignature": "Firma empresa:",
+    "agree": "Conforme",
+    "observations": "Observaciones",
+    "graduation": "Graduacion",
+    "validUntil": "Valido hasta: {{date}} ({{days}} dias)",
+    "expectedDelivery": "Fecha prevista entrega: {{date}}",
+    "orderRef": "Ref. Encargo: {{ref}}",
+    "associatedAdvanceInvoice": "Factura de anticipo asociada:",
+    "advanceNote": "Este anticipo se descontara de la factura final al entregar el pedido."
+  },
+  "table": {
+    "description": "Descripcion",
+    "quantity": "Cant.",
+    "price": "Precio",
+    "discount": "Dto%",
+    "vat": "IVA%",
+    "amount": "Importe",
+    "code": "Codigo"
+  },
+  "totals": {
+    "taxBase": "Base Imponible:",
+    "vat": "IVA:",
+    "vatPercent": "IVA ({{percent}}%):",
+    "total": "TOTAL:",
+    "totalInvoice": "TOTAL FACTURA:",
+    "appliedDiscounts": "Descuentos aplicados:",
+    "previousAdvance": "Anticipo previo:",
+    "pendingPayment": "PENDIENTE DE PAGO:",
+    "pending": "PENDIENTE:",
+    "advancePayment": "Pago a cuenta:"
+  },
+  "verifactu": {
+    "notSent": "No enviada",
+    "pending": "Pendiente",
+    "accepted": "Aceptado",
+    "rejected": "Rechazado",
+    "error": "Error",
+    "sendError": "Error en el envio",
+    "errorSending": "Error al enviar"
+  },
+  "listEditor": {
+    "element": "Elemento {{number}}",
+    "remove": "Quitar",
+    "add": "+ Anadir",
+    "noChanges": "Sin cambios",
+    "pendingChanges": "Cambios pendientes"
+  },
+  "loading": "Cargando..."
+}

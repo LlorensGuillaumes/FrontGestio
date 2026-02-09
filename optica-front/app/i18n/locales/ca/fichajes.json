@@ -1,0 +1,80 @@
+{
+  "title": "Fitxar",
+  "fichar": "Fitxar",
+  "entrada": "ENTRADA",
+  "salida": "SORTIDA",
+  "usuario": "Usuari",
+  "password": "Contrasenya",
+  "usernamePlaceholder": "El teu nom d'usuari",
+  "passwordPlaceholder": "La teva contrasenya",
+  "cancelar": "Cancel·lar",
+  "fichando": "Fitxant...",
+  "ficharEntrada": "Fitxar entrada",
+  "ficharSalida": "Fitxar sortida",
+  "vasAFichar": "Vas a fitxar",
+  "horasHoy": "Hores treballades avui",
+  "cambiar": "Canviar",
+  "advertencias": "Advertències",
+  "entradaRegistrada": "Entrada registrada",
+  "salidaRegistrada": "Sortida registrada",
+  "closeAuto": "Aquesta finestra es tancarà automàticament...",
+  "errorEmptyFields": "Introdueix usuari i contrasenya",
+  "errorInvalidCredentials": "Usuari o contrasenya incorrectes",
+  "errorConnection": "Error de connexió",
+
+  "gestion": {
+    "title": "Gestió de Fitxatges",
+    "listado": "Llistat de Fitxatges",
+    "resumen": "Resum Mensual",
+    "filtros": {
+      "fechaDesde": "Des de",
+      "fechaHasta": "Fins a",
+      "usuario": "Usuari",
+      "tipo": "Tipus",
+      "todos": "Tots",
+      "soloAdvertencias": "Només amb advertències"
+    },
+    "tabla": {
+      "usuario": "Usuari",
+      "fecha": "Data",
+      "hora": "Hora",
+      "tipo": "Tipus",
+      "advertencias": "Advertències",
+      "acciones": "Accions",
+      "correccion": "Correcció",
+      "motivoCorreccion": "Motiu"
+    },
+    "acciones": {
+      "editar": "Editar",
+      "eliminar": "Eliminar",
+      "crearManual": "Crear fitxatge manual"
+    },
+    "modal": {
+      "corregirTitulo": "Corregir Fitxatge",
+      "crearTitulo": "Crear Fitxatge Manual",
+      "hora": "Hora",
+      "tipo": "Tipus",
+      "motivo": "Motiu de la correcció",
+      "motivoPlaceholder": "Indica el motiu de la correcció...",
+      "guardar": "Desar",
+      "cancelar": "Cancel·lar"
+    },
+    "resumenMensual": {
+      "mes": "Mes",
+      "anyo": "Any",
+      "horasTrabajadas": "Hores Treballades",
+      "diasTrabajados": "Dies Treballats",
+      "incompletos": "Fitxatges Incomplets",
+      "advertenciasCount": "Advertències"
+    },
+    "mensajes": {
+      "corregido": "Fitxatge corregit correctament",
+      "eliminado": "Fitxatge eliminat correctament",
+      "creado": "Fitxatge creat correctament",
+      "errorCargar": "Error en carregar els fitxatges",
+      "errorCorregir": "Error en corregir el fitxatge",
+      "errorEliminar": "Error en eliminar el fitxatge",
+      "errorCrear": "Error en crear el fitxatge"
+    }
+  }
+}

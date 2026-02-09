@@ -1,0 +1,139 @@
+{
+  "title": "Configuracio",
+  "professionals": {
+    "title": "Professionals",
+    "newProfessional": "Nou professional",
+    "editProfessional": "Editar professional"
+  },
+  "services": {
+    "title": "Serveis",
+    "newService": "Nou servei",
+    "editService": "Editar servei"
+  },
+  "users": {
+    "title": "Usuaris",
+    "newUser": "Nou usuari",
+    "editUser": "Editar usuari"
+  },
+  "paymentMethods": {
+    "title": "Modes de pagament",
+    "newMethod": "Nou mode de pagament",
+    "editMethod": "Editar mode de pagament"
+  },
+  "company": {
+    "title": "Dades Empresa",
+    "companyName": "Nom de l'empresa",
+    "fiscalName": "Nom fiscal",
+    "cif": "CIF",
+    "address": "Adreca",
+    "phone": "Telefon",
+    "email": "Correu electronic"
+  },
+  "aeat": {
+    "title": "AEAT / VeriFactu"
+  },
+  "databases": {
+    "title": "Gestio de Bases de Dades",
+    "subtitle": "Administra les bases de dades del sistema (botigues/empreses)",
+    "onlyMaster": "Nomes Master",
+    "tabs": {
+      "databases": "Bases de Dades",
+      "schemas": "Sincronitzar Esquemes"
+    },
+    "detectDbs": "Detectar DBs",
+    "syncing": "Sincronitzant...",
+    "newDatabase": "Nova Base de Dades",
+    "postgresInfo": "Bases de dades a PostgreSQL amb prefix \"gestio_db\"",
+    "noneDetected": "Cap detectada",
+    "registeredDatabases": "Bases de dades registrades",
+    "inactiveHidden": "inactives ocultes",
+    "showInactive": "Mostrar inactives",
+    "name": "Nom",
+    "dbName": "DB Name",
+    "host": "Host",
+    "invoiceSeries": "Serie Fact.",
+    "status": "Estat",
+    "actions": "Accions",
+    "active": "Activa",
+    "inactive": "Inactiva",
+    "reactivate": "Reactivar",
+    "editName": "Editar nom",
+    "deletePermantently": "Eliminar permanentment",
+    "save": "Desar",
+    "cancel": "Cancellar",
+    "noDatabases": "No hi ha bases de dades registrades",
+    "noActiveDatabases": "No hi ha bases de dades actives",
+    "howItWorks": "Com funciona",
+    "helpDetect": "Detecta bases de dades a PostgreSQL amb prefix \"gestio_db\" i les registra automaticament",
+    "helpNew": "Crea una copia de gestio_db amb un nou sufix (ex: gestio_db02)",
+    "helpDeactivate": "Oculta la base de dades del llistat sense eliminar dades (es pot reactivar)",
+    "helpDelete": "Esborra permanentment la base de dades i totes les seves dades (requereix contrasenya)",
+    "helpSeries": "Es configura des de \"Dades Empresa\" de cada botiga",
+    "createModal": {
+      "title": "Nova Base de Dades",
+      "subtitle": "Crear una copia de gestio_db",
+      "suffix": "Sufix",
+      "suffixPlaceholder": "02, bcn, nord...",
+      "result": "Resultat",
+      "descriptiveName": "Nom descriptiu",
+      "namePlaceholder": "Optica Barcelona, Sucursal Nord...",
+      "note": "Es creara una copia de l'estructura de gestio_db (taules, indexs, etc.) sense dades. La nova base de dades estara completament buida i llesta per utilitzar.",
+      "creating": "Creant...",
+      "create": "Crear Base de Dades"
+    },
+    "deleteModal": {
+      "title": "Eliminar Base de Dades",
+      "subtitle": "Aquesta accio es irreversible",
+      "warning": "Eliminaras permanentment",
+      "dataLoss": "Es perdran totes les dades",
+      "dataList": {
+        "clients": "Clients i els seus historials",
+        "suppliers": "Proveidors",
+        "products": "Productes i estoc",
+        "salesInvoices": "Factures de venda i compra",
+        "cashMovements": "Moviments de caixa",
+        "reviews": "Revisions i documents",
+        "config": "Tota la configuracio de l'empresa"
+      },
+      "confirmPassword": "Per confirmar, introdueix la contrasenya de l'administrador Master",
+      "passwordPlaceholder": "Contrasenya Master",
+      "deleting": "Eliminant...",
+      "delete": "Eliminar Permanentment"
+    },
+    "schemas": {
+      "title": "Sincronitzacio d'Esquemes",
+      "description": "Aquesta eina compara l'estructura de gestio_db (plantilla) amb les altres bases de dades i detecta taules, columnes i indexs que faltin. Pots sincronitzar automaticament per mantenir totes les bases de dades amb la mateixa estructura.",
+      "analyzeDifferences": "Analitzar Diferencies",
+      "analyzing": "Analitzant...",
+      "syncAll": "Sincronitzar Tot",
+      "syncingSchemas": "Sincronitzant...",
+      "analyzePrompt": "Fes clic a \"Analitzar Diferencies\" per comparar els esquemes de totes les bases de dades",
+      "analyzingSchemas": "Analitzant esquemes...",
+      "comparingStructure": "Comparant estructura de taules i columnes",
+      "analysisSummary": "Resum de l'Analisi",
+      "analyzedDbs": "DBs Analitzades",
+      "differences": "Diferencies",
+      "missingTables": "Taules Faltants",
+      "missingColumns": "Columnes Faltants",
+      "synchronized": "Sincronitzat",
+      "pendingChanges": "Canvis pendents",
+      "applyToDb": "Aplicar a aquesta DB",
+      "table": "TAULA",
+      "column": "COLUMNA",
+      "index": "INDEX",
+      "allSynced": "Tots els esquemes estan sincronitzats"
+    },
+    "messages": {
+      "dbDeactivated": "Base de dades desactivada",
+      "dbReactivated": "Base de dades reactivada",
+      "dbUpdated": "Base de dades actualitzada correctament",
+      "dbCreated": "Base de dades creada correctament",
+      "dbDeleted": "Base de dades eliminada completament",
+      "newDbsDetected": "S'han detectat i registrat noves bases de dades",
+      "noNewDbs": "No s'han trobat noves bases de dades per sincronitzar",
+      "changesApplied": "canvis aplicats",
+      "syncCompleted": "Sincronitzacio completada",
+      "appliedTo": "Canvis aplicats a"
+    }
+  }
+}

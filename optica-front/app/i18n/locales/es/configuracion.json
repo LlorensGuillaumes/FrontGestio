@@ -1,0 +1,139 @@
+{
+  "title": "Configuracion",
+  "professionals": {
+    "title": "Profesionales",
+    "newProfessional": "Nuevo profesional",
+    "editProfessional": "Editar profesional"
+  },
+  "services": {
+    "title": "Servicios",
+    "newService": "Nuevo servicio",
+    "editService": "Editar servicio"
+  },
+  "users": {
+    "title": "Usuarios",
+    "newUser": "Nuevo usuario",
+    "editUser": "Editar usuario"
+  },
+  "paymentMethods": {
+    "title": "Modos de pago",
+    "newMethod": "Nuevo modo de pago",
+    "editMethod": "Editar modo de pago"
+  },
+  "company": {
+    "title": "Datos Empresa",
+    "companyName": "Nombre de la empresa",
+    "fiscalName": "Nombre fiscal",
+    "cif": "CIF",
+    "address": "Direccion",
+    "phone": "Telefono",
+    "email": "Email"
+  },
+  "aeat": {
+    "title": "AEAT / VeriFactu"
+  },
+  "databases": {
+    "title": "Gestion de Bases de Datos",
+    "subtitle": "Administra las bases de datos del sistema (tiendas/empresas)",
+    "onlyMaster": "Solo Master",
+    "tabs": {
+      "databases": "Bases de Datos",
+      "schemas": "Sincronizar Esquemas"
+    },
+    "detectDbs": "Detectar DBs",
+    "syncing": "Sincronizando...",
+    "newDatabase": "Nueva Base de Datos",
+    "postgresInfo": "Bases de datos en PostgreSQL con prefijo \"gestio_db\"",
+    "noneDetected": "Ninguna detectada",
+    "registeredDatabases": "Bases de datos registradas",
+    "inactiveHidden": "inactivas ocultas",
+    "showInactive": "Mostrar inactivas",
+    "name": "Nombre",
+    "dbName": "DB Name",
+    "host": "Host",
+    "invoiceSeries": "Serie Fact.",
+    "status": "Estado",
+    "actions": "Acciones",
+    "active": "Activa",
+    "inactive": "Inactiva",
+    "reactivate": "Reactivar",
+    "editName": "Editar nombre",
+    "deletePermantently": "Eliminar permanentemente",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "noDatabases": "No hay bases de datos registradas",
+    "noActiveDatabases": "No hay bases de datos activas",
+    "howItWorks": "Como funciona",
+    "helpDetect": "Detecta bases de datos en PostgreSQL con prefijo \"gestio_db\" y las registra automaticamente",
+    "helpNew": "Crea una copia de gestio_db con un nuevo sufijo (ej: gestio_db02)",
+    "helpDeactivate": "Oculta la base de datos del listado sin eliminar datos (se puede reactivar)",
+    "helpDelete": "Borra permanentemente la base de datos y todos sus datos (requiere contrasena)",
+    "helpSeries": "Se configura desde \"Datos Empresa\" de cada tienda",
+    "createModal": {
+      "title": "Nueva Base de Datos",
+      "subtitle": "Crear una copia de gestio_db",
+      "suffix": "Sufijo",
+      "suffixPlaceholder": "02, bcn, norte...",
+      "result": "Resultado",
+      "descriptiveName": "Nombre descriptivo",
+      "namePlaceholder": "Optica Barcelona, Sucursal Norte...",
+      "note": "Se creara una copia de la estructura de gestio_db (tablas, indices, etc.) sin datos. La nueva base de datos estara completamente vacia y lista para usar.",
+      "creating": "Creando...",
+      "create": "Crear Base de Datos"
+    },
+    "deleteModal": {
+      "title": "Eliminar Base de Datos",
+      "subtitle": "Esta accion es irreversible",
+      "warning": "Vas a eliminar permanentemente",
+      "dataLoss": "Se perderan todos los datos",
+      "dataList": {
+        "clients": "Clientes y sus historiales",
+        "suppliers": "Proveedores",
+        "products": "Productos y stock",
+        "salesInvoices": "Facturas de venta y compra",
+        "cashMovements": "Movimientos de caja",
+        "reviews": "Revisiones y documentos",
+        "config": "Toda la configuracion de la empresa"
+      },
+      "confirmPassword": "Para confirmar, introduce la contrasena del administrador Master",
+      "passwordPlaceholder": "Contrasena Master",
+      "deleting": "Eliminando...",
+      "delete": "Eliminar Permanentemente"
+    },
+    "schemas": {
+      "title": "Sincronizacion de Esquemas",
+      "description": "Esta herramienta compara la estructura de gestio_db (plantilla) con las demas bases de datos y detecta tablas, columnas e indices que falten. Puedes sincronizar automaticamente para mantener todas las bases de datos con la misma estructura.",
+      "analyzeDifferences": "Analizar Diferencias",
+      "analyzing": "Analizando...",
+      "syncAll": "Sincronizar Todo",
+      "syncingSchemas": "Sincronizando...",
+      "analyzePrompt": "Haz clic en \"Analizar Diferencias\" para comparar los esquemas de todas las bases de datos",
+      "analyzingSchemas": "Analizando esquemas...",
+      "comparingStructure": "Comparando estructura de tablas y columnas",
+      "analysisSummary": "Resumen del Analisis",
+      "analyzedDbs": "DBs Analizadas",
+      "differences": "Diferencias",
+      "missingTables": "Tablas Faltantes",
+      "missingColumns": "Columnas Faltantes",
+      "synchronized": "Sincronizado",
+      "pendingChanges": "Cambios pendientes",
+      "applyToDb": "Aplicar a esta DB",
+      "table": "TABLA",
+      "column": "COLUMNA",
+      "index": "INDICE",
+      "allSynced": "Todos los esquemas estan sincronizados"
+    },
+    "messages": {
+      "dbDeactivated": "Base de datos desactivada",
+      "dbReactivated": "Base de datos reactivada",
+      "dbUpdated": "Base de datos actualizada correctamente",
+      "dbCreated": "Base de datos creada correctamente",
+      "dbDeleted": "Base de datos eliminada completamente",
+      "newDbsDetected": "Se han detectado y registrado nuevas bases de datos",
+      "noNewDbs": "No se encontraron nuevas bases de datos para sincronizar",
+      "changesApplied": "cambios aplicados",
+      "syncCompleted": "Sincronizacion completada",
+      "appliedTo": "Cambios aplicados a"
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "title": "Proveedores",
+  "newSupplier": "Nuevo Proveedor",
+  "editSupplier": "Editar Proveedor",
+  "supplierDetail": "Detalle Proveedor",
+  "supplierFile": "Ficha de proveedor",
+  "fields": {
+    "name": "Nombre",
+    "nameRequired": "Nombre *",
+    "fiscalDocument": "Documento fiscal",
+    "commercialName": "Nombre comercial",
+    "nif": "NIF/CIF",
+    "address": "Direccion",
+    "postalCode": "C.P.",
+    "city": "Poblacion",
+    "province": "Provincia",
+    "country": "Pais",
+    "phone": "Telefono",
+    "phones": "Telefonos",
+    "email": "Email",
+    "web": "Web",
+    "contact": "Persona de contacto",
+    "contacts": "Contactos",
+    "contactName": "Nombre",
+    "contactPosition": "Cargo",
+    "observations": "Observaciones",
+    "active": "Activo",
+    "families": "Familias / Subfamilias"
+  },
+  "phoneTypes": {
+    "main": "Principal",
+    "mobile": "Movil",
+    "fax": "Fax"
+  },
+  "empty": {
+    "noSuppliers": "No hay proveedores.",
+    "noSuppliersFiltered": "No se han encontrado proveedores con esos filtros.",
+    "noPhones": "Sin telefonos",
+    "noContacts": "Sin contactos"
+  },
+  "messages": {
+    "loading": "Cargando...",
+    "errorLoading": "Error cargando proveedor",
+    "errorSaving": "Error guardando proveedor"
+  },
+  "catalog": {
+    "title": "Gestionar Familias de Proveedores",
+    "subtitle": "Alta de familias y subfamilias de proveedores.",
+    "families": "Familias",
+    "subfamilies": "Subfamilias",
+    "addFamily": "+ Anadir familia",
+    "addSubfamily": "+ Anadir subfamilia",
+    "searchFamily": "Buscar familia...",
+    "searchSubfamily": "Buscar subfamilia...",
+    "noFamilies": "Sin familias.",
+    "selectFamily": "Selecciona una familia.",
+    "noSubfamiliesInFamily": "No hay subfamilias en esta familia.",
+    "addFamiliesTitle": "Anadir familias",
+    "addFamiliesSubtitle": "Puedes anadir varias de golpe.",
+    "addSubfamiliesTitle": "Anadir subfamilias",
+    "addSubfamiliesSubtitle": "Se crearan dentro de la familia seleccionada.",
+    "name": "Nombre",
+    "familyPlaceholder": "Ej: Lentes, Monturas, Accesorios...",
+    "subfamilyPlaceholder": "Ej: Progresivas, Monofocales...",
+    "errorLoading": "Error cargando datos",
+    "errorCreatingFamilies": "Error creando familias",
+    "errorCreatingSubfamilies": "Error creando subfamilias",
+    "selectFamilyFirst": "Selecciona una familia antes de crear subfamilias."
+  }
+}

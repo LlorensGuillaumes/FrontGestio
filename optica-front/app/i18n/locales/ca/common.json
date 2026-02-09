@@ -1,0 +1,144 @@
+{
+  "buttons": {
+    "save": "Desar",
+    "saving": "Desant...",
+    "cancel": "Cancel·lar",
+    "close": "Tancar",
+    "new": "Nou",
+    "edit": "Editar",
+    "modify": "Modificar",
+    "delete": "Eliminar",
+    "search": "Cercar",
+    "apply": "Aplicar",
+    "clear": "Netejar",
+    "previous": "Anterior",
+    "next": "Seguent",
+    "loadMore": "Carregar mes",
+    "add": "Afegir",
+    "manage": "Gestionar",
+    "print": "Imprimir",
+    "downloadPdf": "Descarregar PDF",
+    "send": "Enviar",
+    "retry": "Reintentar"
+  },
+  "messages": {
+    "loading": "Carregant...",
+    "noResults": "No s'han trobat resultats.",
+    "noRecords": "No hi ha registres.",
+    "error": "Error",
+    "errorLoading": "Error carregant dades",
+    "errorSaving": "Error desant",
+    "confirmDelete": "Estas segur d'eliminar?",
+    "confirmDeleteDetail": "Aquesta accio no es pot desfer.",
+    "success": "Exit",
+    "required": "Obligatori"
+  },
+  "pagination": {
+    "page": "Pagina {{current}} de {{total}}",
+    "showing": "Mostrant {{count}} de {{total}}",
+    "items": "{{count}} elements"
+  },
+  "filters": {
+    "all": "Tots",
+    "active": "Actiu",
+    "inactive": "Inactiu",
+    "enabled": "Activat"
+  },
+  "fields": {
+    "name": "Nom",
+    "description": "Descripcio",
+    "code": "Codi",
+    "date": "Data",
+    "status": "Estat",
+    "type": "Tipus",
+    "total": "Total",
+    "price": "Preu",
+    "quantity": "Quantitat",
+    "observations": "Observacions",
+    "address": "Adreca",
+    "postalCode": "Codi postal",
+    "city": "Poblacio",
+    "country": "Pais",
+    "phone": "Telefon",
+    "phones": "Telefons",
+    "email": "Correu electronic",
+    "extension": "Extensio",
+    "optional": "Opcional",
+    "main": "Principal",
+    "reference": "Referencia"
+  },
+  "modes": {
+    "reading": "Mode lectura",
+    "editing": "Mode edicio",
+    "creating": "Mode creacio"
+  },
+  "person": {
+    "person": "Persona",
+    "company": "Empresa"
+  },
+  "statuses": {
+    "pending": "PENDENT",
+    "confirmed": "CONFIRMAT",
+    "inProcess": "EN_PROCES",
+    "ready": "LLEST",
+    "delivered": "LLIURAT",
+    "expired": "CADUCAT"
+  },
+  "language": {
+    "language": "Idioma",
+    "spanish": "Castella",
+    "catalan": "Catala"
+  },
+  "pdf": {
+    "documentGenerated": "Document generat el {{date}} a les {{time}}",
+    "clientData": "Dades del Client",
+    "clientSignature": "Signatura del client:",
+    "companySignature": "Signatura empresa:",
+    "agree": "Conforme",
+    "observations": "Observacions",
+    "graduation": "Graduacio",
+    "validUntil": "Valid fins: {{date}} ({{days}} dies)",
+    "expectedDelivery": "Data prevista lliurament: {{date}}",
+    "orderRef": "Ref. Encarrec: {{ref}}",
+    "associatedAdvanceInvoice": "Factura d'avancament associada:",
+    "advanceNote": "Aquest avancament es descomptara de la factura final en lliurar la comanda."
+  },
+  "table": {
+    "description": "Descripcio",
+    "quantity": "Quant.",
+    "price": "Preu",
+    "discount": "Dte%",
+    "vat": "IVA%",
+    "amount": "Import",
+    "code": "Codi"
+  },
+  "totals": {
+    "taxBase": "Base Imposable:",
+    "vat": "IVA:",
+    "vatPercent": "IVA ({{percent}}%):",
+    "total": "TOTAL:",
+    "totalInvoice": "TOTAL FACTURA:",
+    "appliedDiscounts": "Descomptes aplicats:",
+    "previousAdvance": "Avancament previ:",
+    "pendingPayment": "PENDENT DE PAGAMENT:",
+    "pending": "PENDENT:",
+    "advancePayment": "Pagament a compte:"
+  },
+  "verifactu": {
+    "notSent": "No enviada",
+    "pending": "Pendent",
+    "accepted": "Acceptat",
+    "rejected": "Rebutjat",
+    "error": "Error",
+    "sendError": "Error en l'enviament",
+    "errorSending": "Error en enviar"
+  },
+  "listEditor": {
+    "element": "Element {{number}}",
+    "remove": "Treure",
+    "add": "+ Afegir",
+    "noChanges": "Sense canvis",
+    "pendingChanges": "Canvis pendents"
+  },
+  "loading": "Carregant..."
+}

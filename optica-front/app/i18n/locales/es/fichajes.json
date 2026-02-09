@@ -1,0 +1,80 @@
+{
+  "title": "Fichar",
+  "fichar": "Fichar",
+  "entrada": "ENTRADA",
+  "salida": "SALIDA",
+  "usuario": "Usuario",
+  "password": "Contraseña",
+  "usernamePlaceholder": "Tu nombre de usuario",
+  "passwordPlaceholder": "Tu contraseña",
+  "cancelar": "Cancelar",
+  "fichando": "Fichando...",
+  "ficharEntrada": "Fichar entrada",
+  "ficharSalida": "Fichar salida",
+  "vasAFichar": "Vas a fichar",
+  "horasHoy": "Horas trabajadas hoy",
+  "cambiar": "Cambiar",
+  "advertencias": "Advertencias",
+  "entradaRegistrada": "Entrada registrada",
+  "salidaRegistrada": "Salida registrada",
+  "closeAuto": "Esta ventana se cerrará automáticamente...",
+  "errorEmptyFields": "Introduce usuario y contraseña",
+  "errorInvalidCredentials": "Usuario o contraseña incorrectos",
+  "errorConnection": "Error de conexión",
+
+  "gestion": {
+    "title": "Gestión de Fichajes",
+    "listado": "Listado de Fichajes",
+    "resumen": "Resumen Mensual",
+    "filtros": {
+      "fechaDesde": "Desde",
+      "fechaHasta": "Hasta",
+      "usuario": "Usuario",
+      "tipo": "Tipo",
+      "todos": "Todos",
+      "soloAdvertencias": "Solo con advertencias"
+    },
+    "tabla": {
+      "usuario": "Usuario",
+      "fecha": "Fecha",
+      "hora": "Hora",
+      "tipo": "Tipo",
+      "advertencias": "Advertencias",
+      "acciones": "Acciones",
+      "correccion": "Corrección",
+      "motivoCorreccion": "Motivo"
+    },
+    "acciones": {
+      "editar": "Editar",
+      "eliminar": "Eliminar",
+      "crearManual": "Crear fichaje manual"
+    },
+    "modal": {
+      "corregirTitulo": "Corregir Fichaje",
+      "crearTitulo": "Crear Fichaje Manual",
+      "hora": "Hora",
+      "tipo": "Tipo",
+      "motivo": "Motivo de la corrección",
+      "motivoPlaceholder": "Indica el motivo de la corrección...",
+      "guardar": "Guardar",
+      "cancelar": "Cancelar"
+    },
+    "resumenMensual": {
+      "mes": "Mes",
+      "anyo": "Año",
+      "horasTrabajadas": "Horas Trabajadas",
+      "diasTrabajados": "Días Trabajados",
+      "incompletos": "Fichajes Incompletos",
+      "advertenciasCount": "Advertencias"
+    },
+    "mensajes": {
+      "corregido": "Fichaje corregido correctamente",
+      "eliminado": "Fichaje eliminado correctamente",
+      "creado": "Fichaje creado correctamente",
+      "errorCargar": "Error al cargar los fichajes",
+      "errorCorregir": "Error al corregir el fichaje",
+      "errorEliminar": "Error al eliminar el fichaje",
+      "errorCrear": "Error al crear el fichaje"
+    }
+  }
+}

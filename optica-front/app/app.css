@@ -1,0 +1,42 @@
+/* app/app.css */
+
+@import 'react-datepicker/dist/react-datepicker.css';
+@import 'tailwindcss'; /* Esta línea única reemplaza a base, components y utilities */
+
+/* Las siguientes reglas que usan @apply han sido eliminadas para evitar el error de SSR/Vite.
+   Ahora debes aplicar estas clases directamente en tus componentes TSX. */
+
+/* ==========================================
+   ESTILOS DE IMPRESIÓN
+   ========================================== */
+@media print {
+  /* Ocultar todo excepto el documento a imprimir */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Mostrar solo el contenedor del PDF */
+  .print\:shadow-none,
+  .print\:shadow-none * {
+    visibility: visible;
+  }
+
+  /* Posicionar el documento en la esquina superior izquierda */
+  .print\:shadow-none {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  /* Ocultar elementos marcados con print:hidden */
+  .print\:hidden {
+    display: none !important;
+  }
+
+  /* Ajustes de página */
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+}

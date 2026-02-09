@@ -1,0 +1,23 @@
+{
+  "title": "Mi Perfil",
+  "username": "Usuario",
+  "name": "Nombre",
+  "email": "Email",
+  "role": "Rol",
+  "currentDatabase": "Base de datos actual",
+  "security": "Seguridad",
+  "changePassword": "Cambiar contrasena",
+  "currentPassword": "Contrasena actual",
+  "newPassword": "Nueva contrasena",
+  "confirmPassword": "Confirmar contrasena",
+  "passwordDescription": "Puedes cambiar tu contrasena para mantener tu cuenta segura.",
+  "passwordsDoNotMatch": "Las contrasenas no coinciden",
+  "passwordTooShort": "La contrasena debe tener al menos 6 caracteres",
+  "passwordChanged": "Contrasena cambiada correctamente",
+  "errorChangingPassword": "Error al cambiar la contrasena",
+  "masterUser": "Usuario Master",
+  "masterPasswordInfo": "La contrasena del usuario Master se configura en el archivo .env del servidor.",
+  "cancel": "Cancelar",
+  "save": "Guardar",
+  "saving": "Guardando..."
+}
