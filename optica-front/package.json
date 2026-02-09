@@ -12,6 +12,7 @@
     "@apollo/client": "^4.1.0",
     "@react-router/node": "7.10.1",
     "@react-router/serve": "7.10.1",
+    "@vercel/react-router": "^1.2.5",
     "axios": "^1.13.2",
     "date-fns": "^4.1.0",
     "graphql": "^16.12.0",
