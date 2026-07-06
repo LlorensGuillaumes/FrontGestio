@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router";
 
 import DataTable, { type ColumnDef } from "~/components/DataTable";
@@ -21,6 +22,7 @@ type Subfamilia = {
 const sid = (v: any) => (v === null || v === undefined ? "" : String(v));
 
 export default function SubFamiliasListado() {
+  const { t } = useTranslation(["productos", "common"]);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -78,7 +80,7 @@ export default function SubFamiliasListado() {
         );
       } catch (e: any) {
         if (!mounted) return;
-        setError(e?.message ?? "Error cargando subfamilias");
+        setError(e?.message ?? t("subfamiliasList.errorCargando"));
       } finally {
         if (!mounted) return;
         setLoading(false);
@@ -100,22 +102,22 @@ export default function SubFamiliasListado() {
     return [
       {
         name: "q",
-        label: "BUSCAR",
+        label: t("subfamiliasList.buscarLabel"),
         type: "text",
         colSpan: 3,
-        placeholder: "ID o descripción...",
+        placeholder: t("subfamiliasList.buscarPlaceholder"),
       },
       {
         name: "familiaId",
-        label: "FAMILIA",
+        label: t("common:breadcrumb.familia"),
         type: "select",
         colSpan: 2,
         options: familiaOptions,
         allowEmpty: true,
-        emptyLabel: "Todas",
+        emptyLabel: t("subfamiliasList.todas"),
       },
     ];
-  }, [familias]);
+  }, [familias, t]);
 
   // filtradas
   const filtradas = useMemo(() => {
@@ -133,23 +135,23 @@ export default function SubFamiliasListado() {
   const columns = useMemo<ColumnDef<Subfamilia>[]>(() => {
     return [
       {
-        header: "ID",
+        header: t("subfamiliasList.colId"),
         cellClassName: "font-mono text-slate-600",
         render: (sf) => sf.id,
       },
       {
-        header: "Familia",
+        header: t("common:breadcrumb.familia"),
         render: (sf) => (
           <span className="text-slate-700">{getNombreFamilia(sf.idFamilia)}</span>
         ),
       },
       {
-        header: "Subfamilia",
+        header: t("common:breadcrumb.subfamilia"),
         cellClassName: "font-semibold text-slate-900",
         render: (sf) => sf.descripcion || "—",
       },
       {
-        header: "Acciones",
+        header: t("subfamiliasList.colAcciones"),
         headerAlign: "right",
         cellAlign: "right",
         render: (sf) => (
@@ -159,28 +161,28 @@ export default function SubFamiliasListado() {
               onClick={() => navigate(`./${sf.id}`)}
               className="px-3 py-1.5 text-sm rounded-lg border border-slate-200 hover:bg-slate-50"
             >
-              Ver
+              {t("common:breadcrumb.ver")}
             </button>
             <button
               type="button"
               onClick={() => navigate(`./${sf.id}/editar`)}
               className="px-3 py-1.5 text-sm rounded-lg border border-slate-200 hover:bg-slate-50"
             >
-              Editar
+              {t("common:breadcrumb.editar")}
             </button>
           </div>
         ),
       },
     ];
-  }, [navigate, familiasById]);
+  }, [navigate, familiasById, t]);
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Subfamilias</h1>
+          <h1 className="text-2xl font-bold text-slate-900">{t("subfamiliasList.titulo")}</h1>
           <p className="text-slate-500 text-sm">
-            {loading ? "Cargando..." : `${filtradas.length} registros`}
+            {loading ? t("subfamiliasList.cargando") : t("subfamiliasList.registros", { count: filtradas.length })}
           </p>
         </div>
 
@@ -189,7 +191,7 @@ export default function SubFamiliasListado() {
           onClick={() => navigate("./nueva")}
           className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm"
         >
-          + Nueva subfamilia
+          {t("subfamiliasList.nuevaSubfamilia")}
         </button>
       </div>
 
@@ -205,7 +207,7 @@ export default function SubFamiliasListado() {
         columns={columns}
         data={filtradas}
         getRowKey={(sf) => sf.id}
-        emptyText={loading ? "Cargando..." : "No hay subfamilias."}
+        emptyText={loading ? t("subfamiliasList.cargando") : t("subfamiliasList.sinSubfamilias")}
         onRowClick={(sf) => navigate(`./${sf.id}`)}
         showExpandColumn={false}
       />

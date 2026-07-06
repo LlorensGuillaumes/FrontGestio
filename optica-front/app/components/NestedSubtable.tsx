@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import DataTable, { type ColumnDef } from "~/components/DataTable";
 
 type Key = React.Key;
@@ -37,7 +38,7 @@ export type NestedSubtableProps<C, G> = {
 };
 
 export default function NestedSubtable<C, G>({
-  title = "Detalle",
+  title,
 
   actionLabel,
   onAction,
@@ -46,19 +47,24 @@ export default function NestedSubtable<C, G>({
   data,
   columns,
   getRowKey,
-  emptyText = "No hay registros.",
+  emptyText,
 
   getGrandChildren,
   grandColumns,
   getGrandRowKey,
-  grandTitle = "Subdetalle",
-  emptyGrandText = "No hay registros.",
+  grandTitle,
+  emptyGrandText,
 
   wrapperClassName = "bg-white rounded border border-slate-200 overflow-hidden",
   grandWrapperClassName = "bg-white rounded border border-slate-200 overflow-hidden",
 
   isChildExpandable,
 }: NestedSubtableProps<C, G>) {
+  const { t } = useTranslation("common");
+  const resolvedTitle = title ?? t("nestedTable.detail");
+  const resolvedEmptyText = emptyText ?? t("nestedTable.empty");
+  const resolvedGrandTitle = grandTitle ?? t("nestedTable.subdetail");
+  const resolvedEmptyGrandText = emptyGrandText ?? t("nestedTable.empty");
   const [expandedChildId, setExpandedChildId] = useState<Key | null>(null);
 
   const canHaveGrand = Boolean(getGrandChildren && grandColumns && getGrandRowKey);
@@ -78,9 +84,9 @@ export default function NestedSubtable<C, G>({
       <div className="flex items-center justify-between mb-2 gap-3">
         <div className="flex items-center gap-3">
           <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-            {title}
+            {resolvedTitle}
           </h4>
-          <span className="text-xs text-slate-400">{data.length} registros</span>
+          <span className="text-xs text-slate-400">{t("nestedTable.records", { count: data.length })}</span>
         </div>
 
         {showAction ? (
@@ -99,7 +105,7 @@ export default function NestedSubtable<C, G>({
         columns={columns}
         data={data}
         getRowKey={getRowKey}
-        emptyText={emptyText}
+        emptyText={resolvedEmptyText}
         wrapperClassName={wrapperClassName}
         isRowExpandable={(child, key, idx) => {
           if (!canHaveGrand) return false;
@@ -118,10 +124,10 @@ export default function NestedSubtable<C, G>({
                   <div className="border-l-4 border-emerald-200 pl-4">
                     <div className="flex items-center justify-between mb-2">
                       <h5 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                        {grandTitle}
+                        {resolvedGrandTitle}
                       </h5>
                       <span className="text-xs text-slate-400">
-                        {grand.length} registros
+                        {t("nestedTable.records", { count: grand.length })}
                       </span>
                     </div>
 
@@ -129,7 +135,7 @@ export default function NestedSubtable<C, G>({
                       columns={grandColumns!}
                       data={grand}
                       getRowKey={getGrandRowKey!}
-                      emptyText={emptyGrandText}
+                      emptyText={resolvedEmptyGrandText}
                       showExpandColumn={false}
                       wrapperClassName={grandWrapperClassName}
                     />

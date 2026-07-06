@@ -66,5 +66,76 @@
     "errorCreatingFamilies": "Error creando familias",
     "errorCreatingSubfamilies": "Error creando subfamilias",
     "selectFamilyFirst": "Selecciona una familia antes de crear subfamilias."
+  },
+  "detalle": {
+    "newTitle": "Nuevo Proveedor",
+    "editTitle": "Modificar Proveedor",
+    "viewTitle": "Detalle del Proveedor",
+    "typeCompany": "Empresa / SL",
+    "typePerson": "Autónomo / Persona",
+    "legalName": "Razón Social",
+    "commercialName": "Nombre Comercial",
+    "contact": "Contacto",
+    "name": "Nombre",
+    "firstSurname": "1er Apellido",
+    "secondSurname": "2do Apellido",
+    "nif": "NIF / CIF",
+    "email": "Email",
+    "phone": "Teléfono",
+    "mobile": "Móvil",
+    "address": "Dirección",
+    "postalCode": "C.P.",
+    "city": "Población",
+    "province": "Provincia",
+    "country": "País",
+    "close": "Cerrar",
+    "editButton": "Modificar Proveedor",
+    "saveChanges": "Guardar Cambios"
+  },
+  "listado": {
+    "verProveedor": "Ver proveedor",
+    "editarProveedor": "Editar proveedor",
+    "codigo": "Código",
+    "producto": "Producto",
+    "refProveedor": "Ref. Proveedor",
+    "precioCoste": "Precio Coste",
+    "pvp": "PVP",
+    "titulo": "Proveedores",
+    "cargando": "Cargando...",
+    "contador": "{{count}} proveedores"
+  },
+  "gestionarFamilias": "Gestionar familias",
+  "listadoCols": {
+    "nuevoProveedor": "+ Nuevo proveedor",
+    "inactivo": "Inactivo",
+    "sinFamilias": "Sin familias",
+    "cargando": "Cargando...",
+    "cargandoProductos": "Cargando productos...",
+    "sinProductos": "Este proveedor no tiene productos asociados.",
+    "productosSuministrados": "Productos suministrados ({{count}})",
+    "empty": "No hay proveedores.",
+    "emptyConFiltros": "No se han encontrado proveedores con esos filtros.",
+    "filtros": {
+      "buscar": "BUSCAR",
+      "buscarPlaceholder": "Nombre, razón social...",
+      "nif": "NIF/CIF",
+      "nifPlaceholder": "NIF/CIF...",
+      "email": "EMAIL",
+      "emailPlaceholder": "correo@...",
+      "telefono": "TELÉFONO",
+      "telefonoPlaceholder": "Tel / móvil..."
+    },
+    "cols": {
+      "proveedor": "Proveedor",
+      "contacto": "Contacto",
+      "telefono": "Teléfono",
+      "acciones": "Acciones"
+    }
+  },
+  "modal": {
+    "bankDataTitle": "Datos bancarios (SEPA)",
+    "bankDataHelp": "Para pagar a este proveedor por remesa SEPA. En autónomos se rellena automáticamente desde la ficha del trabajador.",
+    "accountHolder": "Titular",
+    "accountHolderPlaceholder": "Titular de la cuenta"
   }
 }

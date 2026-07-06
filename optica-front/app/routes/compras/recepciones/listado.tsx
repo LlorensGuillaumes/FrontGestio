@@ -1,5 +1,6 @@
 // app/routes/compras/recepciones/listado.tsx
 import React, { useEffect, useState, useMemo, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router";
 import DataTable, { type ColumnDef } from "~/components/DataTable";
 import FilterBar, { type FilterField } from "~/components/filtro";
@@ -16,6 +17,7 @@ import RecepcionCompraModal from "~/modales/recepcionCompraModal";
 import FacturaCompraModal from "~/modales/facturaCompraModal";
 
 export default function RecepcionesCompraListado() {
+  const { t } = useTranslation(["compras", "common"]);
   const [searchParams] = useSearchParams();
 
   const q = (searchParams.get("q") ?? "").trim();
@@ -110,52 +112,52 @@ export default function RecepcionesCompraListado() {
     () => [
       {
         name: "q",
-        label: "BUSCAR",
+        label: t("recepcionesList.filtros.buscar"),
         type: "text",
         colSpan: 3,
-        placeholder: "Numero, albaran, proveedor...",
+        placeholder: t("recepcionesList.filtros.buscarPlaceholder"),
       },
       {
         name: "idProveedor",
-        label: "PROVEEDOR",
+        label: t("recepcionesList.filtros.proveedor"),
         type: "select",
         colSpan: 3,
         options: [
-          { value: "", label: "Todos los proveedores" },
+          { value: "", label: t("recepcionesList.filtros.todosProveedores") },
           ...proveedores.map((p) => ({ value: String(p.id), label: p.nombre })),
         ],
       },
       {
         name: "estado",
-        label: "ESTADO",
+        label: t("recepcionesList.filtros.estado"),
         type: "select",
         colSpan: 2,
         options: [
-          { value: "", label: "Todos" },
+          { value: "", label: t("recepcionesList.filtros.todos") },
           ...ESTADOS_RECEPCION.filter(e => e.value !== "ANULADA").map((e) => ({ value: e.value, label: e.label })),
         ],
       },
     ],
-    [proveedores]
+    [proveedores, t]
   );
 
   // Columns
   const columns = useMemo<ColumnDef<RecepcionCompraListItem>[]>(
     () => [
       {
-        header: "Numero",
+        header: t("recepcionesList.columnas.numero"),
         render: (r) => (
           <div className="font-medium text-slate-900">{r.NumeroRecepcion}</div>
         ),
       },
       {
-        header: "Albaran Proveedor",
+        header: t("recepcionesList.columnas.albaranProveedor"),
         render: (r) => (
           <div className="text-slate-600">{r.NumeroAlbaranProveedor || "-"}</div>
         ),
       },
       {
-        header: "Proveedor",
+        header: t("recepcionesList.columnas.proveedor"),
         render: (r) => (
           <div className="min-w-40">
             <div className="font-medium text-slate-900">{r.NombreProveedor || "-"}</div>
@@ -163,13 +165,13 @@ export default function RecepcionesCompraListado() {
         ),
       },
       {
-        header: "Orden",
+        header: t("recepcionesList.columnas.orden"),
         render: (r) => (
           <div className="text-slate-500 text-sm">{r.NumeroOrden || "-"}</div>
         ),
       },
       {
-        header: "Fecha",
+        header: t("recepcionesList.columnas.fecha"),
         render: (r) => (
           <div className="text-slate-600">
             {r.FechaRecepcion ? new Date(r.FechaRecepcion).toLocaleDateString("es-ES") : "-"}
@@ -177,7 +179,7 @@ export default function RecepcionesCompraListado() {
         ),
       },
       {
-        header: "Total",
+        header: t("recepcionesList.columnas.total"),
         headerAlign: "right",
         cellAlign: "right",
         render: (r) => (
@@ -187,7 +189,7 @@ export default function RecepcionesCompraListado() {
         ),
       },
       {
-        header: "Estado",
+        header: t("recepcionesList.columnas.estado"),
         headerAlign: "center",
         cellAlign: "center",
         render: (r) => {
@@ -200,7 +202,7 @@ export default function RecepcionesCompraListado() {
         },
       },
       {
-        header: "Acciones",
+        header: t("recepcionesList.columnas.acciones"),
         headerAlign: "right",
         cellAlign: "right",
         render: (r) => (
@@ -208,7 +210,7 @@ export default function RecepcionesCompraListado() {
             <button
               onClick={() => openModal("view", r.id)}
               className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
-              title="Ver"
+              title={t("recepcionesList.ver")}
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -219,16 +221,16 @@ export default function RecepcionesCompraListado() {
         ),
       },
     ],
-    []
+    [t]
   );
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-4">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-900">Recepciones de Compra</h2>
+          <h2 className="text-xl font-bold text-slate-900">{t("recepcionesList.titulo")}</h2>
           <p className="text-slate-500 text-sm">
-            {loading ? "Cargando..." : `${total} recepciones (albaranes de entrada)`}
+            {loading ? t("recepcionesList.cargando") : t("recepcionesList.totalRecepciones", { total })}
           </p>
         </div>
 
@@ -239,7 +241,7 @@ export default function RecepcionesCompraListado() {
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
-          Nueva Recepcion
+          {t("recepcionesList.nuevaRecepcion")}
         </button>
       </div>
 
@@ -253,7 +255,7 @@ export default function RecepcionesCompraListado() {
         columns={columns}
         data={rows}
         getRowKey={(r) => r.id}
-        emptyText={loading ? "Cargando..." : "No hay recepciones."}
+        emptyText={loading ? t("recepcionesList.cargando") : t("recepcionesList.sinRecepciones")}
         onRowClick={(r) => openModal("view", r.id)}
       />
 

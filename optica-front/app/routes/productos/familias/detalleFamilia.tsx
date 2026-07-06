@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import { api } from "~/lib/api";
 
@@ -12,6 +13,7 @@ type Familia = {
 const sid = (v: any) => (v === null || v === undefined ? "" : String(v));
 
 export default function DetalleFamilia() {
+  const { t } = useTranslation("productos");
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
@@ -42,7 +44,7 @@ export default function DetalleFamilia() {
         });
       } catch (e: any) {
         if (!mounted) return;
-        setError(e?.message ?? "Error cargando familia");
+        setError(e?.message ?? t("familiaDetalle.loadError"));
       } finally {
         if (!mounted) return;
         setLoading(false);
@@ -56,13 +58,13 @@ export default function DetalleFamilia() {
 
   const estado = useMemo(() => {
     if (!familia) return "—";
-    return familia.activo === false ? "Inactiva" : "Activa";
-  }, [familia]);
+    return familia.activo === false ? t("familiaDetalle.inactive") : t("familiaDetalle.active");
+  }, [familia, t]);
 
   if (loading) {
     return (
       <div className="p-6 max-w-4xl mx-auto">
-        <div className="text-sm text-slate-500">Cargando familia…</div>
+        <div className="text-sm text-slate-500">{t("familiaDetalle.loading")}</div>
       </div>
     );
   }
@@ -76,7 +78,7 @@ export default function DetalleFamilia() {
           className="px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-sm"
           onClick={() => navigate("/productos/familias")}
         >
-          Volver
+          {t("familiaDetalle.back")}
         </button>
       </div>
     );
@@ -85,13 +87,13 @@ export default function DetalleFamilia() {
   if (!familia) {
     return (
       <div className="p-6 max-w-4xl mx-auto space-y-3">
-        <div className="text-sm text-slate-500">No existe la familia.</div>
+        <div className="text-sm text-slate-500">{t("familiaDetalle.notFound")}</div>
         <button
           type="button"
           className="px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-sm"
           onClick={() => navigate("/productos/familias")}
         >
-          Volver
+          {t("familiaDetalle.back")}
         </button>
       </div>
     );
@@ -101,14 +103,14 @@ export default function DetalleFamilia() {
     <div className="p-6 max-w-4xl mx-auto space-y-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <div className="text-xs text-slate-500">Familia #{familia.id}</div>
+          <div className="text-xs text-slate-500">{t("familiaDetalle.familyNumber", { id: familia.id })}</div>
           <h1 className="text-2xl font-bold text-slate-900">{familia.descripcion || "—"}</h1>
           <div className="text-sm text-slate-500 mt-1">
-            Estado:{" "}
+            {t("familiaDetalle.statusLabel")}{" "}
             {familia.activo === false ? (
-              <span className="text-slate-700">Inactiva</span>
+              <span className="text-slate-700">{t("familiaDetalle.inactive")}</span>
             ) : (
-              <span className="text-emerald-700">Activa</span>
+              <span className="text-emerald-700">{t("familiaDetalle.active")}</span>
             )}
           </div>
         </div>
@@ -119,7 +121,7 @@ export default function DetalleFamilia() {
             onClick={() => navigate(`/productos/familias/${familia.id}/editar`)}
             className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm"
           >
-            Editar
+            {t("familiaDetalle.edit")}
           </button>
 
           <button
@@ -127,7 +129,7 @@ export default function DetalleFamilia() {
             onClick={() => navigate("/productos/familias")}
             className="px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-sm"
           >
-            Volver
+            {t("familiaDetalle.back")}
           </button>
         </div>
       </div>
@@ -135,17 +137,17 @@ export default function DetalleFamilia() {
       <div className="rounded-2xl border border-slate-200 bg-white p-4">
         <div className="grid grid-cols-12 gap-3">
           <div className="col-span-12 md:col-span-3">
-            <div className="text-xs font-bold text-slate-500">ID</div>
+            <div className="text-xs font-bold text-slate-500">{t("familiaDetalle.colId")}</div>
             <div className="mt-1 font-mono text-slate-800">{familia.id}</div>
           </div>
 
           <div className="col-span-12 md:col-span-7">
-            <div className="text-xs font-bold text-slate-500">Descripción</div>
+            <div className="text-xs font-bold text-slate-500">{t("familiaDetalle.colDescription")}</div>
             <div className="mt-1 text-slate-800">{familia.descripcion || "—"}</div>
           </div>
 
           <div className="col-span-12 md:col-span-2">
-            <div className="text-xs font-bold text-slate-500">Estado</div>
+            <div className="text-xs font-bold text-slate-500">{t("familiaDetalle.colStatus")}</div>
             <div className="mt-1 text-slate-800">{estado}</div>
           </div>
         </div>

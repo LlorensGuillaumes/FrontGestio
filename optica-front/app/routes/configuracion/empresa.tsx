@@ -1,10 +1,12 @@
 // app/routes/configuracion/empresa.tsx
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { fetchDatosEmpresa, updateDatosEmpresa, type DatosEmpresa } from "~/lib/empresaRest";
 import { useAuth } from "~/contexts/AuthContext";
 import { api } from "~/lib/api";
 
 export default function ConfiguracionEmpresa() {
+  const { t } = useTranslation(["configuracion", "common"]);
   const { user, isMaster, currentDatabase, refreshUser } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -39,7 +41,7 @@ export default function ConfiguracionEmpresa() {
         setForm(data);
       })
       .catch((e) => {
-        setError(e?.message ?? "Error cargando datos");
+        setError(e?.message ?? t("configuracion:empresa.errors.loading"));
       })
       .finally(() => setLoading(false));
 
@@ -69,7 +71,7 @@ export default function ConfiguracionEmpresa() {
       await refreshUser();
       setTimeout(() => setSerieSuccess(false), 3000);
     } catch (e: any) {
-      setError(e?.response?.data?.message ?? "Error al guardar la serie");
+      setError(e?.response?.data?.message ?? t("configuracion:empresa.errors.savingSeries"));
     } finally {
       setSavingSerie(false);
     }
@@ -91,7 +93,7 @@ export default function ConfiguracionEmpresa() {
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch (e: any) {
-      setError(e?.response?.data?.error ?? e?.message ?? "Error guardando");
+      setError(e?.response?.data?.error ?? e?.message ?? t("configuracion:empresa.errors.saving"));
     } finally {
       setSaving(false);
     }
@@ -100,7 +102,7 @@ export default function ConfiguracionEmpresa() {
   if (loading) {
     return (
       <div className="h-full flex items-center justify-center">
-        <div className="text-slate-500">Cargando...</div>
+        <div className="text-slate-500">{t("configuracion:empresa.loading")}</div>
       </div>
     );
   }
@@ -111,9 +113,9 @@ export default function ConfiguracionEmpresa() {
       <div className="flex-shrink-0 p-6 pb-4 border-b border-slate-200 bg-white">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Datos de la Empresa</h2>
+            <h2 className="text-xl font-bold text-slate-900">{t("configuracion:empresa.title")}</h2>
             <p className="text-slate-500 text-sm">
-              Configura los datos que aparecen en los documentos
+              {t("configuracion:empresa.subtitle")}
             </p>
           </div>
           <button
@@ -121,7 +123,7 @@ export default function ConfiguracionEmpresa() {
             disabled={saving}
             className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium disabled:opacity-50"
           >
-            {saving ? "Guardando..." : "Guardar cambios"}
+            {saving ? t("configuracion:empresa.saving") : t("configuracion:empresa.saveChanges")}
           </button>
         </div>
 
@@ -135,7 +137,7 @@ export default function ConfiguracionEmpresa() {
             )}
             {success && (
               <div className="p-3 rounded-lg bg-green-50 text-green-700 text-sm border border-green-100">
-                Datos guardados correctamente
+                {t("configuracion:empresa.savedSuccess")}
               </div>
             )}
           </div>
@@ -149,36 +151,36 @@ export default function ConfiguracionEmpresa() {
             {/* Datos fiscales */}
             <div>
               <h3 className="text-sm font-bold text-slate-700 mb-4 pb-2 border-b border-slate-200">
-                Datos Fiscales
+                {t("configuracion:empresa.sections.fiscalData")}
               </h3>
               <div className="grid grid-cols-3 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-slate-500 mb-1">
-                    Nombre Fiscal *
+                    {t("configuracion:empresa.fiscalName")}
                   </label>
                   <input
                     type="text"
                     value={form.NombreEmpresa ?? ""}
                     onChange={(e) => handleChange("NombreEmpresa", e.target.value)}
                     className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                    placeholder="Razón social"
+                    placeholder={t("configuracion:empresa.fiscalNamePlaceholder")}
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-500 mb-1">
-                    Nombre Comercial
+                    {t("configuracion:empresa.commercialName")}
                   </label>
                   <input
                     type="text"
                     value={form.NombreComercial ?? ""}
                     onChange={(e) => handleChange("NombreComercial", e.target.value)}
                     className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                    placeholder="Nombre comercial"
+                    placeholder={t("configuracion:empresa.commercialNamePlaceholder")}
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-500 mb-1">
-                    CIF / NIF
+                    {t("configuracion:empresa.cifNif")}
                   </label>
                   <input
                     type="text"
@@ -194,67 +196,67 @@ export default function ConfiguracionEmpresa() {
             {/* Dirección */}
             <div>
               <h3 className="text-sm font-bold text-slate-700 mb-4 pb-2 border-b border-slate-200">
-                Dirección
+                {t("configuracion:empresa.sections.address")}
               </h3>
               <div className="grid grid-cols-4 gap-4">
                 <div className="col-span-4">
                   <label className="block text-xs font-medium text-slate-500 mb-1">
-                    Dirección
+                    {t("configuracion:empresa.address")}
                   </label>
                   <input
                     type="text"
                     value={form.Direccion ?? ""}
                     onChange={(e) => handleChange("Direccion", e.target.value)}
                     className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                    placeholder="Calle, número, piso..."
+                    placeholder={t("configuracion:empresa.addressPlaceholder")}
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-500 mb-1">
-                    C.P.
+                    {t("configuracion:empresa.postalCode")}
                   </label>
                   <input
                     type="text"
                     value={form.CodigoPostal ?? ""}
                     onChange={(e) => handleChange("CodigoPostal", e.target.value)}
                     className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                    placeholder="28001"
+                    placeholder={t("configuracion:empresa.postalCodePlaceholder")}
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-500 mb-1">
-                    Población
+                    {t("configuracion:empresa.city")}
                   </label>
                   <input
                     type="text"
                     value={form.Poblacion ?? ""}
                     onChange={(e) => handleChange("Poblacion", e.target.value)}
                     className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                    placeholder="Madrid"
+                    placeholder={t("configuracion:empresa.cityPlaceholder")}
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-500 mb-1">
-                    Provincia
+                    {t("configuracion:empresa.province")}
                   </label>
                   <input
                     type="text"
                     value={form.Provincia ?? ""}
                     onChange={(e) => handleChange("Provincia", e.target.value)}
                     className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                    placeholder="Madrid"
+                    placeholder={t("configuracion:empresa.provincePlaceholder")}
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-500 mb-1">
-                    País
+                    {t("configuracion:empresa.country")}
                   </label>
                   <input
                     type="text"
                     value={form.Pais ?? ""}
                     onChange={(e) => handleChange("Pais", e.target.value)}
                     className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                    placeholder="España"
+                    placeholder={t("configuracion:empresa.countryPlaceholder")}
                   />
                 </div>
               </div>
@@ -263,43 +265,43 @@ export default function ConfiguracionEmpresa() {
             {/* Contacto */}
             <div>
               <h3 className="text-sm font-bold text-slate-700 mb-4 pb-2 border-b border-slate-200">
-                Contacto
+                {t("configuracion:empresa.sections.contact")}
               </h3>
               <div className="grid grid-cols-3 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-slate-500 mb-1">
-                    Teléfono
+                    {t("configuracion:empresa.phone")}
                   </label>
                   <input
                     type="text"
                     value={form.Telefono ?? ""}
                     onChange={(e) => handleChange("Telefono", e.target.value)}
                     className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                    placeholder="912345678"
+                    placeholder={t("configuracion:empresa.phonePlaceholder")}
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-500 mb-1">
-                    Email
+                    {t("configuracion:empresa.email")}
                   </label>
                   <input
                     type="email"
                     value={form.Email ?? ""}
                     onChange={(e) => handleChange("Email", e.target.value)}
                     className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                    placeholder="info@empresa.com"
+                    placeholder={t("configuracion:empresa.emailPlaceholder")}
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-500 mb-1">
-                    Web
+                    {t("configuracion:empresa.web")}
                   </label>
                   <input
                     type="text"
                     value={form.Web ?? ""}
                     onChange={(e) => handleChange("Web", e.target.value)}
                     className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                    placeholder="www.empresa.com"
+                    placeholder={t("configuracion:empresa.webPlaceholder")}
                   />
                 </div>
               </div>
@@ -308,12 +310,12 @@ export default function ConfiguracionEmpresa() {
             {/* Configuración documentos */}
             <div>
               <h3 className="text-sm font-bold text-slate-700 mb-4 pb-2 border-b border-slate-200">
-                Configuración de Documentos
+                {t("configuracion:empresa.sections.documentsConfig")}
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-slate-500 mb-1">
-                    URL del Logo
+                    {t("configuracion:empresa.logoUrl")}
                   </label>
                   <input
                     type="text"
@@ -325,7 +327,7 @@ export default function ConfiguracionEmpresa() {
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-500 mb-1">
-                    Plazo confirmación (días)
+                    {t("configuracion:empresa.confirmationDays")}
                   </label>
                   <input
                     type="number"
@@ -338,14 +340,14 @@ export default function ConfiguracionEmpresa() {
                 </div>
                 <div className="col-span-2">
                   <label className="block text-xs font-medium text-slate-500 mb-1">
-                    Texto pie de documento
+                    {t("configuracion:empresa.footerText")}
                   </label>
                   <textarea
                     value={form.TextoPieDocumento ?? ""}
                     onChange={(e) => handleChange("TextoPieDocumento", e.target.value)}
                     rows={2}
                     className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                    placeholder="Condiciones legales, forma de pago, etc."
+                    placeholder={t("configuracion:empresa.footerTextPlaceholder")}
                   />
                 </div>
               </div>
@@ -355,12 +357,12 @@ export default function ConfiguracionEmpresa() {
             {form.LogoUrl && (
               <div>
                 <h3 className="text-sm font-bold text-slate-700 mb-4 pb-2 border-b border-slate-200">
-                  Vista previa del Logo
+                  {t("configuracion:empresa.logoPreview")}
                 </h3>
                 <div className="p-4 bg-slate-50 rounded-lg inline-block">
                   <img
                     src={form.LogoUrl}
-                    alt="Logo empresa"
+                    alt={t("configuracion:empresa.logoAlt")}
                     className="max-h-16 object-contain"
                     onError={(e) => {
                       (e.target as HTMLImageElement).style.display = "none";
@@ -380,12 +382,11 @@ export default function ConfiguracionEmpresa() {
                     <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    Serie de Facturacion
-                    <span className="text-xs font-normal text-purple-600 bg-purple-50 px-2 py-0.5 rounded">Solo Master</span>
+                    {t("configuracion:empresa.invoiceSeries")}
+                    <span className="text-xs font-normal text-purple-600 bg-purple-50 px-2 py-0.5 rounded">{t("configuracion:empresa.masterOnly")}</span>
                   </h3>
                   <p className="text-xs text-slate-500 mb-4">
-                    Define la serie que se usara para numerar las facturas de esta tienda.
-                    Cada tienda debe tener una serie unica para evitar conflictos de numeracion.
+                    {t("configuracion:empresa.invoiceSeriesHelp")}
                   </p>
                 </div>
               </div>
@@ -393,7 +394,7 @@ export default function ConfiguracionEmpresa() {
               <div className="flex items-end gap-4">
                 <div className="flex-1 max-w-xs">
                   <label className="block text-xs font-medium text-slate-500 mb-1">
-                    Serie
+                    {t("configuracion:empresa.series")}
                   </label>
                   <input
                     type="text"
@@ -401,10 +402,10 @@ export default function ConfiguracionEmpresa() {
                     onChange={(e) => setSerieFacturacion(e.target.value.toUpperCase())}
                     maxLength={10}
                     className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm font-mono uppercase"
-                    placeholder="Ej: OC, SN, 01..."
+                    placeholder={t("configuracion:empresa.seriesPlaceholder")}
                   />
                   <p className="text-xs text-slate-400 mt-1">
-                    Las facturas tendran formato: {serieFacturacion || "F"}-0001, {serieFacturacion || "F"}-0002...
+                    {t("configuracion:empresa.seriesFormat", { serie: serieFacturacion || "F" })}
                   </p>
                 </div>
                 <button
@@ -412,13 +413,13 @@ export default function ConfiguracionEmpresa() {
                   disabled={savingSerie}
                   className="px-4 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700 text-sm font-medium disabled:opacity-50"
                 >
-                  {savingSerie ? "Guardando..." : "Guardar serie"}
+                  {savingSerie ? t("configuracion:empresa.saving") : t("configuracion:empresa.saveSeries")}
                 </button>
               </div>
 
               {serieSuccess && (
                 <div className="mt-4 p-3 rounded-lg bg-green-50 text-green-700 text-sm border border-green-100">
-                  Serie de facturacion actualizada correctamente
+                  {t("configuracion:empresa.seriesUpdated")}
                 </div>
               )}
 
@@ -429,11 +430,11 @@ export default function ConfiguracionEmpresa() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <div className="text-sm text-amber-800">
-                    <p className="font-medium">Importante:</p>
+                    <p className="font-medium">{t("configuracion:empresa.importantTitle")}</p>
                     <ul className="mt-1 list-disc list-inside text-xs space-y-1">
-                      <li>Cada tienda debe tener una serie diferente para evitar duplicados</li>
-                      <li>Una vez emitida una factura con una serie, no la cambies</li>
-                      <li>Ejemplos: "OC" para Optica Central, "SN" para Sucursal Norte</li>
+                      <li>{t("configuracion:empresa.importantList.unique")}</li>
+                      <li>{t("configuracion:empresa.importantList.noChange")}</li>
+                      <li>{t("configuracion:empresa.importantList.examples")}</li>
                     </ul>
                   </div>
                 </div>

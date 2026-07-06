@@ -16,6 +16,10 @@ import {
 } from "../../lib/clientesListadoRest";
 import { deleteRevision } from "../../lib/revisionesRest";
 
+// Columna "Acciones" del listado de clientes (oculta a petición).
+// La fila es clicable para abrir la ficha; pon true para volver a mostrarla.
+const SHOW_CLIENTE_ACCIONES = false;
+
 // Normaliza fecha D/M/YYYY o DD/MM/YYYY a DD/MM/YYYY
 function normalizeDMY(value: string): string {
   const s = (value ?? "").trim();
@@ -428,7 +432,7 @@ export default function ClientesListado() {
         const rows = await fetchClienteRevisiones(clienteId);
         setPanelState(clienteId, "revisiones", { loading: false, error: null, rows });
       } catch (err: any) {
-        alert(err.message ?? "Error al eliminar la revisión");
+        alert(err.message ?? t("listado.errorDeletingRevision"));
       }
     };
 
@@ -563,11 +567,11 @@ export default function ClientesListado() {
           );
         },
       },
-      {
+      ...(SHOW_CLIENTE_ACCIONES ? [{
         header: t("columns.actions"),
-        headerAlign: "right",
-        cellAlign: "right",
-        render: (c) => (
+        headerAlign: "right" as const,
+        cellAlign: "right" as const,
+        render: (c: Cliente) => (
           <div className="flex justify-end gap-1" onClick={(e) => e.stopPropagation()}>
             <button
               type="button"
@@ -617,7 +621,7 @@ export default function ClientesListado() {
             </button>
           </div>
         ),
-      },
+      }] : []),
     ];
   }, [openClienteModal, t, showOpticaModule]);
 

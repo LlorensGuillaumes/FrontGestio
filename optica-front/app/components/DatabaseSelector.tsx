@@ -1,8 +1,10 @@
 // app/components/DatabaseSelector.tsx
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "~/contexts/AuthContext";
 
 export function DatabaseSelector() {
+  const { t } = useTranslation("common");
   const { user, currentDatabase, switchDatabase } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -61,7 +63,7 @@ export function DatabaseSelector() {
           {/* Dropdown */}
           <div className="absolute bottom-full left-0 mb-2 w-64 bg-slate-800 rounded-lg shadow-xl border border-slate-700 z-20 overflow-hidden">
             <div className="px-3 py-2 border-b border-slate-700">
-              <p className="text-xs text-slate-400 uppercase tracking-wider">Seleccionar empresa</p>
+              <p className="text-xs text-slate-400 uppercase tracking-wider">{t("dbSelector.selectCompany")}</p>
             </div>
             <div className="max-h-64 overflow-y-auto">
               {user.databases.map((db) => (

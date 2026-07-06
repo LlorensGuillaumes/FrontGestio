@@ -10,6 +10,7 @@ import {
   type RecepcionCompraFull,
   type ProveedorLookup,
 } from "~/lib/comprasRest";
+import FacturaCompraPDF from "~/components/FacturaCompraPDF";
 
 type Props = {
   mode: "new" | "view";
@@ -78,6 +79,7 @@ export default function FacturaCompraModal({
 
   // Factura loaded
   const [factura, setFactura] = useState<FacturaCompraFull | null>(null);
+  const [showPDF, setShowPDF] = useState(false);
 
   // Pre-populate from recepcion if provided
   useEffect(() => {
@@ -245,6 +247,9 @@ export default function FacturaCompraModal({
 
   return (
     <div className="fixed inset-0 z-50">
+      {showPDF && factura && (
+        <FacturaCompraPDF factura={factura} onClose={() => setShowPDF(false)} />
+      )}
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
 
       <div className="absolute inset-0 flex items-center justify-center p-4">
@@ -272,6 +277,14 @@ export default function FacturaCompraModal({
                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${estadoInfo.color}`}>
                   {estadoInfo.label}
                 </span>
+              )}
+              {isView && factura && (
+                <button
+                  onClick={() => setShowPDF(true)}
+                  className="px-3 py-1.5 text-sm rounded-lg bg-emerald-600 text-white hover:bg-emerald-700"
+                >
+                  PDF
+                </button>
               )}
               <button
                 onClick={onClose}

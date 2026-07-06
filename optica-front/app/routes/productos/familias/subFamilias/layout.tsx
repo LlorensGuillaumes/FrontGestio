@@ -1,6 +1,8 @@
 import { Outlet, NavLink, type NavLinkRenderProps } from "react-router";
+import { useTranslation } from "react-i18next";
 
 export default function SubfamiliasLayout() {
+  const { t } = useTranslation(["productos"]);
   const linkStyle = ({ isActive }: NavLinkRenderProps): string =>
     `px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
       isActive
@@ -13,7 +15,7 @@ export default function SubfamiliasLayout() {
       <header className="bg-slate-50/80 backdrop-blur-sm border-b border-slate-200 px-8 py-3 flex items-center justify-between">
         {/* Breadcrumb Productos > Familias > Subfamilias */}
         <nav className="flex items-center space-x-2 text-sm">
-          <span className="text-slate-400 font-medium">Productos</span>
+          <span className="text-slate-400 font-medium">{t("nav.productos")}</span>
 
           <svg
             className="w-4 h-4 text-slate-300"
@@ -29,7 +31,7 @@ export default function SubfamiliasLayout() {
             />
           </svg>
 
-          <span className="text-slate-400 font-medium">Familias</span>
+          <span className="text-slate-400 font-medium">{t("nav.familias")}</span>
 
           <svg
             className="w-4 h-4 text-slate-300"
@@ -46,18 +48,18 @@ export default function SubfamiliasLayout() {
           </svg>
 
           <span className="text-slate-900 font-bold tracking-tight px-2 py-0.5 bg-slate-200/50 rounded-md">
-            Subfamilias
+            {t("nav.subfamilias")}
           </span>
         </nav>
 
         {/* Navegación interna Subfamilias */}
         <nav className="flex space-x-1 bg-slate-200/40 p-1 rounded-xl border border-slate-200/50">
           <NavLink to="." end className={linkStyle}>
-            Listado
+            {t("nav.listado")}
           </NavLink>
 
           <NavLink to="nueva" className={linkStyle}>
-            + Nueva Subfamilia
+            {t("nav.nuevaSubfamilia")}
           </NavLink>
         </nav>
       </header>

@@ -1,7 +1,9 @@
 // app/routes/compras/layout.tsx
+import { useTranslation } from "react-i18next";
 import { Outlet, NavLink, type NavLinkRenderProps } from "react-router";
 
 export default function ComprasLayout() {
+  const { t } = useTranslation(["compras", "common"]);
   const linkStyle = ({ isActive }: NavLinkRenderProps): string =>
     `px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
       isActive
@@ -14,19 +16,19 @@ export default function ComprasLayout() {
       <header className="bg-white border-b border-slate-200 px-8 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Compras</h1>
-            <p className="text-sm text-slate-500">Gestiona ordenes, recepciones y facturas de proveedores</p>
+            <h1 className="text-2xl font-bold text-slate-900">{t("common:breadcrumb.compras")}</h1>
+            <p className="text-sm text-slate-500">{t("compras:subtitulo")}</p>
           </div>
 
           <nav className="flex items-center gap-2 bg-slate-100 p-1 rounded-xl">
             <NavLink to="ordenes" className={linkStyle}>
-              Ordenes
+              {t("common:breadcrumb.ordenes")}
             </NavLink>
             <NavLink to="recepciones" className={linkStyle}>
-              Recepciones
+              {t("common:breadcrumb.recepciones")}
             </NavLink>
             <NavLink to="facturas" className={linkStyle}>
-              Facturas
+              {t("common:breadcrumb.facturas")}
             </NavLink>
           </nav>
         </div>

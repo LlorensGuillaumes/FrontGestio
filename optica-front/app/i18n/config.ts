@@ -20,6 +20,7 @@ import controlHorarioES from "./locales/es/controlHorario.json";
 import agendaES from "./locales/es/agenda.json";
 import fichajesES from "./locales/es/fichajes.json";
 import comunicacionES from "./locales/es/comunicacion.json";
+import escolaES from "./locales/es/escola.json";
 
 // Traducciones CA
 import commonCA from "./locales/ca/common.json";
@@ -39,6 +40,7 @@ import controlHorarioCA from "./locales/ca/controlHorario.json";
 import agendaCA from "./locales/ca/agenda.json";
 import fichajesCA from "./locales/ca/fichajes.json";
 import comunicacionCA from "./locales/ca/comunicacion.json";
+import escolaCA from "./locales/ca/escola.json";
 
 const resources = {
   es: {
@@ -59,6 +61,7 @@ const resources = {
     agenda: agendaES,
     fichajes: fichajesES,
     comunicacion: comunicacionES,
+    escola: escolaES,
   },
   ca: {
     common: commonCA,
@@ -78,6 +81,7 @@ const resources = {
     agenda: agendaCA,
     fichajes: fichajesCA,
     comunicacion: comunicacionCA,
+    escola: escolaCA,
   },
 };
 
@@ -106,6 +110,7 @@ i18n
       "agenda",
       "fichajes",
       "comunicacion",
+      "escola",
     ],
     interpolation: {
       escapeValue: false,

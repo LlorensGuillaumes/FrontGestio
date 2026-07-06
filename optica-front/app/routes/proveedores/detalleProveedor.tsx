@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 
 export default function DetalleProveedorPage() {
+  const { t } = useTranslation("proveedores");
   const { id } = useParams();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
@@ -84,10 +86,10 @@ export default function DetalleProveedorPage() {
         <header className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
           <h2 className="text-xl font-bold text-slate-800">
             {id === "nuevo"
-              ? "Nuevo Proveedor"
+              ? t("detalle.newTitle")
               : isEditing
-              ? "Modificar Proveedor"
-              : "Detalle del Proveedor"}
+              ? t("detalle.editTitle")
+              : t("detalle.viewTitle")}
           </h2>
           <button onClick={handleClose} className="text-slate-400 hover:text-slate-600">
             <svg
@@ -119,7 +121,7 @@ export default function DetalleProveedorPage() {
                 onChange={handleChange}
                 className="w-4 h-4 text-blue-600 focus:ring-blue-500"
               />
-              <span className="text-sm font-medium text-slate-700">Empresa / SL</span>
+              <span className="text-sm font-medium text-slate-700">{t("detalle.typeCompany")}</span>
             </label>
             <label className="flex items-center space-x-2 cursor-pointer">
               <input
@@ -131,7 +133,7 @@ export default function DetalleProveedorPage() {
                 onChange={handleChange}
                 className="w-4 h-4 text-blue-600 focus:ring-blue-500"
               />
-              <span className="text-sm font-medium text-slate-700">Autónomo / Persona</span>
+              <span className="text-sm font-medium text-slate-700">{t("detalle.typePerson")}</span>
             </label>
           </div>
 
@@ -139,7 +141,7 @@ export default function DetalleProveedorPage() {
           {formData.tipo === "empresa" && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in duration-300">
               <div className="space-y-1">
-                <label className={labelClass}>Razón Social</label>
+                <label className={labelClass}>{t("detalle.legalName")}</label>
                 <input
                   type="text"
                   name="razonSocial"
@@ -150,7 +152,7 @@ export default function DetalleProveedorPage() {
                 />
               </div>
               <div className="space-y-1">
-                <label className={labelClass}>Nombre Comercial</label>
+                <label className={labelClass}>{t("detalle.commercialName")}</label>
                 <input
                   type="text"
                   name="nombreComercial"
@@ -167,7 +169,7 @@ export default function DetalleProveedorPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-1">
               <label className={labelClass}>
-                {formData.tipo === "empresa" ? "Contacto" : "Nombre"}
+                {formData.tipo === "empresa" ? t("detalle.contact") : t("detalle.name")}
               </label>
               <input
                 type="text"
@@ -179,7 +181,7 @@ export default function DetalleProveedorPage() {
               />
             </div>
             <div className="space-y-1">
-              <label className={labelClass}>1er Apellido</label>
+              <label className={labelClass}>{t("detalle.firstSurname")}</label>
               <input
                 type="text"
                 name="apellido1"
@@ -190,7 +192,7 @@ export default function DetalleProveedorPage() {
               />
             </div>
             <div className="space-y-1">
-              <label className={labelClass}>2do Apellido</label>
+              <label className={labelClass}>{t("detalle.secondSurname")}</label>
               <input
                 type="text"
                 name="apellido2"
@@ -204,7 +206,7 @@ export default function DetalleProveedorPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-1">
-              <label className={labelClass}>NIF / CIF</label>
+              <label className={labelClass}>{t("detalle.nif")}</label>
               <input
                 type="text"
                 name="nif"
@@ -215,7 +217,7 @@ export default function DetalleProveedorPage() {
               />
             </div>
             <div className="md:col-span-2 space-y-1">
-              <label className={labelClass}>Email</label>
+              <label className={labelClass}>{t("detalle.email")}</label>
               <input
                 type="email"
                 name="email"
@@ -229,7 +231,7 @@ export default function DetalleProveedorPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className={labelClass}>Teléfono</label>
+              <label className={labelClass}>{t("detalle.phone")}</label>
               <input
                 type="text"
                 name="telefono"
@@ -240,7 +242,7 @@ export default function DetalleProveedorPage() {
               />
             </div>
             <div className="space-y-1">
-              <label className={labelClass}>Móvil</label>
+              <label className={labelClass}>{t("detalle.mobile")}</label>
               <input
                 type="text"
                 name="telefonoMovil"
@@ -253,7 +255,7 @@ export default function DetalleProveedorPage() {
           </div>
 
           <div className="space-y-1">
-            <label className={labelClass}>Dirección</label>
+            <label className={labelClass}>{t("detalle.address")}</label>
             <input
               type="text"
               name="direccion"
@@ -266,7 +268,7 @@ export default function DetalleProveedorPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-1">
-              <label className={labelClass}>C.P.</label>
+              <label className={labelClass}>{t("detalle.postalCode")}</label>
               <input
                 type="text"
                 name="cp"
@@ -277,7 +279,7 @@ export default function DetalleProveedorPage() {
               />
             </div>
             <div className="md:col-span-3 space-y-1">
-              <label className={labelClass}>Población</label>
+              <label className={labelClass}>{t("detalle.city")}</label>
               <input
                 type="text"
                 name="poblacion"
@@ -291,7 +293,7 @@ export default function DetalleProveedorPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className={labelClass}>Provincia</label>
+              <label className={labelClass}>{t("detalle.province")}</label>
               <input
                 type="text"
                 name="provincia"
@@ -302,7 +304,7 @@ export default function DetalleProveedorPage() {
               />
             </div>
             <div className="space-y-1">
-              <label className={labelClass}>País</label>
+              <label className={labelClass}>{t("detalle.country")}</label>
               <input
                 type="text"
                 name="pais"
@@ -320,18 +322,18 @@ export default function DetalleProveedorPage() {
             onClick={handleClose}
             className="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-200 rounded-lg"
           >
-            Cerrar
+            {t("detalle.close")}
           </button>
           {!isEditing ? (
             <button
               onClick={() => setIsEditing(true)}
               className="px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
-              Modificar Proveedor
+              {t("detalle.editButton")}
             </button>
           ) : (
             <button className="px-4 py-2 text-sm font-medium bg-green-600 text-white rounded-lg hover:bg-green-700">
-              Guardar Cambios
+              {t("detalle.saveChanges")}
             </button>
           )}
         </footer>

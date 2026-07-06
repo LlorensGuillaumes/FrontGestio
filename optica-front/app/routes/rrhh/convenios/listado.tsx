@@ -10,7 +10,7 @@ import {
 type ModalMode = "new" | "edit" | null;
 
 export default function ConveniosListado() {
-  const { t } = useTranslation("controlHorario");
+  const { t } = useTranslation(["trabajadores", "common"]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [convenios, setConvenios] = useState<Convenio[]>([]);
@@ -37,7 +37,7 @@ export default function ConveniosListado() {
       const data = await fetchConvenios(!showInactivos);
       setConvenios(data);
     } catch (e: any) {
-      setError(e.message ?? "Error cargando convenios");
+      setError(e.message ?? t("convenios.errorLoading", "Error cargando convenios"));
     } finally {
       setLoading(false);
     }
@@ -83,11 +83,11 @@ export default function ConveniosListado() {
 
   const handleSave = async () => {
     if (!formData.Nombre.trim()) {
-      setFormError(t("nameRequired", "El nombre es obligatorio"));
+      setFormError(t("convenios.nameRequired", "El nombre es obligatorio"));
       return;
     }
     if (!formData.HorasAnuales || formData.HorasAnuales <= 0) {
-      setFormError(t("hoursRequired", "Las horas anuales deben ser mayores que 0"));
+      setFormError(t("convenios.hoursRequired", "Las horas anuales deben ser mayores que 0"));
       return;
     }
 
@@ -103,21 +103,21 @@ export default function ConveniosListado() {
       closeModal();
       loadData();
     } catch (e: any) {
-      setFormError(e.message ?? "Error guardando convenio");
+      setFormError(e.message ?? t("convenios.errorSaving", "Error guardando convenio"));
     } finally {
       setSaving(false);
     }
   };
 
   const handleDeactivate = async (id: number) => {
-    const confirmed = window.confirm(t("confirmDeactivate", "¿Desactivar este convenio?"));
+    const confirmed = window.confirm(t("convenios.confirmDeactivate", "¿Desactivar este convenio?"));
     if (!confirmed) return;
 
     try {
       await updateConvenio(id, { Activo: 0 });
       loadData();
     } catch (e: any) {
-      alert(e.message ?? "Error al desactivar");
+      alert(e.message ?? t("convenios.errorDeactivating", "Error al desactivar"));
     }
   };
 
@@ -125,9 +125,9 @@ export default function ConveniosListado() {
     <div className="p-6 max-w-4xl mx-auto space-y-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">{t("agreements", "Convenios")}</h1>
+          <h1 className="text-2xl font-bold text-slate-900">{t("convenios.title", "Convenios")}</h1>
           <p className="text-slate-500 text-sm">
-            {loading ? t("loading", "Cargando...") : `${convenios.length} ${t("agreementsRegistered", "convenios registrados")}`}
+            {loading ? t("convenios.loading", "Cargando...") : `${convenios.length} ${t("convenios.agreementsRegistered", "convenios registrados")}`}
           </p>
         </div>
 
@@ -139,7 +139,7 @@ export default function ConveniosListado() {
               onChange={(e) => setShowInactivos(e.target.checked)}
               className="rounded border-slate-300"
             />
-            {t("showInactive", "Mostrar inactivos")}
+            {t("convenios.showInactive", "Mostrar inactivos")}
           </label>
 
           <button
@@ -147,7 +147,7 @@ export default function ConveniosListado() {
             onClick={openNewModal}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"
           >
-            + {t("newAgreement", "Nuevo convenio")}
+            + {t("convenios.newAgreement", "Nuevo convenio")}
           </button>
         </div>
       </div>
@@ -162,19 +162,19 @@ export default function ConveniosListado() {
         <table className="w-full">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
-              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("name", "Nombre")}</th>
-              <th className="text-right p-4 text-sm font-semibold text-slate-600">{t("annualHours", "Horas/año")}</th>
-              <th className="text-right p-4 text-sm font-semibold text-slate-600">{t("vacationDays", "Vacaciones")}</th>
-              <th className="text-right p-4 text-sm font-semibold text-slate-600">{t("agreementDays", "Días convenio")}</th>
-              <th className="text-center p-4 text-sm font-semibold text-slate-600">{t("status", "Estado")}</th>
-              <th className="text-right p-4 text-sm font-semibold text-slate-600">{t("actions", "Acciones")}</th>
+              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("convenios.name", "Nombre")}</th>
+              <th className="text-right p-4 text-sm font-semibold text-slate-600">{t("convenios.annualHoursCol", "Horas/año")}</th>
+              <th className="text-right p-4 text-sm font-semibold text-slate-600">{t("convenios.vacationDaysCol", "Vacaciones")}</th>
+              <th className="text-right p-4 text-sm font-semibold text-slate-600">{t("convenios.agreementDays", "Días convenio")}</th>
+              <th className="text-center p-4 text-sm font-semibold text-slate-600">{t("convenios.status", "Estado")}</th>
+              <th className="text-right p-4 text-sm font-semibold text-slate-600">{t("convenios.actions", "Acciones")}</th>
             </tr>
           </thead>
           <tbody>
             {convenios.length === 0 && !loading && (
               <tr>
                 <td colSpan={6} className="p-8 text-center text-slate-500">
-                  {t("noAgreements", "No hay convenios registrados.")}
+                  {t("convenios.noAgreements", "No hay convenios registrados.")}
                 </td>
               </tr>
             )}
@@ -190,10 +190,10 @@ export default function ConveniosListado() {
                   {c.HorasAnuales}h
                 </td>
                 <td className="p-4 text-right text-slate-600">
-                  {c.DiasVacaciones} {t("days", "días")}
+                  {c.DiasVacaciones} {t("convenios.days", "días")}
                 </td>
                 <td className="p-4 text-right text-slate-600">
-                  {c.DiasConvenio} {t("days", "días")}
+                  {c.DiasConvenio} {t("convenios.days", "días")}
                 </td>
                 <td className="p-4 text-center">
                   <span
@@ -203,7 +203,7 @@ export default function ConveniosListado() {
                         : "bg-slate-100 text-slate-500"
                     }`}
                   >
-                    {c.Activo ? t("active", "Activo") : t("inactive", "Inactivo")}
+                    {c.Activo ? t("convenios.active", "Activo") : t("convenios.inactive", "Inactivo")}
                   </span>
                 </td>
                 <td className="p-4 text-right">
@@ -212,7 +212,7 @@ export default function ConveniosListado() {
                       type="button"
                       onClick={() => openEditModal(c)}
                       className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50"
-                      title={t("edit", "Editar")}
+                      title={t("convenios.edit", "Editar")}
                     >
                       <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -223,7 +223,7 @@ export default function ConveniosListado() {
                         type="button"
                         onClick={() => handleDeactivate(c.IdConvenio)}
                         className="p-1.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50"
-                        title={t("deactivate", "Desactivar")}
+                        title={t("convenios.deactivate", "Desactivar")}
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
@@ -246,7 +246,7 @@ export default function ConveniosListado() {
             <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
               <div className="px-6 py-4 border-b border-slate-200">
                 <h2 className="text-lg font-bold text-slate-900">
-                  {modalMode === "new" ? t("newAgreement", "Nuevo convenio") : t("editAgreement", "Editar convenio")}
+                  {modalMode === "new" ? t("convenios.newAgreement", "Nuevo convenio") : t("convenios.editAgreement", "Editar convenio")}
                 </h2>
               </div>
 
@@ -258,18 +258,18 @@ export default function ConveniosListado() {
                 )}
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700">{t("name", "Nombre")} *</label>
+                  <label className="text-sm font-medium text-slate-700">{t("convenios.name", "Nombre")} *</label>
                   <input
                     type="text"
                     value={formData.Nombre}
                     onChange={(e) => setFormData({ ...formData, Nombre: e.target.value })}
                     className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                    placeholder="Ej: Convenio Comercio, Convenio Optica..."
+                    placeholder={t("convenios.namePlaceholder", "Ej: Convenio Comercio, Convenio Optica...")}
                   />
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700">{t("annualHours", "Horas anuales")} *</label>
+                  <label className="text-sm font-medium text-slate-700">{t("convenios.annualHours", "Horas anuales")} *</label>
                   <input
                     type="number"
                     min="0"
@@ -279,13 +279,13 @@ export default function ConveniosListado() {
                     className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
                   />
                   <p className="mt-1 text-xs text-slate-500">
-                    {t("hoursHelp", "Horas totales de trabajo según convenio (ej: 1800h)")}
+                    {t("convenios.hoursHelp", "Horas totales de trabajo según convenio (ej: 1800h)")}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium text-slate-700">{t("vacationDays", "Días vacaciones")}</label>
+                    <label className="text-sm font-medium text-slate-700">{t("convenios.vacationDays", "Días vacaciones")}</label>
                     <input
                       type="number"
                       min="0"
@@ -295,7 +295,7 @@ export default function ConveniosListado() {
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-slate-700">{t("agreementDays", "Días convenio")}</label>
+                    <label className="text-sm font-medium text-slate-700">{t("convenios.agreementDays", "Días convenio")}</label>
                     <input
                       type="number"
                       min="0"
@@ -304,13 +304,13 @@ export default function ConveniosListado() {
                       className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
                     />
                     <p className="mt-1 text-xs text-slate-500">
-                      {t("agreementDaysHelp", "Días extra por convenio")}
+                      {t("convenios.agreementDaysHelp", "Días extra por convenio")}
                     </p>
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700">{t("description", "Descripción")}</label>
+                  <label className="text-sm font-medium text-slate-700">{t("convenios.description", "Descripción")}</label>
                   <textarea
                     value={formData.Descripcion}
                     onChange={(e) => setFormData({ ...formData, Descripcion: e.target.value })}
@@ -328,7 +328,7 @@ export default function ConveniosListado() {
                         onChange={(e) => setFormData({ ...formData, Activo: e.target.checked ? 1 : 0 })}
                         className="rounded border-slate-300"
                       />
-                      {t("active", "Activo")}
+                      {t("convenios.active", "Activo")}
                     </label>
                   </div>
                 )}
@@ -341,7 +341,7 @@ export default function ConveniosListado() {
                   className="px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-sm"
                   disabled={saving}
                 >
-                  {t("cancel", "Cancelar")}
+                  {t("convenios.cancel", "Cancelar")}
                 </button>
                 <button
                   type="button"
@@ -349,7 +349,7 @@ export default function ConveniosListado() {
                   className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm disabled:opacity-50"
                   disabled={saving}
                 >
-                  {saving ? t("saving", "Guardando...") : t("save", "Guardar")}
+                  {saving ? t("convenios.saving", "Guardando...") : t("convenios.save", "Guardar")}
                 </button>
               </div>
             </div>

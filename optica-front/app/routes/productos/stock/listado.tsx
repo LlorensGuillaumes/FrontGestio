@@ -1,5 +1,6 @@
 // app/routes/productos/stock/listado.tsx
 import React, { useEffect, useMemo, useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useOutletContext, useSearchParams } from "react-router";
 
 import DataTable, { type ColumnDef } from "~/components/DataTable";
@@ -16,6 +17,7 @@ type Familia = { IdFamiliaProducto: number; Descripcion: string; subfamilias?: S
 type Subfamilia = { IdSubFamiliaProducto: number; IdFamiliaProducto: number; Descripcion: string };
 
 export default function StockListado() {
+  const { t } = useTranslation(["productos", "common"]);
   const { openHistorialModal, refreshToken } = useOutletContext<StockOutletContext>();
   const [searchParams] = useSearchParams();
 
@@ -97,46 +99,46 @@ export default function StockListado() {
     () => [
       {
         name: "q",
-        label: "BUSCAR",
+        label: t("stockList.filtros.buscar"),
         type: "text",
         colSpan: 3,
-        placeholder: "Nombre, codigo, marca...",
+        placeholder: t("stockList.filtros.buscarPlaceholder"),
       },
       {
         name: "idFamilia",
-        label: "FAMILIA",
+        label: t("stockList.filtros.familia"),
         type: "select",
         colSpan: 2,
         options: [
-          { value: "", label: "Todas las familias" },
+          { value: "", label: t("stockList.filtros.todasFamilias") },
           ...familias.map((f) => ({ value: String(f.IdFamiliaProducto), label: f.Descripcion })),
         ],
       },
       {
         name: "idSubfamilia",
-        label: "SUBFAMILIA",
+        label: t("stockList.filtros.subfamilia"),
         type: "select",
         colSpan: 2,
         options: [
-          { value: "", label: "Todas las subfamilias" },
+          { value: "", label: t("stockList.filtros.todasSubfamilias") },
           ...subfamiliasFiltradas.map((s) => ({ value: String(s.IdSubFamiliaProducto), label: s.Descripcion })),
         ],
       },
       {
         name: "stockBajo",
-        label: "SOLO STOCK BAJO",
+        label: t("stockList.filtros.soloStockBajo"),
         type: "checkbox",
         colSpan: 2,
       },
     ],
-    [familias, subfamiliasFiltradas]
+    [familias, subfamiliasFiltradas, t]
   );
 
   // Columnas
   const columns = useMemo<ColumnDef<ProductoStockItem>[]>(() => {
     return [
       {
-        header: "Codigo",
+        header: t("stockList.cols.codigo"),
         render: (p) => (
           <div className="min-w-24 font-mono text-sm text-slate-600">
             {p.Codigo || "-"}
@@ -144,18 +146,18 @@ export default function StockListado() {
         ),
       },
       {
-        header: "Producto",
+        header: t("stockList.cols.producto"),
         render: (p) => (
           <div className="min-w-64">
             <div className="font-medium text-slate-900">{p.Nombre}</div>
             <div className="text-xs text-slate-400">
-              {p.NombreMarca ?? "Sin marca"}
+              {p.NombreMarca ?? t("stockList.sinMarca")}
             </div>
           </div>
         ),
       },
       {
-        header: "Familias",
+        header: t("stockList.cols.familias"),
         render: (p) => {
           const subs = p.subfamilias ?? [];
           if (!subs.length) return <span className="text-slate-400">-</span>;
@@ -188,7 +190,7 @@ export default function StockListado() {
         },
       },
       {
-        header: "Stock",
+        header: t("stockList.cols.stock"),
         headerAlign: "right",
         cellAlign: "right",
         render: (p) => (
@@ -198,7 +200,7 @@ export default function StockListado() {
         ),
       },
       {
-        header: "Stock Min.",
+        header: t("stockList.cols.stockMin"),
         headerAlign: "right",
         cellAlign: "right",
         render: (p) => (
@@ -208,7 +210,7 @@ export default function StockListado() {
         ),
       },
       {
-        header: "Estado",
+        header: t("stockList.cols.estado"),
         headerAlign: "center",
         cellAlign: "center",
         render: (p) => {
@@ -219,9 +221,9 @@ export default function StockListado() {
             agotado: "bg-red-100 text-red-700",
           };
           const badgeLabels = {
-            ok: "OK",
-            bajo: "Bajo",
-            agotado: "Agotado",
+            ok: t("stockList.estado.ok"),
+            bajo: t("stockList.estado.bajo"),
+            agotado: t("stockList.estado.agotado"),
           };
           return (
             <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${badgeClasses[estado]}`}>
@@ -231,7 +233,7 @@ export default function StockListado() {
         },
       },
       {
-        header: "Acciones",
+        header: t("stockList.cols.acciones"),
         headerAlign: "right",
         cellAlign: "right",
         render: (p) => (
@@ -240,7 +242,7 @@ export default function StockListado() {
               type="button"
               onClick={() => openHistorialModal(p.id, p.Nombre)}
               className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-100 rounded-lg transition-all"
-              title="Ver historial de movimientos"
+              title={t("stockList.verHistorial")}
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -250,7 +252,7 @@ export default function StockListado() {
         ),
       },
     ];
-  }, [openHistorialModal]);
+  }, [openHistorialModal, t]);
 
   // Estadisticas
   const stats = useMemo(() => {
@@ -268,9 +270,9 @@ export default function StockListado() {
     <div className="p-6 max-w-7xl mx-auto space-y-4">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Control de Stock</h1>
+          <h1 className="text-2xl font-bold text-slate-900">{t("stockList.titulo")}</h1>
           <p className="text-slate-500 text-sm">
-            {loading ? "Cargando..." : `${total} productos`}
+            {loading ? t("stockList.cargando") : t("stockList.contador", { count: total })}
           </p>
         </div>
 
@@ -278,15 +280,15 @@ export default function StockListado() {
         <div className="flex gap-3">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-100">
             <span className="w-2 h-2 rounded-full bg-emerald-500" />
-            <span className="text-sm text-emerald-700 font-medium">{stats.ok} OK</span>
+            <span className="text-sm text-emerald-700 font-medium">{stats.ok} {t("stockList.estado.ok")}</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-100">
             <span className="w-2 h-2 rounded-full bg-amber-500" />
-            <span className="text-sm text-amber-700 font-medium">{stats.bajos} Bajo</span>
+            <span className="text-sm text-amber-700 font-medium">{stats.bajos} {t("stockList.estado.bajo")}</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-50 border border-red-100">
             <span className="w-2 h-2 rounded-full bg-red-500" />
-            <span className="text-sm text-red-700 font-medium">{stats.agotados} Agotado</span>
+            <span className="text-sm text-red-700 font-medium">{stats.agotados} {t("stockList.estado.agotado")}</span>
           </div>
         </div>
       </div>
@@ -303,10 +305,10 @@ export default function StockListado() {
         getRowKey={(p) => p.id}
         emptyText={
           loading
-            ? "Cargando..."
+            ? t("stockList.cargando")
             : anyFilter
-            ? "No se han encontrado productos con esos filtros."
-            : "No hay productos."
+            ? t("stockList.emptyConFiltros")
+            : t("stockList.empty")
         }
         onRowClick={(p) => openHistorialModal(p.id, p.Nombre)}
         showExpandColumn={false}

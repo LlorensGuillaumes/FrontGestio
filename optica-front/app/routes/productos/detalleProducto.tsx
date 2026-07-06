@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import DataTable, { type ColumnDef } from "~/components/DataTable";
 import { api } from "~/lib/api";
@@ -30,6 +31,7 @@ const sid = (v: any) => (v === null || v === undefined ? "" : String(v));
 const money = (n: number) => `${Number(n ?? 0).toFixed(2)} €`;
 
 export default function DetalleProducto() {
+  const { t } = useTranslation("productos");
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
@@ -100,7 +102,7 @@ export default function DetalleProducto() {
         );
       } catch (e: any) {
         if (!mounted) return;
-        setError(e?.message ?? "Error cargando producto");
+        setError(e?.message ?? t("detalle.loadError"));
       } finally {
         if (!mounted) return;
         setLoading(false);
@@ -138,12 +140,12 @@ export default function DetalleProducto() {
 
   const getNombreProveedor = (idProveedor: string) => {
     const p = proveedoresById.get(sid(idProveedor));
-    if (!p) return "Desconocido";
+    if (!p) return t("detalle.unknownProvider");
     if (p.razonSocial && String(p.razonSocial).trim() !== "") return p.razonSocial;
-    return `${p.nombre ?? ""} ${p.apellido1 ?? ""} ${p.apellido2 ?? ""}`.trim() || "Desconocido";
+    return `${p.nombre ?? ""} ${p.apellido1 ?? ""} ${p.apellido2 ?? ""}`.trim() || t("detalle.unknownProvider");
   };
 
-  const getNombreMarca = (idMarca: string) => marcasById.get(sid(idMarca))?.descripcion ?? "Desconocida";
+  const getNombreMarca = (idMarca: string) => marcasById.get(sid(idMarca))?.descripcion ?? t("detalle.unknownBrand");
   const getNombreFamilia = (idFamilia: string) => familiasById.get(sid(idFamilia))?.descripcion ?? "—";
 
   const subfamiliasRows = useMemo(() => {
@@ -155,16 +157,16 @@ export default function DetalleProducto() {
 
   const subCols = useMemo<ColumnDef<Subfamilia>[]>(() => {
     return [
-      { header: "ID", cellClassName: "font-mono text-slate-400", render: (sf) => sf.id },
-      { header: "Familia", render: (sf) => <span className="text-slate-600">{getNombreFamilia(sf.idFamilia)}</span> },
-      { header: "Subfamilia", cellClassName: "font-semibold text-slate-900", render: (sf) => sf.descripcion },
+      { header: t("detalle.colId"), cellClassName: "font-mono text-slate-400", render: (sf) => sf.id },
+      { header: t("detalle.colFamily"), render: (sf) => <span className="text-slate-600">{getNombreFamilia(sf.idFamilia)}</span> },
+      { header: t("detalle.colSubfamily"), cellClassName: "font-semibold text-slate-900", render: (sf) => sf.descripcion },
     ];
-  }, [familiasById]);
+  }, [familiasById, t]);
 
   if (loading) {
     return (
       <div className="p-6 max-w-5xl mx-auto">
-        <div className="text-sm text-slate-500">Cargando producto…</div>
+        <div className="text-sm text-slate-500">{t("detalle.loading")}</div>
       </div>
     );
   }
@@ -178,7 +180,7 @@ export default function DetalleProducto() {
           className="px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-sm"
           onClick={() => navigate("/productos")}
         >
-          Volver
+          {t("detalle.back")}
         </button>
       </div>
     );
@@ -187,13 +189,13 @@ export default function DetalleProducto() {
   if (!producto) {
     return (
       <div className="p-6 max-w-5xl mx-auto space-y-3">
-        <div className="text-sm text-slate-500">No existe el producto.</div>
+        <div className="text-sm text-slate-500">{t("detalle.notFound")}</div>
         <button
           type="button"
           className="px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-sm"
           onClick={() => navigate("/productos")}
         >
-          Volver
+          {t("detalle.back")}
         </button>
       </div>
     );
@@ -203,18 +205,18 @@ export default function DetalleProducto() {
     <div className="p-6 max-w-5xl mx-auto space-y-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <div className="text-xs text-slate-500">Producto #{producto.id}</div>
+          <div className="text-xs text-slate-500">{t("detalle.productNumber", { id: producto.id })}</div>
           <h1 className="text-2xl font-bold text-slate-900">
             {producto.codigo} · {producto.modelo || "—"}
           </h1>
           <div className="text-sm text-slate-500 mt-1">
-            Marca: <span className="text-slate-800 font-medium">{getNombreMarca(producto.idMarca)}</span> ·{" "}
-            Proveedor:{" "}
+            {t("detalle.brandLabel")} <span className="text-slate-800 font-medium">{getNombreMarca(producto.idMarca)}</span> ·{" "}
+            {t("detalle.providerLabel")}{" "}
             <button
               type="button"
               className="text-blue-700 hover:underline font-medium"
               onClick={() => navigate(`/proveedores/${producto.idProveedor}`)}
-              title="Ver proveedor"
+              title={t("detalle.viewProvider")}
             >
               {getNombreProveedor(producto.idProveedor)}
             </button>
@@ -227,7 +229,7 @@ export default function DetalleProducto() {
             onClick={() => navigate(`/productos/${producto.id}/editar`)}
             className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm"
           >
-            Editar
+            {t("detalle.edit")}
           </button>
 
           <button
@@ -235,7 +237,7 @@ export default function DetalleProducto() {
             onClick={() => navigate("/productos")}
             className="px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-sm"
           >
-            Volver
+            {t("detalle.back")}
           </button>
         </div>
       </div>
@@ -243,27 +245,27 @@ export default function DetalleProducto() {
       <div className="rounded-2xl border border-slate-200 bg-white p-4">
         <div className="grid grid-cols-12 gap-3">
           <div className="col-span-12 md:col-span-4">
-            <div className="text-xs font-bold text-slate-500">Código</div>
+            <div className="text-xs font-bold text-slate-500">{t("detalle.code")}</div>
             <div className="mt-1 font-mono text-slate-800">{producto.codigo || "—"}</div>
           </div>
 
           <div className="col-span-12 md:col-span-8">
-            <div className="text-xs font-bold text-slate-500">Modelo</div>
+            <div className="text-xs font-bold text-slate-500">{t("detalle.model")}</div>
             <div className="mt-1 text-slate-800">{producto.modelo || "—"}</div>
           </div>
 
           <div className="col-span-12 md:col-span-4">
-            <div className="text-xs font-bold text-slate-500">Coste</div>
+            <div className="text-xs font-bold text-slate-500">{t("detalle.cost")}</div>
             <div className="mt-1 font-mono text-slate-800">{money(producto.precioCoste)}</div>
           </div>
 
           <div className="col-span-12 md:col-span-4">
-            <div className="text-xs font-bold text-slate-500">PVP</div>
+            <div className="text-xs font-bold text-slate-500">{t("detalle.pvp")}</div>
             <div className="mt-1 font-mono font-semibold text-slate-900">{money(producto.pvp)}</div>
           </div>
 
           <div className="col-span-12 md:col-span-4">
-            <div className="text-xs font-bold text-slate-500">Código proveedor</div>
+            <div className="text-xs font-bold text-slate-500">{t("detalle.providerCode")}</div>
             <div className="mt-1 font-mono text-slate-800">{producto.codigoProveedor || "—"}</div>
           </div>
         </div>
@@ -271,8 +273,8 @@ export default function DetalleProducto() {
 
       <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
         <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between">
-          <div className="font-semibold text-slate-900">Subfamilias</div>
-          <div className="text-xs text-slate-500">{subfamiliasRows.length} registros</div>
+          <div className="font-semibold text-slate-900">{t("detalle.subfamilies")}</div>
+          <div className="text-xs text-slate-500">{t("detalle.records", { count: subfamiliasRows.length })}</div>
         </div>
 
         <div className="p-4">
@@ -280,7 +282,7 @@ export default function DetalleProducto() {
             columns={subCols}
             data={subfamiliasRows}
             getRowKey={(sf) => sf.id}
-            emptyText="Este producto no tiene subfamilias."
+            emptyText={t("detalle.noSubfamilies")}
             showExpandColumn={false}
             wrapperClassName="bg-white rounded border border-slate-200 overflow-hidden"
           />

@@ -1,6 +1,7 @@
 // app/routes/compras/facturas/listado.tsx
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useSearchParams } from "react-router";
+import { useTranslation } from "react-i18next";
 import DataTable, { type ColumnDef } from "~/components/DataTable";
 import FilterBar, { type FilterField } from "~/components/filtro";
 import {
@@ -13,9 +14,12 @@ import {
 } from "~/lib/comprasRest";
 import FacturaCompraModal from "~/modales/facturaCompraModal";
 import VeriFactuBadge from "~/components/VeriFactuBadge";
+import SepaPagoModal from "~/components/SepaPagoModal";
 
 export default function FacturasCompraListado() {
+  const { t } = useTranslation(["compras", "common"]);
   const [searchParams] = useSearchParams();
+  const [showSepaPago, setShowSepaPago] = useState(false);
 
   const q = (searchParams.get("q") ?? "").trim();
   const idProveedor = searchParams.get("idProveedor") ? Number(searchParams.get("idProveedor")) : undefined;
@@ -57,7 +61,7 @@ export default function FacturasCompraListado() {
       setRows(res.data ?? []);
       setTotal(res.total ?? 0);
     } catch (e: any) {
-      setError(e?.response?.data?.error ?? e.message ?? "Error cargando facturas");
+      setError(e?.response?.data?.error ?? e.message ?? t("facturasList.errorCargando"));
       setRows([]);
     } finally {
       setLoading(false);
@@ -88,40 +92,40 @@ export default function FacturasCompraListado() {
     () => [
       {
         name: "q",
-        label: "BUSCAR",
+        label: t("facturasList.buscar"),
         type: "text",
         colSpan: 3,
-        placeholder: "Numero, proveedor...",
+        placeholder: t("facturasList.buscarPlaceholder"),
       },
       {
         name: "idProveedor",
-        label: "PROVEEDOR",
+        label: t("facturasList.proveedor"),
         type: "select",
         colSpan: 3,
         options: [
-          { value: "", label: "Todos los proveedores" },
+          { value: "", label: t("facturasList.todosProveedores") },
           ...proveedores.map((p) => ({ value: String(p.id), label: p.nombre })),
         ],
       },
       {
         name: "estado",
-        label: "ESTADO",
+        label: t("facturasList.estado"),
         type: "select",
         colSpan: 2,
         options: [
-          { value: "", label: "Todos" },
+          { value: "", label: t("facturasList.todos") },
           ...ESTADOS_FACTURA_COMPRA.filter(e => e.value !== "ANULADA").map((e) => ({ value: e.value, label: e.label })),
         ],
       },
     ],
-    [proveedores]
+    [proveedores, t]
   );
 
   // Columns
   const columns = useMemo<ColumnDef<FacturaCompraListItem>[]>(
     () => [
       {
-        header: "Numero",
+        header: t("facturasList.colNumero"),
         render: (f) => (
           <div className="font-medium text-slate-900">
             {f.SerieFactura ? `${f.SerieFactura}-` : ""}{f.NumeroFactura}
@@ -129,7 +133,7 @@ export default function FacturasCompraListado() {
         ),
       },
       {
-        header: "Proveedor",
+        header: t("facturasList.colProveedor"),
         render: (f) => (
           <div className="min-w-48">
             <div className="font-medium text-slate-900">{f.NombreProveedor || "-"}</div>
@@ -137,7 +141,7 @@ export default function FacturasCompraListado() {
         ),
       },
       {
-        header: "Fecha",
+        header: t("facturasList.colFecha"),
         render: (f) => (
           <div className="text-slate-600">
             {f.FechaFactura ? new Date(f.FechaFactura).toLocaleDateString("es-ES") : "-"}
@@ -145,7 +149,7 @@ export default function FacturasCompraListado() {
         ),
       },
       {
-        header: "Total",
+        header: t("facturasList.colTotal"),
         headerAlign: "right",
         cellAlign: "right",
         render: (f) => (
@@ -155,7 +159,7 @@ export default function FacturasCompraListado() {
         ),
       },
       {
-        header: "Pagado",
+        header: t("facturasList.colPagado"),
         headerAlign: "right",
         cellAlign: "right",
         render: (f) => (
@@ -165,7 +169,7 @@ export default function FacturasCompraListado() {
         ),
       },
       {
-        header: "Pendiente",
+        header: t("facturasList.colPendiente"),
         headerAlign: "right",
         cellAlign: "right",
         render: (f) => (
@@ -175,7 +179,7 @@ export default function FacturasCompraListado() {
         ),
       },
       {
-        header: "Estado",
+        header: t("facturasList.colEstado"),
         headerAlign: "center",
         cellAlign: "center",
         render: (f) => {
@@ -188,7 +192,7 @@ export default function FacturasCompraListado() {
         },
       },
       {
-        header: "VeriFactu",
+        header: t("facturasList.colVeriFactu"),
         render: (f) => (
           <VeriFactuBadge
             estado={f.VeriFactuEstado || "NO_ENVIADA"}
@@ -200,7 +204,7 @@ export default function FacturasCompraListado() {
         ),
       },
       {
-        header: "Acciones",
+        header: t("facturasList.colAcciones"),
         headerAlign: "right",
         cellAlign: "right",
         render: (f) => (
@@ -208,7 +212,7 @@ export default function FacturasCompraListado() {
             <button
               onClick={() => openModal("view", f.id)}
               className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
-              title="Ver"
+              title={t("facturasList.ver")}
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -219,7 +223,7 @@ export default function FacturasCompraListado() {
         ),
       },
     ],
-    []
+    [t]
   );
 
   // Estadisticas
@@ -233,9 +237,9 @@ export default function FacturasCompraListado() {
     <div className="p-6 max-w-7xl mx-auto space-y-4">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-900">Facturas de Compra</h2>
+          <h2 className="text-xl font-bold text-slate-900">{t("facturasList.titulo")}</h2>
           <p className="text-slate-500 text-sm">
-            {loading ? "Cargando..." : `${total} facturas`}
+            {loading ? t("facturasList.cargando") : t("facturasList.contador", { count: total })}
           </p>
         </div>
 
@@ -243,13 +247,19 @@ export default function FacturasCompraListado() {
           {/* Stats */}
           <div className="flex gap-3 text-sm">
             <div className="px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-100">
-              <span className="text-amber-600 font-medium">Pendiente: {stats.pendiente.toFixed(2)} €</span>
+              <span className="text-amber-600 font-medium">{t("facturasList.pendienteStat", { importe: stats.pendiente.toFixed(2) })}</span>
             </div>
             <div className="px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-100">
-              <span className="text-emerald-600 font-medium">Pagado: {stats.pagado.toFixed(2)} €</span>
+              <span className="text-emerald-600 font-medium">{t("facturasList.pagadoStat", { importe: stats.pagado.toFixed(2) })}</span>
             </div>
           </div>
 
+          <button
+            onClick={() => setShowSepaPago(true)}
+            className="px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 text-sm font-medium"
+          >
+            {t("facturasList.sepaPago")}
+          </button>
           <button
             onClick={() => openModal("new")}
             className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium flex items-center gap-2"
@@ -257,10 +267,11 @@ export default function FacturasCompraListado() {
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
-            Nueva Factura
+            {t("facturasList.nuevaFactura")}
           </button>
         </div>
       </div>
+      {showSepaPago && <SepaPagoModal tipo="COMPRAS" onClose={() => setShowSepaPago(false)} onGenerated={() => load()} />}
 
       <FilterBar fields={filterFields} mdCols={8} />
 
@@ -272,7 +283,7 @@ export default function FacturasCompraListado() {
         columns={columns}
         data={rows}
         getRowKey={(f) => f.id}
-        emptyText={loading ? "Cargando..." : "No hay facturas de compra."}
+        emptyText={loading ? t("facturasList.cargando") : t("facturasList.sinDatos")}
         onRowClick={(f) => openModal("view", f.id)}
       />
 

@@ -1,5 +1,6 @@
 // components/recuadros/subFamiliasProveedoresPicker.tsx
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type FamiliaProveedor = {
   IdFamiliaProveedor: number;
@@ -29,6 +30,7 @@ export function SubfamiliasProveedoresPicker({
   onChangeSelected,
   mode = "edit",
 }: Props) {
+  const { t } = useTranslation("common");
   const [familiaId, setFamiliaId] = useState<number | null>(null);
   const [subSeleccionadaId, setSubSeleccionadaId] = useState<number | null>(null);
   const isView = mode === "view";
@@ -83,7 +85,7 @@ export function SubfamiliasProveedoresPicker({
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
       {isView ? (
         <div className="rounded-xl border border-slate-200 bg-white p-3 md:col-span-3">
-          <div className="font-medium text-slate-900 mb-2">Subfamilias asignadas</div>
+          <div className="font-medium text-slate-900 mb-2">{t("picker.assignedSubfamilies")}</div>
 
           {selectedItems.length ? (
             <div className="space-y-2">
@@ -94,14 +96,14 @@ export function SubfamiliasProveedoresPicker({
               ))}
             </div>
           ) : (
-            <div className="text-sm text-slate-400">No hay subfamilias asignadas.</div>
+            <div className="text-sm text-slate-400">{t("picker.noSubfamiliesAssigned")}</div>
           )}
         </div>
       ) : (
         <>
           {/* 1) Familias */}
           <div className="rounded-xl border border-slate-200 bg-white p-3">
-            <div className="font-medium text-slate-900 mb-2">Familias</div>
+            <div className="font-medium text-slate-900 mb-2">{t("picker.families")}</div>
 
             <select
               className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
@@ -112,7 +114,7 @@ export function SubfamiliasProveedoresPicker({
                 setFamiliaId(v === "" ? null : Number(v));
               }}
             >
-              <option value="">— Selecciona familia —</option>
+              <option value="">{t("picker.selectFamily")}</option>
               {familias.map((f) => (
                 <option key={f.IdFamiliaProveedor} value={f.IdFamiliaProveedor}>
                   {f.Descripcion}
@@ -121,13 +123,13 @@ export function SubfamiliasProveedoresPicker({
             </select>
 
             <div className="text-xs text-slate-400 mt-2">
-              Elige una familia para ver sus subfamilias.
+              {t("picker.chooseFamilyHint")}
             </div>
           </div>
 
           {/* 2) Subfamilias + Add */}
           <div className="rounded-xl border border-slate-200 bg-white p-3">
-            <div className="font-medium text-slate-900 mb-2">Subfamilias</div>
+            <div className="font-medium text-slate-900 mb-2">{t("picker.subfamilies")}</div>
 
             <div className="flex gap-2">
               <select
@@ -139,11 +141,11 @@ export function SubfamiliasProveedoresPicker({
                   setSubSeleccionadaId(v === "" ? null : Number(v));
                 }}
               >
-                <option value="">— Selecciona subfamilia —</option>
+                <option value="">{t("picker.selectSubfamily")}</option>
                 {subsFiltradas.map((s) => (
                   <option key={s.id} value={s.id} disabled={selectedSet.has(s.id)}>
                     {s.nombre}
-                    {selectedSet.has(s.id) ? " (ya añadida)" : ""}
+                    {selectedSet.has(s.id) ? t("picker.alreadyAddedSuffix") : ""}
                   </option>
                 ))}
               </select>
@@ -154,18 +156,18 @@ export function SubfamiliasProveedoresPicker({
                 onClick={addSelected}
                 className="px-3 py-2 rounded-lg border border-slate-200 text-sm hover:bg-slate-50 disabled:opacity-50"
               >
-                + Add
+                {t("picker.add")}
               </button>
             </div>
 
             <div className="text-xs text-slate-400 mt-2">
-              Selecciona y pulsa Add para asignar al proveedor.
+              {t("picker.assignHintProvider")}
             </div>
           </div>
 
           {/* 3) Seleccionadas */}
           <div className="rounded-xl border border-slate-200 bg-white p-3">
-            <div className="font-medium text-slate-900 mb-2">Subfamilias asignadas</div>
+            <div className="font-medium text-slate-900 mb-2">{t("picker.assignedSubfamilies")}</div>
 
             {selectedItems.length ? (
               <div className="space-y-2">
@@ -179,13 +181,13 @@ export function SubfamiliasProveedoresPicker({
                       onClick={() => removeSelected(s.id)}
                       className="px-2 py-1 rounded-lg border border-slate-200 text-xs hover:bg-slate-50 disabled:opacity-50"
                     >
-                      Quitar
+                      {t("picker.remove")}
                     </button>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-sm text-slate-400">No hay subfamilias asignadas.</div>
+              <div className="text-sm text-slate-400">{t("picker.noSubfamiliesAssigned")}</div>
             )}
           </div>
         </>

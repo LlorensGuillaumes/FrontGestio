@@ -1,5 +1,6 @@
 // app/routes/compras/ordenes/listado.tsx
 import React, { useEffect, useState, useMemo, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router";
 import DataTable, { type ColumnDef } from "~/components/DataTable";
 import FilterBar, { type FilterField } from "~/components/filtro";
@@ -14,6 +15,7 @@ import {
 import OrdenCompraModal from "~/modales/ordenCompraModal";
 
 export default function OrdenesCompraListado() {
+  const { t } = useTranslation(["compras", "common"]);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const q = (searchParams.get("q") ?? "").trim();
@@ -87,46 +89,46 @@ export default function OrdenesCompraListado() {
     () => [
       {
         name: "q",
-        label: "BUSCAR",
+        label: t("ordenesListado.filtros.buscar"),
         type: "text",
         colSpan: 3,
-        placeholder: "Numero, proveedor...",
+        placeholder: t("ordenesListado.filtros.buscarPlaceholder"),
       },
       {
         name: "idProveedor",
-        label: "PROVEEDOR",
+        label: t("ordenesListado.filtros.proveedor"),
         type: "select",
         colSpan: 3,
         options: [
-          { value: "", label: "Todos los proveedores" },
+          { value: "", label: t("ordenesListado.filtros.todosProveedores") },
           ...proveedores.map((p) => ({ value: String(p.id), label: p.nombre })),
         ],
       },
       {
         name: "estado",
-        label: "ESTADO",
+        label: t("ordenesListado.filtros.estado"),
         type: "select",
         colSpan: 2,
         options: [
-          { value: "", label: "Todos" },
+          { value: "", label: t("ordenesListado.filtros.todos") },
           ...ESTADOS_ORDEN.filter(e => e.value !== "ANULADA").map((e) => ({ value: e.value, label: e.label })),
         ],
       },
     ],
-    [proveedores]
+    [proveedores, t]
   );
 
   // Columns
   const columns = useMemo<ColumnDef<OrdenCompraListItem>[]>(
     () => [
       {
-        header: "Numero",
+        header: t("ordenesListado.columnas.numero"),
         render: (o) => (
           <div className="font-medium text-slate-900">{o.NumeroOrden}</div>
         ),
       },
       {
-        header: "Proveedor",
+        header: t("ordenesListado.columnas.proveedor"),
         render: (o) => (
           <div className="min-w-48">
             <div className="font-medium text-slate-900">{o.NombreProveedor || "-"}</div>
@@ -134,7 +136,7 @@ export default function OrdenesCompraListado() {
         ),
       },
       {
-        header: "Fecha",
+        header: t("ordenesListado.columnas.fecha"),
         render: (o) => (
           <div className="text-slate-600">
             {o.FechaOrden ? new Date(o.FechaOrden).toLocaleDateString("es-ES") : "-"}
@@ -142,7 +144,7 @@ export default function OrdenesCompraListado() {
         ),
       },
       {
-        header: "Entrega Prevista",
+        header: t("ordenesListado.columnas.entregaPrevista"),
         render: (o) => (
           <div className="text-slate-500 text-sm">
             {o.FechaEntregaPrevista
@@ -152,7 +154,7 @@ export default function OrdenesCompraListado() {
         ),
       },
       {
-        header: "Total",
+        header: t("ordenesListado.columnas.total"),
         headerAlign: "right",
         cellAlign: "right",
         render: (o) => (
@@ -162,7 +164,7 @@ export default function OrdenesCompraListado() {
         ),
       },
       {
-        header: "Estado",
+        header: t("ordenesListado.columnas.estado"),
         headerAlign: "center",
         cellAlign: "center",
         render: (o) => {
@@ -175,7 +177,7 @@ export default function OrdenesCompraListado() {
         },
       },
       {
-        header: "Acciones",
+        header: t("ordenesListado.columnas.acciones"),
         headerAlign: "right",
         cellAlign: "right",
         render: (o) => (
@@ -183,7 +185,7 @@ export default function OrdenesCompraListado() {
             <button
               onClick={() => openModal("view", o.id)}
               className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
-              title="Ver"
+              title={t("ordenesListado.ver")}
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -194,7 +196,7 @@ export default function OrdenesCompraListado() {
               <button
                 onClick={() => openModal("edit", o.id)}
                 className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg"
-                title="Editar"
+                title={t("ordenesListado.editar")}
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -205,16 +207,16 @@ export default function OrdenesCompraListado() {
         ),
       },
     ],
-    []
+    [t]
   );
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-4">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-900">Ordenes de Compra</h2>
+          <h2 className="text-xl font-bold text-slate-900">{t("ordenesListado.titulo")}</h2>
           <p className="text-slate-500 text-sm">
-            {loading ? "Cargando..." : `${total} ordenes`}
+            {loading ? t("ordenesListado.cargando") : t("ordenesListado.totalOrdenes", { total })}
           </p>
         </div>
 
@@ -225,7 +227,7 @@ export default function OrdenesCompraListado() {
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
-          Nueva Orden
+          {t("ordenesListado.nuevaOrden")}
         </button>
       </div>
 
@@ -239,7 +241,7 @@ export default function OrdenesCompraListado() {
         columns={columns}
         data={rows}
         getRowKey={(o) => o.id}
-        emptyText={loading ? "Cargando..." : "No hay ordenes de compra."}
+        emptyText={loading ? t("ordenesListado.cargando") : t("ordenesListado.sinOrdenes")}
         onRowClick={(o) => openModal("view", o.id)}
       />
 

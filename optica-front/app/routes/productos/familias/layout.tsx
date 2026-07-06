@@ -1,6 +1,8 @@
 import { Outlet, NavLink, type NavLinkRenderProps, useMatch } from "react-router";
+import { useTranslation } from "react-i18next";
 
 export default function FamiliasLayout() {
+  const { t } = useTranslation(["productos"]);
   // Detecta si estamos en subFamilias o alguna ruta hija
   const isInSubfamilias = useMatch("/productos/familias/subFamilias/*");
 
@@ -21,7 +23,7 @@ export default function FamiliasLayout() {
       <header className="bg-slate-50/80 backdrop-blur-sm border-b border-slate-200 px-8 py-3 flex items-center justify-between">
         {/* Breadcrumb mejorado */}
         <nav className="flex items-center space-x-2 text-sm">
-          <span className="text-slate-400 font-medium">Productos</span>
+          <span className="text-slate-400 font-medium">{t("nav.productos")}</span>
 
           {/* Separador visual */}
           <svg
@@ -39,17 +41,17 @@ export default function FamiliasLayout() {
           </svg>
 
           <span className="text-slate-900 font-bold tracking-tight px-2 py-0.5 bg-slate-200/50 rounded-md">
-            Familias
+            {t("nav.familias")}
           </span>
         </nav>
 
         <nav className="flex space-x-1 bg-slate-200/40 p-1 rounded-xl border border-slate-200/50">
           <NavLink to="." end className={linkStyle}>
-            Listado
+            {t("nav.listado")}
           </NavLink>
 
           <NavLink to="nuevo" className={linkStyle}>
-            + Nueva Familia
+            {t("nav.nuevaFamilia")}
           </NavLink>
         </nav>
       </header>

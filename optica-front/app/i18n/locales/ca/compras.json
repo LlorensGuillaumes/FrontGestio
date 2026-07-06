@@ -130,5 +130,117 @@
     "errorLoadingReception": "Error carregant recepcio",
     "errorLoadingInvoice": "Error carregant factura",
     "enterInvoiceNumber": "Introdueix el numero de factura"
+  },
+  "recepcionModal": {
+    "stockLabel": "Stock:",
+    "eliminarLineaTooltip": "Eliminar línia (no ha arribat)"
+  },
+  "pdfCompra": {
+    "titulo": "FACTURA DE COMPRA",
+    "proveedor": "Proveïdor",
+    "datosReceptor": "Dades del receptor",
+    "descripcion": "Descripció",
+    "cantidad": "Quant.",
+    "precio": "Preu",
+    "descuento": "Dte.",
+    "iva": "IVA",
+    "importe": "Import",
+    "baseImponible": "Base imposable",
+    "retencion": "Retenció",
+    "totalFactura": "Total factura",
+    "pagado": "Pagat",
+    "pendiente": "Pendent",
+    "observaciones": "Observacions",
+    "imprimir": "Imprimir",
+    "descargarPdf": "Descarregar PDF",
+    "cerrar": "Tancar",
+    "vencimiento": "Venciment",
+    "fecha": "Data",
+    "documentoGenerado": "Document generat el {{fecha}} a les {{hora}}"
+  },
+  "ordenesList": {
+    "titulo": "Ordres de Compra",
+    "ver": "Veure",
+    "editar": "Editar"
+  },
+  "facturasList": {
+    "errorCargando": "Error carregant factures",
+    "buscar": "CERCAR",
+    "buscarPlaceholder": "Número, proveïdor...",
+    "proveedor": "PROVEÏDOR",
+    "todosProveedores": "Tots els proveïdors",
+    "estado": "ESTAT",
+    "todos": "Tots",
+    "colNumero": "Número",
+    "colProveedor": "Proveïdor",
+    "colFecha": "Data",
+    "colTotal": "Total",
+    "colPagado": "Pagat",
+    "colPendiente": "Pendent",
+    "colEstado": "Estat",
+    "colVeriFactu": "VeriFactu",
+    "colAcciones": "Accions",
+    "ver": "Veure",
+    "titulo": "Factures de Compra",
+    "cargando": "Carregant...",
+    "contador": "{{count}} factures",
+    "pendienteStat": "Pendent: {{importe}} €",
+    "pagadoStat": "Pagat: {{importe}} €",
+    "sepaPago": "SEPA de pagament",
+    "nuevaFactura": "Nova Factura",
+    "sinDatos": "No hi ha factures de compra."
+  },
+  "subtitulo": "Gestiona ordres, recepcions i factures de proveïdors",
+  "recepcionesList": {
+    "titulo": "Recepcions de Compra",
+    "cargando": "Carregant...",
+    "totalRecepciones": "{{total}} recepcions (albarans d'entrada)",
+    "nuevaRecepcion": "Nova Recepció",
+    "sinRecepciones": "No hi ha recepcions.",
+    "ver": "Veure",
+    "filtros": {
+      "buscar": "CERCAR",
+      "buscarPlaceholder": "Número, albarà, proveïdor...",
+      "proveedor": "PROVEÏDOR",
+      "todosProveedores": "Tots els proveïdors",
+      "estado": "ESTAT",
+      "todos": "Tots"
+    },
+    "columnas": {
+      "numero": "Número",
+      "albaranProveedor": "Albarà Proveïdor",
+      "proveedor": "Proveïdor",
+      "orden": "Ordre",
+      "fecha": "Data",
+      "total": "Total",
+      "estado": "Estat",
+      "acciones": "Accions"
+    }
+  },
+  "ordenesListado": {
+    "titulo": "Ordres de Compra",
+    "cargando": "Carregant...",
+    "totalOrdenes": "{{total}} ordres",
+    "nuevaOrden": "Nova Ordre",
+    "sinOrdenes": "No hi ha ordres de compra.",
+    "ver": "Veure",
+    "editar": "Editar",
+    "filtros": {
+      "buscar": "CERCAR",
+      "buscarPlaceholder": "Número, proveïdor...",
+      "proveedor": "PROVEÏDOR",
+      "todosProveedores": "Tots els proveïdors",
+      "estado": "ESTAT",
+      "todos": "Tots"
+    },
+    "columnas": {
+      "numero": "Número",
+      "proveedor": "Proveïdor",
+      "fecha": "Data",
+      "entregaPrevista": "Entrega Prevista",
+      "total": "Total",
+      "estado": "Estat",
+      "acciones": "Accions"
+    }
   }
 }

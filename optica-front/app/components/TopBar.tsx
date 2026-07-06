@@ -7,7 +7,7 @@ import { FichajeModal } from "./FichajeModal";
 import { NotificationBell } from "./NotificationBell";
 
 export function TopBar() {
-  const { t } = useTranslation(["auth", "fichajes"]);
+  const { t } = useTranslation(["auth", "fichajes", "common"]);
   const { user, currentDatabase, switchDatabase, switchUser } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,8 +40,8 @@ export function TopBar() {
       {/* Indicador de tienda actual */}
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" title="Conectado" />
-          <span className="text-sm text-gray-500">Trabajando en:</span>
+          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" title={t("common:topbar.connected")} />
+          <span className="text-sm text-gray-500">{t("common:topbar.workingIn")}</span>
         </div>
 
         {hasMultipleDatabases ? (
@@ -69,8 +69,8 @@ export function TopBar() {
                 <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
                 <div className="absolute top-full left-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden">
                   <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
-                    <p className="text-sm font-medium text-gray-700">Cambiar de tienda</p>
-                    <p className="text-xs text-gray-500">Selecciona la tienda donde quieres trabajar</p>
+                    <p className="text-sm font-medium text-gray-700">{t("common:topbar.changeStore")}</p>
+                    <p className="text-xs text-gray-500">{t("common:topbar.changeStoreHint")}</p>
                   </div>
                   <div className="max-h-64 overflow-y-auto">
                     {user?.databases.map((db) => (
@@ -133,7 +133,7 @@ export function TopBar() {
       <div className="flex items-center gap-4">
         {currentDb && (
           <div className="text-right hidden sm:block">
-            <p className="text-xs text-gray-400">Serie facturacion</p>
+            <p className="text-xs text-gray-400">{t("common:topbar.billingSeries")}</p>
             <p className="text-sm font-mono font-bold text-blue-600">
               {currentDb.serieFacturacion || "F"}
             </p>
@@ -158,7 +158,7 @@ export function TopBar() {
         <div className="flex items-center gap-2">
           <div className="text-right">
             <p className="text-sm font-medium text-gray-700">{user?.nombre}</p>
-            <p className="text-xs text-gray-400">{user?.role === "master" ? "Master" : user?.role === "admin" ? "Admin" : "Usuario"}</p>
+            <p className="text-xs text-gray-400">{user?.role === "master" ? t("common:topbar.roleMaster") : user?.role === "admin" ? t("common:topbar.roleAdmin") : t("common:topbar.roleUser")}</p>
           </div>
 
           {/* Switch User Button */}

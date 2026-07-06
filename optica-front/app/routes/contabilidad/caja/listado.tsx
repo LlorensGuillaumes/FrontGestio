@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router";
+import { useTranslation } from "react-i18next";
 import {
   fetchMovimientosCaja,
   fetchResumenCaja,
@@ -20,6 +21,7 @@ import TicketCajaModal from "~/modales/ticketCajaModal";
 const hoy = () => new Date().toISOString().split("T")[0];
 
 export default function ListadoCaja() {
+  const { t } = useTranslation(["contabilidad", "common"]);
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Data state
@@ -84,7 +86,7 @@ export default function ListadoCaja() {
       setPaginaActual(result.paginaActual);
     } catch (e: any) {
       console.error("Error loading movimientos:", e);
-      setLoadError(e?.response?.data?.error ?? e?.message ?? "Error al cargar movimientos");
+      setLoadError(e?.response?.data?.error ?? e?.message ?? t("contabilidad:caja.errorCargarMovimientos"));
     } finally {
       setLoading(false);
     }
@@ -150,11 +152,11 @@ export default function ListadoCaja() {
 
   const handleCrearAjuste = async () => {
     if (!ajuste.concepto.trim()) {
-      setError("El concepto es obligatorio");
+      setError(t("contabilidad:caja.errorConceptoObligatorio"));
       return;
     }
     if (!ajuste.importe || Number(ajuste.importe) === 0) {
-      setError("El importe es obligatorio");
+      setError(t("contabilidad:caja.errorImporteObligatorio"));
       return;
     }
 
@@ -182,7 +184,7 @@ export default function ListadoCaja() {
       });
       loadMovimientos();
     } catch (e: any) {
-      setError(e?.response?.data?.error ?? e?.message ?? "Error al crear ajuste");
+      setError(e?.response?.data?.error ?? e?.message ?? t("contabilidad:caja.errorCrearAjuste"));
     } finally {
       setGuardando(false);
     }
@@ -191,7 +193,7 @@ export default function ListadoCaja() {
   // Retirada de efectivo
   const handleRetiradaEfectivo = async () => {
     if (!retirada.importe || Number(retirada.importe) <= 0) {
-      setError("El importe es obligatorio");
+      setError(t("contabilidad:caja.errorImporteObligatorio"));
       return;
     }
 
@@ -205,7 +207,7 @@ export default function ListadoCaja() {
       await createMovimientoCaja({
         tipo: "PAGO",
         idModoPago: efectivo?.id,
-        concepto: retirada.concepto || "Retirada de efectivo",
+        concepto: retirada.concepto || t("contabilidad:caja.retiradaEfectivo"),
         importe: -Math.abs(Number(retirada.importe)),
         observaciones: retirada.observaciones || undefined,
       });
@@ -218,19 +220,19 @@ export default function ListadoCaja() {
       });
       loadMovimientos();
     } catch (e: any) {
-      setError(e?.response?.data?.error ?? e?.message ?? "Error al registrar retirada");
+      setError(e?.response?.data?.error ?? e?.message ?? t("contabilidad:caja.errorRegistrarRetirada"));
     } finally {
       setGuardando(false);
     }
   };
 
   const handleEliminar = async (id: number) => {
-    if (!window.confirm("Eliminar este movimiento?")) return;
+    if (!window.confirm(t("contabilidad:caja.confirmarEliminarMovimiento"))) return;
     try {
       await deleteMovimientoCaja(id);
       loadMovimientos();
     } catch (e: any) {
-      alert(e?.response?.data?.error ?? e?.message ?? "Error al eliminar");
+      alert(e?.response?.data?.error ?? e?.message ?? t("contabilidad:caja.errorEliminar"));
     }
   };
 
@@ -252,7 +254,7 @@ export default function ListadoCaja() {
   const columns = useMemo<ColumnDef<MovimientoCaja>[]>(
     () => [
       {
-        header: "Fecha/Hora",
+        header: t("contabilidad:caja.colFechaHora"),
         render: (m) => (
           <span className="text-sm">
             {new Date(m.fecha).toLocaleDateString("es-ES")}{" "}
@@ -263,7 +265,7 @@ export default function ListadoCaja() {
         ),
       },
       {
-        header: "Tipo",
+        header: t("contabilidad:caja.colTipo"),
         render: (m) => {
           const colors: Record<string, string> = {
             COBRO: "bg-emerald-100 text-emerald-800",
@@ -279,11 +281,11 @@ export default function ListadoCaja() {
           );
         },
       },
-      { header: "Modo Pago", render: (m) => m.modoPago || "-" },
-      { header: "Concepto", render: (m) => <span className="text-sm">{m.concepto}</span> },
-      { header: "Factura", render: (m) => m.numeroFactura || "-" },
+      { header: t("contabilidad:caja.colModoPago"), render: (m) => m.modoPago || "-" },
+      { header: t("contabilidad:caja.colConcepto"), render: (m) => <span className="text-sm">{m.concepto}</span> },
+      { header: t("contabilidad:caja.colFactura"), render: (m) => m.numeroFactura || "-" },
       {
-        header: "Importe",
+        header: t("contabilidad:caja.colImporte"),
         headerClassName: "text-right",
         cellClassName: "text-right font-mono font-medium",
         render: (m) => {
@@ -301,29 +303,29 @@ export default function ListadoCaja() {
                 handleEliminar(m.id);
               }}
               className="text-red-500 hover:text-red-700 text-xs"
-              title="Eliminar"
+              title={t("contabilidad:caja.eliminar")}
             >
-              Eliminar
+              {t("contabilidad:caja.eliminar")}
             </button>
           ),
       },
     ],
-    []
+    [t]
   );
 
   // Formatear rango de fechas para mostrar
   const rangoFechasTexto = useMemo(() => {
     if (desdeFecha === hastaFecha) {
-      if (desdeFecha === hoy()) return "Hoy";
+      if (desdeFecha === hoy()) return t("contabilidad:caja.hoy");
       return new Date(desdeFecha).toLocaleDateString("es-ES");
     }
     return `${new Date(desdeFecha).toLocaleDateString("es-ES")} - ${new Date(hastaFecha).toLocaleDateString("es-ES")}`;
-  }, [desdeFecha, hastaFecha]);
+  }, [desdeFecha, hastaFecha, t]);
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="flex items-start justify-between mb-6">
-        <GridHeader title="Caja" subtitle="Movimientos de caja y cobros" />
+        <GridHeader title={t("contabilidad:caja.titulo")} subtitle={t("contabilidad:caja.subtitulo")} />
 
         <div className="flex items-center gap-2">
           <button
@@ -333,29 +335,29 @@ export default function ListadoCaja() {
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" />
             </svg>
-            Nuevo Ticket
+            {t("contabilidad:caja.nuevoTicket")}
           </button>
 
           <button
             onClick={() => setShowRetiradaModal(true)}
             className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 text-sm font-medium flex items-center gap-2"
-            title="Sacar efectivo de caja (para banco, cambio, etc.)"
+            title={t("contabilidad:caja.retirarEfectivoTooltip")}
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
-            Retirar Efectivo
+            {t("contabilidad:caja.retirarEfectivo")}
           </button>
 
           <button
             onClick={() => setShowAjusteModal(true)}
             className="px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 text-sm font-medium flex items-center gap-2"
-            title="Corregir descuadres de caja"
+            title={t("contabilidad:caja.ajusteCajaTooltip")}
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
             </svg>
-            Ajuste de Caja
+            {t("contabilidad:caja.ajusteCaja")}
           </button>
         </div>
       </div>
@@ -368,7 +370,7 @@ export default function ListadoCaja() {
             onClick={loadMovimientos}
             className="ml-4 text-sm underline hover:no-underline"
           >
-            Reintentar
+            {t("contabilidad:caja.reintentar")}
           </button>
         </div>
       )}
@@ -381,7 +383,7 @@ export default function ListadoCaja() {
               <svg className="w-5 h-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
               </svg>
-              <span className="font-medium text-slate-700">Resumen de Caja</span>
+              <span className="font-medium text-slate-700">{t("contabilidad:caja.resumenCaja")}</span>
               <span className="text-sm text-slate-500">({rangoFechasTexto})</span>
             </div>
           </div>
@@ -390,15 +392,15 @@ export default function ListadoCaja() {
             {/* Fila superior: Cobros, Pagos, Ajustes */}
             <div className="grid grid-cols-3 gap-4 mb-4">
               <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-100">
-                <div className="text-xs font-medium text-emerald-600 uppercase">Total Cobros</div>
+                <div className="text-xs font-medium text-emerald-600 uppercase">{t("contabilidad:caja.totalCobros")}</div>
                 <div className="text-2xl font-bold text-emerald-700">{resumen.resumen.totalCobros.toFixed(2)} EUR</div>
               </div>
               <div className="bg-red-50 rounded-lg p-4 border border-red-100">
-                <div className="text-xs font-medium text-red-600 uppercase">Total Pagos/Salidas</div>
+                <div className="text-xs font-medium text-red-600 uppercase">{t("contabilidad:caja.totalPagosSalidas")}</div>
                 <div className="text-2xl font-bold text-red-700">{resumen.resumen.totalPagos.toFixed(2)} EUR</div>
               </div>
               <div className="bg-amber-50 rounded-lg p-4 border border-amber-100">
-                <div className="text-xs font-medium text-amber-600 uppercase">Ajustes</div>
+                <div className="text-xs font-medium text-amber-600 uppercase">{t("contabilidad:caja.ajustes")}</div>
                 <div className="text-2xl font-bold text-amber-700">{resumen.resumen.totalAjustes.toFixed(2)} EUR</div>
               </div>
             </div>
@@ -407,20 +409,20 @@ export default function ListadoCaja() {
             <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <div className="text-xs font-medium text-blue-600 uppercase">Saldo Total en Caja</div>
+                  <div className="text-xs font-medium text-blue-600 uppercase">{t("contabilidad:caja.saldoTotalCaja")}</div>
                   <div className="text-3xl font-bold text-blue-700">{resumen.resumen.saldoCaja.toFixed(2)} EUR</div>
                 </div>
               </div>
 
               {resumen.totalesPorModoPago.length > 0 && (
                 <div className="border-t border-blue-200 pt-4">
-                  <div className="text-xs font-medium text-blue-600 uppercase mb-3">Desglose por Forma de Pago</div>
+                  <div className="text-xs font-medium text-blue-600 uppercase mb-3">{t("contabilidad:caja.desglosePorFormaPago")}</div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {resumen.totalesPorModoPago.map((mp) => (
                       <div key={mp.idModoPago} className="bg-white rounded-lg p-3 border border-blue-100">
                         <div className="text-xs text-slate-500 uppercase">{mp.modoPago}</div>
                         <div className="text-lg font-bold text-slate-800">{Number(mp.total).toFixed(2)} EUR</div>
-                        <div className="text-xs text-slate-400">{mp.operaciones} operaciones</div>
+                        <div className="text-xs text-slate-400">{t("contabilidad:caja.operaciones", { count: mp.operaciones })}</div>
                       </div>
                     ))}
                   </div>
@@ -435,7 +437,7 @@ export default function ListadoCaja() {
       <div className="mb-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
         <div className="flex flex-wrap items-end gap-4">
           <div>
-            <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Desde</label>
+            <label className="block text-xs font-medium text-slate-500 uppercase mb-1">{t("contabilidad:caja.desde")}</label>
             <input
               type="date"
               value={desdeFecha}
@@ -444,7 +446,7 @@ export default function ListadoCaja() {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Hasta</label>
+            <label className="block text-xs font-medium text-slate-500 uppercase mb-1">{t("contabilidad:caja.hasta")}</label>
             <input
               type="date"
               value={hastaFecha}
@@ -453,28 +455,28 @@ export default function ListadoCaja() {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Tipo</label>
+            <label className="block text-xs font-medium text-slate-500 uppercase mb-1">{t("contabilidad:caja.tipo")}</label>
             <select
               value={tipoFiltro}
               onChange={(e) => handleTipoChange(e.target.value)}
               className="rounded-lg border border-slate-200 px-3 py-2 text-sm min-w-[120px]"
             >
-              <option value="">Todos</option>
-              <option value="COBRO">Cobro</option>
-              <option value="PAGO">Pago</option>
-              <option value="AJUSTE">Ajuste</option>
-              <option value="APERTURA">Apertura</option>
-              <option value="CIERRE">Cierre</option>
+              <option value="">{t("contabilidad:caja.todos")}</option>
+              <option value="COBRO">{t("contabilidad:caja.tipoCobro")}</option>
+              <option value="PAGO">{t("contabilidad:caja.tipoPago")}</option>
+              <option value="AJUSTE">{t("contabilidad:caja.tipoAjuste")}</option>
+              <option value="APERTURA">{t("contabilidad:caja.tipoApertura")}</option>
+              <option value="CIERRE">{t("contabilidad:caja.tipoCierre")}</option>
             </select>
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Modo de Pago</label>
+            <label className="block text-xs font-medium text-slate-500 uppercase mb-1">{t("contabilidad:caja.modoPago")}</label>
             <select
               value={modoPagoFiltro}
               onChange={(e) => handleModoPagoChange(e.target.value)}
               className="rounded-lg border border-slate-200 px-3 py-2 text-sm min-w-[150px]"
             >
-              <option value="">Todos</option>
+              <option value="">{t("contabilidad:caja.todos")}</option>
               {modosPagoUnicos.map((mp) => (
                 <option key={mp.id} value={mp.id}>
                   {mp.descripcion}
@@ -486,7 +488,7 @@ export default function ListadoCaja() {
             onClick={handleLimpiarFiltros}
             className="px-3 py-2 text-sm text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg"
           >
-            Limpiar filtros
+            {t("contabilidad:caja.limpiarFiltros")}
           </button>
         </div>
 
@@ -494,7 +496,7 @@ export default function ListadoCaja() {
         {(tipoFiltro || modoPagoFiltro) && movimientos.length > 0 && (
           <div className="mt-4 pt-4 border-t border-slate-200 flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-slate-600">Sumatorio de {totalRegistros} movimientos filtrados:</span>
+              <span className="text-sm text-slate-600">{t("contabilidad:caja.sumatorioFiltrados", { count: totalRegistros })}</span>
               <span className={`text-lg font-bold font-mono ${sumatorioFiltrado >= 0 ? "text-emerald-600" : "text-red-600"}`}>
                 {sumatorioFiltrado.toFixed(2)} EUR
               </span>
@@ -513,14 +515,14 @@ export default function ListadoCaja() {
       {loading ? (
         <div className="flex items-center justify-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-600"></div>
-          <span className="ml-3 text-slate-600">Cargando movimientos...</span>
+          <span className="ml-3 text-slate-600">{t("contabilidad:caja.cargandoMovimientos")}</span>
         </div>
       ) : (
         <DataTable<MovimientoCaja>
           columns={columns}
           data={movimientos}
           getRowKey={(m) => m.id}
-          emptyText="No hay movimientos de caja"
+          emptyText={t("contabilidad:caja.sinMovimientos")}
         />
       )}
 
@@ -535,8 +537,8 @@ export default function ListadoCaja() {
                 </svg>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-800">Ajuste de Caja</h3>
-                <p className="text-sm text-slate-500">Corregir descuadres o diferencias</p>
+                <h3 className="text-lg font-bold text-slate-800">{t("contabilidad:caja.ajusteCaja")}</h3>
+                <p className="text-sm text-slate-500">{t("contabilidad:caja.ajusteCajaSubtitulo")}</p>
               </div>
             </div>
 
@@ -546,7 +548,7 @@ export default function ListadoCaja() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Tipo de ajuste</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">{t("contabilidad:caja.tipoAjusteLabel")}</label>
                 <div className="flex gap-2">
                   <button
                     type="button"
@@ -561,9 +563,9 @@ export default function ListadoCaja() {
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                       </svg>
-                      Sobra dinero
+                      {t("contabilidad:caja.sobraDinero")}
                     </div>
-                    <div className="text-xs mt-1 opacity-75">Hay mas efectivo del esperado</div>
+                    <div className="text-xs mt-1 opacity-75">{t("contabilidad:caja.sobraDineroDesc")}</div>
                   </button>
                   <button
                     type="button"
@@ -578,15 +580,15 @@ export default function ListadoCaja() {
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                       </svg>
-                      Falta dinero
+                      {t("contabilidad:caja.faltaDinero")}
                     </div>
-                    <div className="text-xs mt-1 opacity-75">Hay menos efectivo del esperado</div>
+                    <div className="text-xs mt-1 opacity-75">{t("contabilidad:caja.faltaDineroDesc")}</div>
                   </button>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Importe de la diferencia</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">{t("contabilidad:caja.importeDiferencia")}</label>
                 <div className="flex items-center gap-2">
                   <span className={`text-lg font-bold ${ajuste.tipo === "positivo" ? "text-emerald-600" : "text-red-600"}`}>
                     {ajuste.tipo === "positivo" ? "+" : "-"}
@@ -606,24 +608,24 @@ export default function ListadoCaja() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Motivo del ajuste</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">{t("contabilidad:caja.motivoAjuste")}</label>
                 <input
                   type="text"
                   value={ajuste.concepto}
                   onChange={(e) => setAjuste((prev) => ({ ...prev, concepto: e.target.value }))}
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                  placeholder="Ej: Descuadre al cierre, error en cambio..."
+                  placeholder={t("contabilidad:caja.motivoAjustePlaceholder")}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Observaciones</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">{t("contabilidad:caja.observaciones")}</label>
                 <textarea
                   value={ajuste.observaciones}
                   onChange={(e) => setAjuste((prev) => ({ ...prev, observaciones: e.target.value }))}
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
                   rows={2}
-                  placeholder="Detalles adicionales (opcional)"
+                  placeholder={t("contabilidad:caja.observacionesPlaceholder")}
                 />
               </div>
             </div>
@@ -637,14 +639,14 @@ export default function ListadoCaja() {
                 }}
                 className="px-4 py-2 rounded-lg border border-slate-200 text-sm hover:bg-slate-50"
               >
-                Cancelar
+                {t("contabilidad:caja.cancelar")}
               </button>
               <button
                 onClick={handleCrearAjuste}
                 disabled={guardando}
                 className="px-4 py-2 rounded-lg bg-slate-600 text-white text-sm hover:bg-slate-700 disabled:opacity-50"
               >
-                {guardando ? "Guardando..." : "Registrar Ajuste"}
+                {guardando ? t("contabilidad:caja.guardando") : t("contabilidad:caja.registrarAjuste")}
               </button>
             </div>
           </div>
@@ -662,8 +664,8 @@ export default function ListadoCaja() {
                 </svg>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-800">Retirada de Efectivo</h3>
-                <p className="text-sm text-slate-500">Registrar salida de efectivo de caja</p>
+                <h3 className="text-lg font-bold text-slate-800">{t("contabilidad:caja.retiradaEfectivoTitulo")}</h3>
+                <p className="text-sm text-slate-500">{t("contabilidad:caja.retiradaEfectivoSubtitulo")}</p>
               </div>
             </div>
 
@@ -673,7 +675,7 @@ export default function ListadoCaja() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Importe a retirar</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">{t("contabilidad:caja.importeRetirar")}</label>
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
@@ -690,24 +692,24 @@ export default function ListadoCaja() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Concepto</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">{t("contabilidad:caja.concepto")}</label>
                 <input
                   type="text"
                   value={retirada.concepto}
                   onChange={(e) => setRetirada((prev) => ({ ...prev, concepto: e.target.value }))}
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                  placeholder="Retirada de efectivo"
+                  placeholder={t("contabilidad:caja.retiradaEfectivo")}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Observaciones</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">{t("contabilidad:caja.observaciones")}</label>
                 <textarea
                   value={retirada.observaciones}
                   onChange={(e) => setRetirada((prev) => ({ ...prev, observaciones: e.target.value }))}
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
                   rows={2}
-                  placeholder="Opcional (ej: Retirada para banco, cambio...)"
+                  placeholder={t("contabilidad:caja.retiradaObservacionesPlaceholder")}
                 />
               </div>
             </div>
@@ -720,7 +722,7 @@ export default function ListadoCaja() {
                 }}
                 className="px-4 py-2 rounded-lg border border-slate-200 text-sm hover:bg-slate-50"
               >
-                Cancelar
+                {t("contabilidad:caja.cancelar")}
               </button>
               <button
                 onClick={handleRetiradaEfectivo}
@@ -728,13 +730,13 @@ export default function ListadoCaja() {
                 className="px-4 py-2 rounded-lg bg-amber-600 text-white text-sm hover:bg-amber-700 disabled:opacity-50 flex items-center gap-2"
               >
                 {guardando ? (
-                  "Procesando..."
+                  t("contabilidad:caja.procesando")
                 ) : (
                   <>
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    Registrar Retirada
+                    {t("contabilidad:caja.registrarRetirada")}
                   </>
                 )}
               </button>

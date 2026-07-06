@@ -29,6 +29,7 @@ export type Servicio = {
   PVP: number;
   PrecioCoste: number;
   PorcentajeIva: number;
+  ImporteMatricula: number;
   DuracionMinutos: number;
   RequiereCita: boolean;
   Observaciones: string | null;
@@ -45,6 +46,7 @@ export type ServicioInput = {
   pvp?: number;
   precioCoste?: number;
   porcentajeIva?: number;
+  importeMatricula?: number;
   duracionMinutos?: number;
   requiereCita?: boolean;
   observaciones?: string;

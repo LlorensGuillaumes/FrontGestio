@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import { getResumenMensual, type ResumenMensualUsuario } from "~/lib/fichajesRest";
 
 export default function FichajesResumen() {
-  const { t, i18n } = useTranslation("fichajes");
+  const { t, i18n } = useTranslation(["fichajes", "trabajadores"]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resumen, setResumen] = useState<ResumenMensualUsuario[]>([]);
@@ -250,7 +250,7 @@ export default function FichajesResumen() {
               </tbody>
               <tfoot className="bg-gray-100 border-t-2 border-gray-300">
                 <tr>
-                  <td className="px-4 py-3 font-semibold text-gray-800">Total</td>
+                  <td className="px-4 py-3 font-semibold text-gray-800">{t("trabajadores:fichajesResumen.total")}</td>
                   <td className="px-4 py-3 text-right font-mono text-lg font-bold text-gray-800">
                     {totales.horasTrabajadas.toFixed(1)}h
                   </td>

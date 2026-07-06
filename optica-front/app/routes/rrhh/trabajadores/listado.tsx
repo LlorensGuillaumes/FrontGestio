@@ -8,12 +8,15 @@ import {
   type Trabajador,
 } from "~/lib/trabajadoresRest";
 import { fetchConvenios, type Convenio } from "~/lib/conveniosRest";
+import { useAuth } from "~/contexts/AuthContext";
 
 type ModalMode = "new" | "edit" | null;
 
 export default function TrabajadoresListado() {
-  const { t } = useTranslation("trabajadores");
+  const { t } = useTranslation(["trabajadores", "common"]);
   const navigate = useNavigate();
+  const { canAccess } = useAuth();
+  const verBancarios = canAccess("trabajadores.datos_bancarios", "ver");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [trabajadores, setTrabajadores] = useState<Trabajador[]>([]);
@@ -33,6 +36,15 @@ export default function TrabajadoresListado() {
     IdConvenio: "" as string | number,
     FechaAlta: new Date().toISOString().split("T")[0],
     Observaciones: "",
+    tipo_relacion: "NOMINA",
+    iban: "",
+    titular_cuenta: "",
+    bic: "",
+    salario_base: 0,
+    pct_irpf: 0,
+    pct_ss: 6.35,
+    num_pagas: 12,
+    complementos: [] as { concepto: string; importe: number }[],
     Activo: 1,
   });
   const [formError, setFormError] = useState<string | null>(null);
@@ -70,6 +82,15 @@ export default function TrabajadoresListado() {
       IdConvenio: "",
       FechaAlta: new Date().toISOString().split("T")[0],
       Observaciones: "",
+      tipo_relacion: "NOMINA",
+      iban: "",
+      titular_cuenta: "",
+      bic: "",
+      salario_base: 0,
+      pct_irpf: 0,
+      pct_ss: 6.35,
+      num_pagas: 12,
+      complementos: [] as { concepto: string; importe: number }[],
       Activo: 1,
     });
     setEditingId(null);
@@ -88,6 +109,15 @@ export default function TrabajadoresListado() {
       IdConvenio: t.IdConvenio ?? "",
       FechaAlta: t.FechaAlta?.split("T")[0] ?? "",
       Observaciones: t.Observaciones ?? "",
+      tipo_relacion: t.tipo_relacion ?? "NOMINA",
+      iban: t.iban ?? "",
+      titular_cuenta: t.titular_cuenta ?? "",
+      bic: t.bic ?? "",
+      salario_base: t.salario_base ?? 0,
+      pct_irpf: t.pct_irpf ?? 0,
+      pct_ss: t.pct_ss ?? 6.35,
+      num_pagas: t.num_pagas ?? 12,
+      complementos: (t.complementos ?? []) as { concepto: string; importe: number }[],
       Activo: t.Activo,
     });
     setEditingId(t.IdTrabajador);
@@ -390,6 +420,115 @@ export default function TrabajadoresListado() {
                     rows={3}
                   />
                 </div>
+
+                {/* Relación laboral y datos bancarios (SEPA) */}
+                <div className="border-t border-slate-200 pt-3">
+                  <p className="text-xs font-bold uppercase tracking-wide text-slate-400 mb-2">{t("datosBancarios.relacionLaboralPago")}</p>
+                  <div>
+                    <label className="text-sm font-medium text-slate-700">{t("datosBancarios.tipoRelacion")}</label>
+                    <select
+                      value={formData.tipo_relacion}
+                      onChange={(e) => setFormData({ ...formData, tipo_relacion: e.target.value })}
+                      className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm bg-white"
+                    >
+                      <option value="NOMINA">{t("datosBancarios.tipoNomina")}</option>
+                      <option value="AUTONOMO">{t("datosBancarios.tipoAutonomo")}</option>
+                    </select>
+                  </div>
+                  {verBancarios && (
+                    <>
+                      <div className="mt-3 grid grid-cols-3 gap-3">
+                        <div className="col-span-2">
+                          <label className="text-sm font-medium text-slate-700">{t("datosBancarios.iban")}</label>
+                          <input
+                            value={formData.iban}
+                            onChange={(e) => setFormData({ ...formData, iban: e.target.value })}
+                            className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
+                            placeholder={t("listado.ibanPlaceholder", "ES..")}
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-slate-700">{t("datosBancarios.bic")}</label>
+                          <input
+                            value={formData.bic}
+                            onChange={(e) => setFormData({ ...formData, bic: e.target.value })}
+                            className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
+                          />
+                        </div>
+                      </div>
+                      <div className="mt-3">
+                        <label className="text-sm font-medium text-slate-700">{t("datosBancarios.titularCuenta")}</label>
+                        <input
+                          value={formData.titular_cuenta}
+                          onChange={(e) => setFormData({ ...formData, titular_cuenta: e.target.value })}
+                          className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Datos de nómina (solo personal propio) */}
+                {formData.tipo_relacion === "NOMINA" && (
+                  <div className="border-t border-slate-200 pt-3">
+                    <p className="text-xs font-bold uppercase tracking-wide text-slate-400 mb-2">{t("datosNomina.titulo")}</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-sm font-medium text-slate-700">{t("datosNomina.salarioBase")}</label>
+                        <input type="number" step="0.01" value={formData.salario_base}
+                          onChange={(e) => setFormData({ ...formData, salario_base: parseFloat(e.target.value) || 0 })}
+                          className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm" />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-slate-700">{t("datosNomina.numPagas")}</label>
+                        <select value={formData.num_pagas} onChange={(e) => setFormData({ ...formData, num_pagas: Number(e.target.value) })}
+                          className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm bg-white">
+                          <option value={12}>12</option>
+                          <option value={14}>{t("datosNomina.pagas14")}</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-slate-700">{t("datosNomina.pctIrpf")}</label>
+                        <input type="number" step="0.01" value={formData.pct_irpf}
+                          onChange={(e) => setFormData({ ...formData, pct_irpf: parseFloat(e.target.value) || 0 })}
+                          className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm" />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-slate-700">{t("datosNomina.pctSs")}</label>
+                        <input type="number" step="0.01" value={formData.pct_ss}
+                          onChange={(e) => setFormData({ ...formData, pct_ss: parseFloat(e.target.value) || 0 })}
+                          className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm" />
+                      </div>
+                    </div>
+
+                    {/* Complementos salariales */}
+                    <div className="mt-3">
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="text-sm font-medium text-slate-700">{t("datosNomina.complementos")}</label>
+                        <button type="button"
+                          onClick={() => setFormData({ ...formData, complementos: [...formData.complementos, { concepto: "", importe: 0 }] })}
+                          className="text-sm text-blue-600 hover:underline font-medium">{t("datosNomina.anyadirComplemento")}</button>
+                      </div>
+                      {formData.complementos.length === 0 && <p className="text-xs text-slate-400">{t("datosNomina.sinComplementos")}</p>}
+                      <div className="space-y-2">
+                        {formData.complementos.map((c, idx) => (
+                          <div key={idx} className="flex items-center gap-2">
+                            <input value={c.concepto} placeholder={t("datosNomina.concepto")}
+                              onChange={(e) => setFormData({ ...formData, complementos: formData.complementos.map((x, i) => i === idx ? { ...x, concepto: e.target.value } : x) })}
+                              className="flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm" />
+                            <input type="number" step="0.01" value={c.importe} placeholder={t("datosNomina.importePlaceholder")}
+                              onChange={(e) => setFormData({ ...formData, complementos: formData.complementos.map((x, i) => i === idx ? { ...x, importe: parseFloat(e.target.value) || 0 } : x) })}
+                              className="w-28 rounded-lg border border-slate-200 px-3 py-2 text-sm text-right" />
+                            <button type="button"
+                              onClick={() => setFormData({ ...formData, complementos: formData.complementos.filter((_, i) => i !== idx) })}
+                              className="px-2 py-2 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 text-xs">{t("datosNomina.quitar")}</button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <p className="mt-2 text-xs text-slate-500">{t("datosNomina.ayudaGeneracion")}</p>
+                  </div>
+                )}
 
                 {modalMode === "edit" && (
                   <div>

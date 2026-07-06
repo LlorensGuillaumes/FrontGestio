@@ -6,6 +6,9 @@ export type Profesional = {
   nombreCompleto: string;
   especialidad: string | null;
   numColegiado: string | null;
+  idUsuario?: number | null;
+  nombreTrabajador?: string | null;
+  tipoRelacion?: string | null;
   activo: boolean;
 };
 

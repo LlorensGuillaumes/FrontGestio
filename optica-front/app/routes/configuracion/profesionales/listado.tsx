@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   fetchProfesionales,
   createProfesional,
@@ -6,13 +7,16 @@ import {
   deleteProfesional,
   type Profesional,
 } from "~/lib/profesionalesRest";
+import { fetchTrabajadores, type Trabajador } from "~/lib/trabajadoresRest";
 
 type ModalMode = "new" | "edit" | null;
 
 export default function ProfesionalesListado() {
+  const { t } = useTranslation(["configuracion", "common"]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [profesionales, setProfesionales] = useState<Profesional[]>([]);
+  const [trabajadores, setTrabajadores] = useState<Trabajador[]>([]);
   const [showInactivos, setShowInactivos] = useState(false);
 
   // Modal state
@@ -22,6 +26,7 @@ export default function ProfesionalesListado() {
     nombreCompleto: "",
     especialidad: "",
     numColegiado: "",
+    idUsuario: "" as number | "",
     activo: true,
   });
   const [formError, setFormError] = useState<string | null>(null);
@@ -34,7 +39,7 @@ export default function ProfesionalesListado() {
       const data = await fetchProfesionales(!showInactivos);
       setProfesionales(data);
     } catch (e: any) {
-      setError(e.message ?? "Error cargando profesionales");
+      setError(e.message ?? t("configuracion:profesionales.errors.loading"));
     } finally {
       setLoading(false);
     }
@@ -44,8 +49,12 @@ export default function ProfesionalesListado() {
     loadProfesionales();
   }, [showInactivos]);
 
+  useEffect(() => {
+    fetchTrabajadores(true).then(setTrabajadores).catch(() => {});
+  }, []);
+
   const openNewModal = () => {
-    setFormData({ nombreCompleto: "", especialidad: "", numColegiado: "", activo: true });
+    setFormData({ nombreCompleto: "", especialidad: "", numColegiado: "", idUsuario: "", activo: true });
     setEditingId(null);
     setFormError(null);
     setModalMode("new");
@@ -56,6 +65,7 @@ export default function ProfesionalesListado() {
       nombreCompleto: p.nombreCompleto,
       especialidad: p.especialidad ?? "",
       numColegiado: p.numColegiado ?? "",
+      idUsuario: p.idUsuario ?? "",
       activo: p.activo,
     });
     setEditingId(p.id);
@@ -71,7 +81,7 @@ export default function ProfesionalesListado() {
 
   const handleSave = async () => {
     if (!formData.nombreCompleto.trim()) {
-      setFormError("El nombre completo es obligatorio");
+      setFormError(t("configuracion:profesionales.errors.nameRequired"));
       return;
     }
 
@@ -79,39 +89,36 @@ export default function ProfesionalesListado() {
     setFormError(null);
 
     try {
+      const payload = {
+        nombreCompleto: formData.nombreCompleto.trim(),
+        especialidad: formData.especialidad.trim() || null,
+        numColegiado: formData.numColegiado.trim() || null,
+        idUsuario: formData.idUsuario === "" ? null : Number(formData.idUsuario),
+        activo: formData.activo,
+      };
       if (modalMode === "new") {
-        await createProfesional({
-          nombreCompleto: formData.nombreCompleto.trim(),
-          especialidad: formData.especialidad.trim() || null,
-          numColegiado: formData.numColegiado.trim() || null,
-          activo: formData.activo,
-        });
+        await createProfesional(payload);
       } else if (modalMode === "edit" && editingId) {
-        await updateProfesional(editingId, {
-          nombreCompleto: formData.nombreCompleto.trim(),
-          especialidad: formData.especialidad.trim() || null,
-          numColegiado: formData.numColegiado.trim() || null,
-          activo: formData.activo,
-        });
+        await updateProfesional(editingId, payload);
       }
       closeModal();
       loadProfesionales();
     } catch (e: any) {
-      setFormError(e.message ?? "Error guardando profesional");
+      setFormError(e.message ?? t("configuracion:profesionales.errors.saving"));
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async (id: number) => {
-    const confirmed = window.confirm("¿Desactivar este profesional? Podrá reactivarlo más tarde.");
+    const confirmed = window.confirm(t("configuracion:profesionales.confirmDeactivate"));
     if (!confirmed) return;
 
     try {
       await deleteProfesional(id);
       loadProfesionales();
     } catch (e: any) {
-      alert(e.message ?? "Error al desactivar profesional");
+      alert(e.message ?? t("configuracion:profesionales.errors.deactivating"));
     }
   };
 
@@ -119,9 +126,9 @@ export default function ProfesionalesListado() {
     <div className="p-6 max-w-4xl mx-auto space-y-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Profesionales</h1>
+          <h1 className="text-2xl font-bold text-slate-900">{t("configuracion:profesionales.title")}</h1>
           <p className="text-slate-500 text-sm">
-            {loading ? "Cargando..." : `${profesionales.length} profesionales`}
+            {loading ? t("configuracion:profesionales.loading") : t("configuracion:profesionales.count", { count: profesionales.length })}
           </p>
         </div>
 
@@ -133,7 +140,7 @@ export default function ProfesionalesListado() {
               onChange={(e) => setShowInactivos(e.target.checked)}
               className="rounded border-slate-300"
             />
-            Mostrar inactivos
+            {t("configuracion:profesionales.showInactive")}
           </label>
 
           <button
@@ -141,7 +148,7 @@ export default function ProfesionalesListado() {
             onClick={openNewModal}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"
           >
-            + Nuevo profesional
+            {t("configuracion:profesionales.newProfessional")}
           </button>
         </div>
       </div>
@@ -156,18 +163,18 @@ export default function ProfesionalesListado() {
         <table className="w-full">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
-              <th className="text-left p-4 text-sm font-semibold text-slate-600">Nombre completo</th>
-              <th className="text-left p-4 text-sm font-semibold text-slate-600">Especialidad</th>
-              <th className="text-left p-4 text-sm font-semibold text-slate-600">N. Colegiado</th>
-              <th className="text-center p-4 text-sm font-semibold text-slate-600">Estado</th>
-              <th className="text-right p-4 text-sm font-semibold text-slate-600">Acciones</th>
+              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("configuracion:profesionales.table.fullName")}</th>
+              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("configuracion:profesionales.table.specialty")}</th>
+              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("configuracion:profesionales.table.worker")}</th>
+              <th className="text-center p-4 text-sm font-semibold text-slate-600">{t("configuracion:profesionales.table.status")}</th>
+              <th className="text-right p-4 text-sm font-semibold text-slate-600">{t("configuracion:profesionales.table.actions")}</th>
             </tr>
           </thead>
           <tbody>
             {profesionales.length === 0 && !loading && (
               <tr>
                 <td colSpan={5} className="p-8 text-center text-slate-500">
-                  No hay profesionales registrados.
+                  {t("configuracion:profesionales.noProfessionals")}
                 </td>
               </tr>
             )}
@@ -177,7 +184,18 @@ export default function ProfesionalesListado() {
                   <div className="font-medium text-slate-900">{p.nombreCompleto}</div>
                 </td>
                 <td className="p-4 text-slate-600">{p.especialidad ?? "—"}</td>
-                <td className="p-4 text-slate-600 font-mono text-sm">{p.numColegiado ?? "—"}</td>
+                <td className="p-4 text-slate-600 text-sm">
+                  {p.idUsuario ? (
+                    <span className="inline-flex items-center gap-2">
+                      {p.nombreTrabajador ?? t("configuracion:profesionales.linked")}
+                      {p.tipoRelacion && (
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${p.tipoRelacion === "AUTONOMO" ? "bg-amber-100 text-amber-700" : "bg-slate-100 text-slate-600"}`}>
+                          {p.tipoRelacion === "AUTONOMO" ? t("configuracion:profesionales.freelance") : t("configuracion:profesionales.payroll")}
+                        </span>
+                      )}
+                    </span>
+                  ) : <span className="text-amber-600 text-xs">{t("configuracion:profesionales.notLinked")}</span>}
+                </td>
                 <td className="p-4 text-center">
                   <span
                     className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
@@ -186,7 +204,7 @@ export default function ProfesionalesListado() {
                         : "bg-slate-100 text-slate-500"
                     }`}
                   >
-                    {p.activo ? "Activo" : "Inactivo"}
+                    {p.activo ? t("configuracion:profesionales.active") : t("configuracion:profesionales.inactive")}
                   </span>
                 </td>
                 <td className="p-4 text-right">
@@ -195,7 +213,7 @@ export default function ProfesionalesListado() {
                       type="button"
                       onClick={() => openEditModal(p)}
                       className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50"
-                      title="Editar"
+                      title={t("configuracion:profesionales.edit")}
                     >
                       <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -206,7 +224,7 @@ export default function ProfesionalesListado() {
                         type="button"
                         onClick={() => handleDelete(p.id)}
                         className="p-1.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50"
-                        title="Desactivar"
+                        title={t("configuracion:profesionales.deactivate")}
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
@@ -229,7 +247,7 @@ export default function ProfesionalesListado() {
             <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
               <div className="px-6 py-4 border-b border-slate-200">
                 <h2 className="text-lg font-bold text-slate-900">
-                  {modalMode === "new" ? "Nuevo profesional" : "Editar profesional"}
+                  {modalMode === "new" ? t("configuracion:profesionales.modal.newTitle") : t("configuracion:profesionales.modal.editTitle")}
                 </h2>
               </div>
 
@@ -241,38 +259,43 @@ export default function ProfesionalesListado() {
                 )}
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700">Nombre completo *</label>
+                  <label className="text-sm font-medium text-slate-700">{t("configuracion:profesionales.form.fullName")}</label>
                   <input
                     type="text"
                     value={formData.nombreCompleto}
                     onChange={(e) => setFormData({ ...formData, nombreCompleto: e.target.value })}
                     className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                    placeholder="Ej: Dr. Juan García López"
+                    placeholder={t("configuracion:profesionales.form.fullNamePlaceholder")}
                   />
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700">Especialidad</label>
+                  <label className="text-sm font-medium text-slate-700">{t("configuracion:profesionales.form.specialty")}</label>
                   <input
                     type="text"
                     value={formData.especialidad}
                     onChange={(e) => setFormData({ ...formData, especialidad: e.target.value })}
                     className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                    placeholder="Ej: Optometrista, Óptico, Asistente..."
+                    placeholder={t("configuracion:profesionales.form.specialtyPlaceholder")}
                   />
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700">N. Colegiado</label>
-                  <input
-                    type="text"
-                    value={formData.numColegiado}
-                    onChange={(e) => setFormData({ ...formData, numColegiado: e.target.value })}
-                    className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                    placeholder="Ej: COL-12345 (opcional)"
-                  />
+                  <label className="text-sm font-medium text-slate-700">{t("configuracion:profesionales.form.linkedWorker")}</label>
+                  <select
+                    value={formData.idUsuario}
+                    onChange={(e) => setFormData({ ...formData, idUsuario: e.target.value ? Number(e.target.value) : "" })}
+                    className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm bg-white"
+                  >
+                    <option value="">{t("configuracion:profesionales.form.unlinkedOption")}</option>
+                    {trabajadores.map((tr) => (
+                      <option key={tr.id} value={tr.id}>
+                        {tr.nombre}{tr.tipo_relacion ? ` (${tr.tipo_relacion === "AUTONOMO" ? t("configuracion:profesionales.freelanceLower") : t("configuracion:profesionales.payrollLower")})` : ""}
+                      </option>
+                    ))}
+                  </select>
                   <p className="mt-1 text-xs text-slate-500">
-                    Opcional. Dejar vacío para asistentes o vendedores.
+                    {t("configuracion:profesionales.form.linkedWorkerHelp")}
                   </p>
                 </div>
 
@@ -285,7 +308,7 @@ export default function ProfesionalesListado() {
                         onChange={(e) => setFormData({ ...formData, activo: e.target.checked })}
                         className="rounded border-slate-300"
                       />
-                      Activo
+                      {t("configuracion:profesionales.form.active")}
                     </label>
                   </div>
                 )}
@@ -298,7 +321,7 @@ export default function ProfesionalesListado() {
                   className="px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-sm"
                   disabled={saving}
                 >
-                  Cancelar
+                  {t("configuracion:profesionales.cancel")}
                 </button>
                 <button
                   type="button"
@@ -306,7 +329,7 @@ export default function ProfesionalesListado() {
                   className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm disabled:opacity-50"
                   disabled={saving}
                 >
-                  {saving ? "Guardando..." : "Guardar"}
+                  {saving ? t("configuracion:profesionales.saving") : t("configuracion:profesionales.save")}
                 </button>
               </div>
             </div>

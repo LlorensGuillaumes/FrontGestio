@@ -21,6 +21,19 @@ export interface Trabajador {
   observaciones: string | null;
   activo: boolean;
 
+  // Datos laborales y bancarios (SEPA)
+  tipo_relacion?: string | null; // NOMINA | AUTONOMO
+  iban?: string | null;
+  titular_cuenta?: string | null;
+  bic?: string | null;
+
+  // Datos de nómina
+  salario_base?: number | null;
+  pct_irpf?: number | null;
+  pct_ss?: number | null;
+  num_pagas?: number | null;
+  complementos?: { concepto: string; importe: number }[] | null;
+
   // Alias para compatibilidad con código antiguo (siempre definidos por normalize)
   IdTrabajador: number;
   Nombre: string;
@@ -165,6 +178,15 @@ export async function updateTrabajador(id: number, input: Partial<Trabajador>): 
     fecha_alta: input.fecha_alta ?? input.FechaAlta,
     fecha_baja: input.fecha_baja ?? input.FechaBaja,
     observaciones: input.observaciones ?? input.Observaciones,
+    tipo_relacion: input.tipo_relacion,
+    iban: input.iban,
+    titular_cuenta: input.titular_cuenta,
+    bic: input.bic,
+    salario_base: input.salario_base,
+    pct_irpf: input.pct_irpf,
+    pct_ss: input.pct_ss,
+    num_pagas: input.num_pagas,
+    complementos: input.complementos,
   };
 
   const { data } = await api.put(`/rrhh/usuarios/${id}`, payload);

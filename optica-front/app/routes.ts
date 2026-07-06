@@ -144,6 +144,25 @@ export default [
     ]),
 
     // ===============================
+    // ESCUELA (Clases recurrentes y Matrículas)
+    // ===============================
+    route("escuela/clases-recurrentes", "routes/escuela/clases-recurrentes/layout.tsx", [
+      index("routes/escuela/clases-recurrentes/listado.tsx"),
+    ]),
+    route("escuela/matriculas", "routes/escuela/matriculas/layout.tsx", [
+      index("routes/escuela/matriculas/listado.tsx"),
+    ]),
+    route("escuela/contactos", "routes/escuela/contactos/layout.tsx", [
+      index("routes/escuela/contactos/listado.tsx"),
+    ]),
+    route("escuela/descuentos", "routes/escuela/descuentos/layout.tsx", [
+      index("routes/escuela/descuentos/listado.tsx"),
+    ]),
+    route("escuela/aulas", "routes/escuela/aulas/layout.tsx", [
+      index("routes/escuela/aulas/listado.tsx"),
+    ]),
+
+    // ===============================
     // RECURSOS HUMANOS (RRHH)
     // ===============================
     route("rrhh", "routes/rrhh/layout.tsx", [
@@ -152,6 +171,11 @@ export default [
         index("routes/rrhh/trabajadores/listado.tsx"),
         route(":id/horario", "routes/rrhh/trabajadores/$id.horario.tsx", { id: "trabajador-horario" }),
         route(":id/ausencias", "routes/rrhh/trabajadores/$id.ausencias.tsx", { id: "trabajador-ausencias" }),
+      ]),
+
+      // Nóminas
+      route("nominas", "routes/rrhh/nominas/layout.tsx", [
+        index("routes/rrhh/nominas/listado.tsx"),
       ]),
 
       // Festivos

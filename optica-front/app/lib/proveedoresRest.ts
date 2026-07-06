@@ -19,6 +19,9 @@ export type ProveedorFull = ProveedorListItem & {
   Pais?: string;
   Web?: string;
   Observaciones?: string;
+  Iban?: string | null;
+  TitularCuenta?: string | null;
+  Bic?: string | null;
   contactos: { id: number; Nombre: string; Cargo?: string; Telefono?: string; Email?: string }[];
   productos: { id: number; Nombre: string; Codigo?: string; PVP?: number }[];
 };
@@ -96,14 +99,14 @@ export type SubfamiliaProveedor = {
 
 // Familias de proveedores
 export async function fetchFamiliasProveedores(): Promise<FamiliaProveedor[]> {
-  const { data } = await api.get<FamiliaProveedor[]>(`/familias-proveedores?take=5000&offset=0`);
-  return data;
+  const { data } = await api.get<any>(`/familias-proveedores?take=5000&offset=0`);
+  return Array.isArray(data) ? data : (data?.rows ?? []);
 }
 
 // Subfamilias de proveedores
 export async function fetchSubfamiliasProveedores(): Promise<SubfamiliaProveedor[]> {
-  const { data } = await api.get<SubfamiliaProveedor[]>(`/subfamilias-proveedores?take=5000&offset=0`);
-  return data;
+  const { data } = await api.get<any>(`/subfamilias-proveedores?take=5000&offset=0`);
+  return Array.isArray(data) ? data : (data?.rows ?? []);
 }
 
 // CRUD familias

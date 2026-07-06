@@ -1,5 +1,6 @@
 // app/routes/productos/layout.tsx
 import React, { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Outlet, NavLink, type NavLinkRenderProps, useSearchParams } from "react-router";
 import { GestionarFamiliasProductoModal } from "~/modales/familiasProductoModal";
 import ProductoModal from "~/modales/productoModal";
@@ -14,6 +15,7 @@ export type ProductosOutletContext = {
 type ModalType = "producto" | "familias" | null;
 
 export default function ProductosLayout() {
+  const { t } = useTranslation(["productos", "common"]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [refreshToken, setRefreshToken] = useState(0);
 
@@ -74,13 +76,13 @@ export default function ProductosLayout() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
           </svg>
           <span className="text-slate-900 font-bold tracking-tight px-2 py-0.5 bg-slate-200/50 rounded-md">
-            Productos
+            {t("common:breadcrumb.productos")}
           </span>
         </nav>
 
         <nav className="flex space-x-1 bg-slate-200/40 p-1 rounded-xl border border-slate-200/50">
           <NavLink to="." end className={linkStyle}>
-            Listado
+            {t("common:breadcrumb.listado")}
           </NavLink>
 
           <button
@@ -88,7 +90,7 @@ export default function ProductosLayout() {
             onClick={openGestionarFamiliasModal}
             className="px-3 py-1.5 text-sm font-medium rounded-md transition-colors text-slate-500 hover:text-slate-700 hover:bg-slate-50"
           >
-            Gestionar familias
+            {t("productos:gestionarFamilias")}
           </button>
         </nav>
       </header>

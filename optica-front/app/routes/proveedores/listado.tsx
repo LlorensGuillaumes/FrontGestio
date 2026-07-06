@@ -1,5 +1,6 @@
 // app/routes/proveedores/listado.tsx
 import React, { useEffect, useMemo, useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useOutletContext, useSearchParams } from "react-router";
 
 import DataTable, { type ColumnDef } from "~/components/DataTable";
@@ -23,6 +24,7 @@ type ProductoProveedor = {
 };
 
 export default function ProveedoresListado() {
+  const { t } = useTranslation(["proveedores"]);
   const { openProveedorModal, refreshToken } = useOutletContext<ProveedoresOutletContext>();
   const [searchParams] = useSearchParams();
 
@@ -119,34 +121,34 @@ export default function ProveedoresListado() {
     () => [
       {
         name: "q",
-        label: "BUSCAR",
+        label: t("listadoCols.filtros.buscar"),
         type: "text",
         colSpan: 3,
-        placeholder: "Nombre, razón social...",
+        placeholder: t("listadoCols.filtros.buscarPlaceholder"),
       },
       {
         name: "nif",
-        label: "NIF/CIF",
+        label: t("listadoCols.filtros.nif"),
         type: "text",
         colSpan: 2,
-        placeholder: "NIF/CIF...",
+        placeholder: t("listadoCols.filtros.nifPlaceholder"),
       },
       {
         name: "email",
-        label: "EMAIL",
+        label: t("listadoCols.filtros.email"),
         type: "text",
         colSpan: 2,
-        placeholder: "correo@...",
+        placeholder: t("listadoCols.filtros.emailPlaceholder"),
       },
       {
         name: "telefono",
-        label: "TELÉFONO",
+        label: t("listadoCols.filtros.telefono"),
         type: "text",
         colSpan: 1,
-        placeholder: "Tel / móvil...",
+        placeholder: t("listadoCols.filtros.telefonoPlaceholder"),
       },
     ],
-    []
+    [t]
   );
 
   const getDisplayName = (p: ProveedorListItem) => {
@@ -168,32 +170,32 @@ export default function ProveedoresListado() {
   const columns = useMemo<ColumnDef<ProveedorListItem>[]>(() => {
     return [
       {
-        header: "Proveedor",
+        header: t("listadoCols.cols.proveedor"),
         render: (p) => (
           <div className="min-w-72">
             <div className="font-medium text-slate-900">{getDisplayName(p)}</div>
             <div className="text-xs text-slate-400">
               {p.NIF ?? "—"}
-              {p.Activo === 0 ? " · Inactivo" : ""}
+              {p.Activo === 0 ? ` · ${t("listadoCols.inactivo")}` : ""}
             </div>
           </div>
         ),
       },
       {
-        header: "Contacto",
+        header: t("listadoCols.cols.contacto"),
         render: (p) => (
           <div className="min-w-64 text-sm text-slate-700">
             <div className="truncate">{p.Email ?? "—"}</div>
             <div className="text-xs text-slate-400 truncate">
               {p.subfamilias?.length
                 ? p.subfamilias.map((s) => s.descripcion).join(", ")
-                : "Sin familias"}
+                : t("listadoCols.sinFamilias")}
             </div>
           </div>
         ),
       },
       {
-        header: "Teléfono",
+        header: t("listadoCols.cols.telefono"),
         render: (p) => (
           <div className="min-w-40 text-sm text-slate-700">
             {getPrimaryPhone(p)}
@@ -201,7 +203,7 @@ export default function ProveedoresListado() {
         ),
       },
       {
-        header: "Acciones",
+        header: t("listadoCols.cols.acciones"),
         headerAlign: "right",
         cellAlign: "right",
         render: (p) => (
@@ -210,7 +212,7 @@ export default function ProveedoresListado() {
               type="button"
               onClick={() => openProveedorModal("view", String(p.id))}
               className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-100 rounded-lg transition-all"
-              title="Ver proveedor"
+              title={t("listado.verProveedor")}
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -222,7 +224,7 @@ export default function ProveedoresListado() {
               type="button"
               onClick={() => openProveedorModal("edit", String(p.id))}
               className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-100 rounded-lg transition-all"
-              title="Editar proveedor"
+              title={t("listado.editarProveedor")}
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -232,7 +234,7 @@ export default function ProveedoresListado() {
         ),
       },
     ];
-  }, [openProveedorModal]);
+  }, [openProveedorModal, t]);
 
   // -------------------------
   // Render subgrid de productos
@@ -244,7 +246,7 @@ export default function ProveedoresListado() {
     if (isLoading) {
       return (
         <div className="text-sm text-slate-500 py-4">
-          Cargando productos...
+          {t("listadoCols.cargandoProductos")}
         </div>
       );
     }
@@ -252,7 +254,7 @@ export default function ProveedoresListado() {
     if (!productos || productos.length === 0) {
       return (
         <div className="text-sm text-slate-400 py-4">
-          Este proveedor no tiene productos asociados.
+          {t("listadoCols.sinProductos")}
         </div>
       );
     }
@@ -260,16 +262,16 @@ export default function ProveedoresListado() {
     return (
       <div className="space-y-2">
         <div className="text-xs font-bold text-slate-500 uppercase mb-2">
-          Productos suministrados ({productos.length})
+          {t("listadoCols.productosSuministrados", { count: productos.length })}
         </div>
         <table className="w-full text-sm">
           <thead>
             <tr className="text-xs text-slate-500 border-b border-slate-200">
-              <th className="text-left py-2 px-2 font-medium">Código</th>
-              <th className="text-left py-2 px-2 font-medium">Producto</th>
-              <th className="text-left py-2 px-2 font-medium">Ref. Proveedor</th>
-              <th className="text-right py-2 px-2 font-medium">Precio Coste</th>
-              <th className="text-right py-2 px-2 font-medium">PVP</th>
+              <th className="text-left py-2 px-2 font-medium">{t("listado.codigo")}</th>
+              <th className="text-left py-2 px-2 font-medium">{t("listado.producto")}</th>
+              <th className="text-left py-2 px-2 font-medium">{t("listado.refProveedor")}</th>
+              <th className="text-right py-2 px-2 font-medium">{t("listado.precioCoste")}</th>
+              <th className="text-right py-2 px-2 font-medium">{t("listado.pvp")}</th>
             </tr>
           </thead>
           <tbody>
@@ -290,15 +292,15 @@ export default function ProveedoresListado() {
         </table>
       </div>
     );
-  }, [productosCache, loadingProductos]);
+  }, [productosCache, loadingProductos, t]);
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-4">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Proveedores</h1>
+          <h1 className="text-2xl font-bold text-slate-900">{t("listado.titulo")}</h1>
           <p className="text-slate-500 text-sm">
-            {loading ? "Cargando..." : `${total} proveedores`}
+            {loading ? t("listado.cargando") : t("listado.contador", { count: total })}
           </p>
         </div>
 
@@ -307,7 +309,7 @@ export default function ProveedoresListado() {
           onClick={() => openProveedorModal("new")}
           className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm"
         >
-          + Nuevo proveedor
+          {t("listadoCols.nuevoProveedor")}
         </button>
       </div>
 
@@ -323,10 +325,10 @@ export default function ProveedoresListado() {
         getRowKey={(p) => p.id}
         emptyText={
           loading
-            ? "Cargando..."
+            ? t("listadoCols.cargando")
             : anyFilter
-            ? "No se han encontrado proveedores con esos filtros."
-            : "No hay proveedores."
+            ? t("listadoCols.emptyConFiltros")
+            : t("listadoCols.empty")
         }
         onRowClick={(p) => openProveedorModal("view", String(p.id))}
         showExpandColumn={true}

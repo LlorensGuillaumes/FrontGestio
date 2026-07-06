@@ -30,7 +30,76 @@
     "email": "Correu electronic"
   },
   "aeat": {
-    "title": "AEAT / VeriFactu"
+    "title": "Configuració AEAT - VeriFactu",
+    "loading": "Carregant...",
+    "subtitle": "Gestiona l'enviament de factures a l'Agència Tributària",
+    "saving": "Desant...",
+    "saveChanges": "Desar canvis",
+    "sections": {
+      "verifactuStatus": "Estat VeriFactu",
+      "aeatEnvironment": "Entorn AEAT",
+      "digitalCertificate": "Certificat Digital",
+      "sif": "Sistema Informàtic de Facturació"
+    },
+    "activateVerifactu": "Activar VeriFactu",
+    "activateVerifactuHelp": "Habilita l'enviament de factures a l'AEAT",
+    "autoSend": "Enviar factures automàticament en crear-les",
+    "autoSendHelp": "Les factures s'enviaran a l'AEAT immediatament després de crear-les",
+    "testing": "Proves",
+    "production": "Producció",
+    "testingConnection": "Provant...",
+    "testConnection": "Provar connexió",
+    "productionWarning": "En mode producció, les factures s'enviaran al sistema real de l'AEAT. Assegureu-vos de tenir el certificat digital configurat.",
+    "expires": "Caduca",
+    "noDate": "Sense data",
+    "changeCertificate": "Canviar certificat",
+    "noCertificate": "No hi ha cap certificat configurat",
+    "uploadCertificate": "Pujar certificat",
+    "certificateHelp": "Necessari per enviar factures en mode producció",
+    "sifName": "Nom del SIF",
+    "sifVersion": "Versió del SIF",
+    "communicationsLog": "Registre de Comunicacions",
+    "refresh": "Actualitzar",
+    "filters": {
+      "allTypes": "Tots els tipus",
+      "salesInvoices": "Factures de venda",
+      "purchaseInvoices": "Factures de compra",
+      "allStatuses": "Tots els estats"
+    },
+    "status": {
+      "pending": "Pendent",
+      "accepted": "Acceptat",
+      "rejected": "Rebutjat",
+      "error": "Error"
+    },
+    "table": {
+      "date": "Data",
+      "invoice": "Factura",
+      "type": "Tipus",
+      "status": "Estat",
+      "csv": "CSV",
+      "message": "Missatge",
+      "action": "Acció"
+    },
+    "noRecords": "No hi ha registres de comunicacions",
+    "sale": "Venda",
+    "purchase": "Compra",
+    "retrying": "Reintentant...",
+    "retry": "Reintentar",
+    "showing": "Mostrant {{shown}} de {{total}} registres",
+    "previous": "Anterior",
+    "next": "Següent",
+    "messages": {
+      "saved": "Configuració desada correctament",
+      "resendSuccess": "Reenviament correcte"
+    },
+    "errors": {
+      "loadingConfig": "Error carregant la configuració",
+      "saving": "Error desant",
+      "connectionTest": "Error en el test de connexió",
+      "resend": "Error en el reenviament",
+      "retrying": "Error reintentant"
+    }
   },
   "databases": {
     "title": "Gestio de Bases de Dades",
@@ -134,6 +203,274 @@
       "changesApplied": "canvis aplicats",
       "syncCompleted": "Sincronitzacio completada",
       "appliedTo": "Canvis aplicats a"
+    }
+  },
+  "basesDatos": {
+    "loading": "Carregant...",
+    "inactiveBadge": "INACTIVA",
+    "errors": {
+      "loadingData": "Error carregant dades",
+      "sync": "Error en sincronitzar",
+      "update": "Error en actualitzar",
+      "changeStatus": "Error en canviar l'estat",
+      "suffixNameRequired": "El sufix i el nom són obligatoris",
+      "create": "Error en crear la base de dades",
+      "analyzeSchemas": "Error en analitzar esquemes",
+      "errorsWord": "errors",
+      "syncSchemas": "Error en sincronitzar esquemes",
+      "applyChanges": "Error en aplicar canvis",
+      "delete": "Error en eliminar la base de dades"
+    },
+    "titles": {
+      "clickDeactivate": "Clic per desactivar",
+      "clickReactivate": "Clic per reactivar",
+      "save": "Desar",
+      "cancel": "Cancel·lar",
+      "editName": "Editar nom",
+      "deletePermanently": "Eliminar permanentment"
+    }
+  },
+  "servicios": {
+    "title": "Serveis",
+    "loading": "Carregant...",
+    "count": "{{count}} serveis",
+    "allFamilies": "Totes les famílies",
+    "allSubfamilies": "Totes les subfamílies",
+    "showInactive": "Mostrar inactius",
+    "newService": "+ Nou servei",
+    "noServices": "No hi ha serveis registrats.",
+    "minutes": "{{count}} min",
+    "yes": "Sí",
+    "no": "No",
+    "active": "Actiu",
+    "inactive": "Inactiu",
+    "edit": "Editar",
+    "deactivate": "Desactivar",
+    "cancel": "Cancel·lar",
+    "save": "Desar",
+    "saving": "Desant...",
+    "confirmDeactivate": "Voleu desactivar aquest servei? El podreu reactivar més tard.",
+    "errors": {
+      "loading": "Error carregant serveis",
+      "nameRequired": "El nom és obligatori",
+      "saving": "Error desant el servei",
+      "deactivating": "Error en desactivar el servei"
+    },
+    "table": {
+      "code": "Codi",
+      "name": "Nom",
+      "family": "Família",
+      "pvp": "PVP",
+      "duration": "Durada",
+      "appointment": "Cita",
+      "status": "Estat",
+      "actions": "Accions"
+    },
+    "modal": {
+      "newTitle": "Nou servei",
+      "editTitle": "Editar servei"
+    },
+    "form": {
+      "code": "Codi",
+      "codePlaceholder": "Ex: SRV001",
+      "name": "Nom *",
+      "namePlaceholder": "Ex: Sessió de teràpia visual",
+      "description": "Descripció",
+      "descriptionPlaceholder": "Descripció del servei...",
+      "pvp": "PVP (€)",
+      "iva": "% IVA",
+      "enrollmentAmount": "Import matrícula (€/any)",
+      "durationMinutes": "Durada (minuts)",
+      "durationPlaceholder": "0 si no aplica",
+      "requiresAppointment": "Requereix cita prèvia",
+      "observations": "Observacions",
+      "observationsPlaceholder": "Notes internes...",
+      "familiesSubfamilies": "Famílies / Subfamílies",
+      "active": "Actiu"
+    }
+  },
+  "modosPago": {
+    "title": "Modes de Pagament",
+    "loading": "Carregant...",
+    "count": "{{count}} modes de pagament",
+    "showInactive": "Mostrar inactius",
+    "newPaymentMethod": "+ Nou mode de pagament",
+    "noPaymentMethods": "No hi ha modes de pagament registrats.",
+    "cardTerminal": "Datàfon",
+    "no": "No",
+    "active": "Actiu",
+    "inactive": "Inactiu",
+    "edit": "Editar",
+    "deactivate": "Desactivar",
+    "cancel": "Cancel·lar",
+    "save": "Desar",
+    "saving": "Desant...",
+    "confirmDeactivate": "Voleu desactivar aquest mode de pagament? El podreu reactivar més tard.",
+    "errors": {
+      "loading": "Error carregant modes de pagament",
+      "descriptionRequired": "La descripció és obligatòria",
+      "saving": "Error desant el mode de pagament",
+      "deactivating": "Error en desactivar el mode de pagament"
+    },
+    "table": {
+      "order": "Ordre",
+      "description": "Descripció",
+      "usesCardTerminal": "Usa Datàfon",
+      "status": "Estat",
+      "actions": "Accions"
+    },
+    "info": {
+      "title": "Informació:",
+      "cardTerminal": "Marca els mètodes de pagament que requereixen terminal de targetes (TPV físic).",
+      "order": "Determina l'ordre en què apareixen als desplegables i llistats."
+    },
+    "modal": {
+      "newTitle": "Nou mode de pagament",
+      "editTitle": "Editar mode de pagament"
+    },
+    "form": {
+      "description": "Descripció *",
+      "descriptionPlaceholder": "Ex: Targeta de crèdit, Efectiu, Bizum...",
+      "order": "Ordre",
+      "orderHelp": "Determina la posició als llistats i desplegables (menor = primer).",
+      "usesCardTerminal": "Usa datàfon / TPV",
+      "usesCardTerminalHelp": "Activar si aquest mètode requereix terminal de targetes",
+      "active": "Actiu"
+    }
+  },
+  "profesionales": {
+    "title": "Professionals",
+    "loading": "Carregant...",
+    "count": "{{count}} professionals",
+    "showInactive": "Mostrar inactius",
+    "newProfessional": "+ Nou professional",
+    "noProfessionals": "No hi ha professionals registrats.",
+    "linked": "Vinculat",
+    "freelance": "Autònom",
+    "payroll": "Nòmina",
+    "notLinked": "⚠ sense vincular",
+    "freelanceLower": "autònom",
+    "payrollLower": "nòmina",
+    "active": "Actiu",
+    "inactive": "Inactiu",
+    "edit": "Editar",
+    "deactivate": "Desactivar",
+    "cancel": "Cancel·lar",
+    "save": "Desar",
+    "saving": "Desant...",
+    "confirmDeactivate": "Voleu desactivar aquest professional? El podreu reactivar més tard.",
+    "errors": {
+      "loading": "Error carregant professionals",
+      "nameRequired": "El nom complet és obligatori",
+      "saving": "Error desant el professional",
+      "deactivating": "Error en desactivar el professional"
+    },
+    "table": {
+      "fullName": "Nom complet",
+      "specialty": "Especialitat",
+      "worker": "Treballador (RRHH)",
+      "status": "Estat",
+      "actions": "Accions"
+    },
+    "modal": {
+      "newTitle": "Nou professional",
+      "editTitle": "Editar professional"
+    },
+    "form": {
+      "fullName": "Nom complet *",
+      "fullNamePlaceholder": "Ex: Dr. Joan García López",
+      "specialty": "Especialitat",
+      "specialtyPlaceholder": "Ex: Corda, Vent, Piano...",
+      "linkedWorker": "Treballador vinculat (RRHH)",
+      "unlinkedOption": "— Sense vincular —",
+      "linkedWorkerHelp": "El professor és un treballador de l'escola. Vincula'l per a nòmines, IBAN i factures d'autònoms.",
+      "active": "Actiu"
+    }
+  },
+  "usuarios": {
+    "noAccess": "No tens permisos per accedir a aquesta secció.",
+    "roleAdmin": "Admin",
+    "roleUser": "Usuari",
+    "statusActive": "Actiu",
+    "statusInactive": "Inactiu",
+    "contactToActivate": "Contacta per activar aquest mòdul",
+    "notContracted": "No contractat",
+    "confirmDelete": "Segur que vols eliminar l'usuari \"{{name}}\"?",
+    "permissions": {
+      "all": "Tots",
+      "view": "Veure",
+      "create": "Crear",
+      "edit": "Editar",
+      "delete": "Eliminar"
+    },
+    "errors": {
+      "loading": "Error en carregar usuaris",
+      "selectDatabase": "Has de seleccionar almenys una base de dades",
+      "saving": "Error en desar l'usuari",
+      "deleting": "Error en eliminar l'usuari",
+      "loadingPermissions": "Error en carregar permisos",
+      "savingPermissions": "Error en desar permisos",
+      "resettingPassword": "Error en restablir la contrasenya"
+    }
+  },
+  "empresa": {
+    "loading": "Carregant...",
+    "title": "Dades de l'Empresa",
+    "subtitle": "Configura les dades que apareixen als documents",
+    "saving": "Desant...",
+    "saveChanges": "Desar canvis",
+    "savedSuccess": "Dades desades correctament",
+    "sections": {
+      "fiscalData": "Dades Fiscals",
+      "address": "Adreça",
+      "contact": "Contacte",
+      "documentsConfig": "Configuració de Documents"
+    },
+    "fiscalName": "Nom Fiscal *",
+    "fiscalNamePlaceholder": "Raó social",
+    "commercialName": "Nom Comercial",
+    "commercialNamePlaceholder": "Nom comercial",
+    "cifNif": "CIF / NIF",
+    "address": "Adreça",
+    "addressPlaceholder": "Carrer, número, pis...",
+    "postalCode": "C.P.",
+    "postalCodePlaceholder": "28001",
+    "city": "Població",
+    "cityPlaceholder": "Madrid",
+    "province": "Província",
+    "provincePlaceholder": "Madrid",
+    "country": "País",
+    "countryPlaceholder": "Espanya",
+    "phone": "Telèfon",
+    "phonePlaceholder": "912345678",
+    "email": "Email",
+    "emailPlaceholder": "info@empresa.com",
+    "web": "Web",
+    "webPlaceholder": "www.empresa.com",
+    "logoUrl": "URL del Logotip",
+    "confirmationDays": "Termini de confirmació (dies)",
+    "footerText": "Text peu de document",
+    "footerTextPlaceholder": "Condicions legals, forma de pagament, etc.",
+    "logoPreview": "Vista prèvia del Logotip",
+    "logoAlt": "Logotip empresa",
+    "invoiceSeries": "Sèrie de Facturació",
+    "masterOnly": "Només Master",
+    "invoiceSeriesHelp": "Defineix la sèrie que s'utilitzarà per numerar les factures d'aquesta botiga. Cada botiga ha de tenir una sèrie única per evitar conflictes de numeració.",
+    "series": "Sèrie",
+    "seriesPlaceholder": "Ex: OC, SN, 01...",
+    "seriesFormat": "Les factures tindran format: {{serie}}-0001, {{serie}}-0002...",
+    "saveSeries": "Desar sèrie",
+    "seriesUpdated": "Sèrie de facturació actualitzada correctament",
+    "importantTitle": "Important:",
+    "importantList": {
+      "unique": "Cada botiga ha de tenir una sèrie diferent per evitar duplicats",
+      "noChange": "Un cop emesa una factura amb una sèrie, no la canviïs",
+      "examples": "Exemples: \"OC\" per a Òptica Central, \"SN\" per a Sucursal Nord"
+    },
+    "errors": {
+      "loading": "Error en carregar les dades de l'empresa",
+      "saving": "Error en desar les dades de l'empresa",
+      "savingSeries": "Error en desar la sèrie de facturació"
     }
   }
 }

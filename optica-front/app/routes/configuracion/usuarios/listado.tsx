@@ -23,7 +23,7 @@ import {
 } from "~/lib/authRest";
 
 export default function UsuariosListado() {
-  const { t } = useTranslation("users");
+  const { t } = useTranslation(["users", "configuracion", "common"]);
   const { isAdmin, isMaster } = useAuth();
 
   const [users, setUsers] = useState<Usuario[]>([]);
@@ -105,7 +105,7 @@ export default function UsuariosListado() {
       const data = await listUsers();
       setUsers(data);
     } catch (err) {
-      setError("Error al cargar usuarios");
+      setError(t("configuracion:usuarios.errors.loading"));
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -182,7 +182,7 @@ export default function UsuariosListado() {
       } else {
         // Crear - validar que haya al menos una base de datos seleccionada
         if (selectedDatabases.length === 0) {
-          setError("Debes seleccionar al menos una base de datos");
+          setError(t("configuracion:usuarios.errors.selectDatabase"));
           setIsSaving(false);
           return;
         }
@@ -196,8 +196,8 @@ export default function UsuariosListado() {
     } catch (err: unknown) {
       const message = err && typeof err === "object" && "response" in err
         ? (err as { response?: { data?: { message?: string } } }).response?.data?.message
-        : "Error al guardar usuario";
-      setError(message || "Error al guardar usuario");
+        : t("configuracion:usuarios.errors.saving");
+      setError(message || t("configuracion:usuarios.errors.saving"));
     } finally {
       setIsSaving(false);
     }
@@ -205,14 +205,14 @@ export default function UsuariosListado() {
 
   // Eliminar usuario
   const handleDelete = async (user: Usuario) => {
-    if (!confirm(`¿Seguro que deseas eliminar al usuario "${user.nombre}"?`)) {
+    if (!confirm(t("configuracion:usuarios.confirmDelete", { name: user.nombre }))) {
       return;
     }
     try {
       await deleteUser(user.id);
       loadUsers();
     } catch (err) {
-      setError("Error al eliminar usuario");
+      setError(t("configuracion:usuarios.errors.deleting"));
       console.error(err);
     }
   };
@@ -238,7 +238,7 @@ export default function UsuariosListado() {
       setPermissions(permInputs);
       setShowPermissionsModal(true);
     } catch (err) {
-      setError("Error al cargar permisos");
+      setError(t("configuracion:usuarios.errors.loadingPermissions"));
       console.error(err);
     }
   };
@@ -251,7 +251,7 @@ export default function UsuariosListado() {
       await setUserPermissions(selectedUser.id, permissions);
       setShowPermissionsModal(false);
     } catch (err) {
-      setError("Error al guardar permisos");
+      setError(t("configuracion:usuarios.errors.savingPermissions"));
       console.error(err);
     } finally {
       setIsSaving(false);
@@ -291,7 +291,7 @@ export default function UsuariosListado() {
       await resetUserPassword(selectedUser.id, newPassword);
       setShowResetPasswordModal(false);
     } catch (err) {
-      setError("Error al restablecer contrasena");
+      setError(t("configuracion:usuarios.errors.resettingPassword"));
       console.error(err);
     } finally {
       setIsSaving(false);
@@ -310,7 +310,7 @@ export default function UsuariosListado() {
   if (!isAdmin) {
     return (
       <div className="p-8 text-center">
-        <p className="text-gray-600">No tienes permisos para acceder a esta seccion.</p>
+        <p className="text-gray-600">{t("configuracion:usuarios.noAccess")}</p>
       </div>
     );
   }
@@ -447,7 +447,7 @@ export default function UsuariosListado() {
                           : "bg-slate-100 text-slate-700"
                       }`}
                     >
-                      {user.rol === "admin" ? "Admin" : "Usuario"}
+                      {user.rol === "admin" ? t("configuracion:usuarios.roleAdmin") : t("configuracion:usuarios.roleUser")}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -458,7 +458,7 @@ export default function UsuariosListado() {
                           : "bg-red-100 text-red-700"
                       }`}
                     >
-                      {user.activo ? "Activo" : "Inactivo"}
+                      {user.activo ? t("configuracion:usuarios.statusActive") : t("configuracion:usuarios.statusInactive")}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right">
@@ -600,8 +600,8 @@ export default function UsuariosListado() {
                               onChange={(e) => setDatabaseRole(db.id, e.target.value as "admin" | "user")}
                               className="text-xs px-2 py-1 border border-gray-300 rounded"
                             >
-                              <option value="user">Usuario</option>
-                              <option value="admin">Admin</option>
+                              <option value="user">{t("configuracion:usuarios.roleUser")}</option>
+                              <option value="admin">{t("configuracion:usuarios.roleAdmin")}</option>
                             </select>
                           )}
                         </div>
@@ -670,11 +670,11 @@ export default function UsuariosListado() {
                           </div>
                           <div>
                             <p className="font-medium text-gray-600 uppercase">{grupo}</p>
-                            <p className="text-xs text-gray-400">Contacta para activar este modulo</p>
+                            <p className="text-xs text-gray-400">{t("configuracion:usuarios.contactToActivate")}</p>
                           </div>
                         </div>
                         <span className="px-3 py-1 text-xs font-medium bg-gray-300 text-gray-600 rounded-full">
-                          No contratado
+                          {t("configuracion:usuarios.notContracted")}
                         </span>
                       </div>
                     </div>
@@ -710,7 +710,7 @@ export default function UsuariosListado() {
                                 onChange={(e) => toggleAllPermissions(menu.id, e.target.checked)}
                                 className="w-4 h-4 text-blue-600 rounded"
                               />
-                              <span className="text-sm text-gray-600">Todos</span>
+                              <span className="text-sm text-gray-600">{t("configuracion:usuarios.permissions.all")}</span>
                             </label>
                             <label className="flex items-center gap-2 cursor-pointer">
                               <input
@@ -719,7 +719,7 @@ export default function UsuariosListado() {
                                 onChange={(e) => updatePermission(menu.id, "puedeVer", e.target.checked)}
                                 className="w-4 h-4 text-blue-600 rounded"
                               />
-                              <span className="text-sm text-gray-600">Ver</span>
+                              <span className="text-sm text-gray-600">{t("configuracion:usuarios.permissions.view")}</span>
                             </label>
                             <label className="flex items-center gap-2 cursor-pointer">
                               <input
@@ -728,7 +728,7 @@ export default function UsuariosListado() {
                                 onChange={(e) => updatePermission(menu.id, "puedeCrear", e.target.checked)}
                                 className="w-4 h-4 text-blue-600 rounded"
                               />
-                              <span className="text-sm text-gray-600">Crear</span>
+                              <span className="text-sm text-gray-600">{t("configuracion:usuarios.permissions.create")}</span>
                             </label>
                             <label className="flex items-center gap-2 cursor-pointer">
                               <input
@@ -737,7 +737,7 @@ export default function UsuariosListado() {
                                 onChange={(e) => updatePermission(menu.id, "puedeEditar", e.target.checked)}
                                 className="w-4 h-4 text-blue-600 rounded"
                               />
-                              <span className="text-sm text-gray-600">Editar</span>
+                              <span className="text-sm text-gray-600">{t("configuracion:usuarios.permissions.edit")}</span>
                             </label>
                             <label className="flex items-center gap-2 cursor-pointer">
                               <input
@@ -746,7 +746,7 @@ export default function UsuariosListado() {
                                 onChange={(e) => updatePermission(menu.id, "puedeEliminar", e.target.checked)}
                                 className="w-4 h-4 text-blue-600 rounded"
                               />
-                              <span className="text-sm text-gray-600">Eliminar</span>
+                              <span className="text-sm text-gray-600">{t("configuracion:usuarios.permissions.delete")}</span>
                             </label>
                           </div>
                         );

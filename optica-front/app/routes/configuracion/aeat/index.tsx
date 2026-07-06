@@ -1,5 +1,6 @@
 // app/routes/configuracion/aeat/index.tsx
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   fetchVeriFactuConfig,
   updateVeriFactuConfig,
@@ -21,6 +22,7 @@ const estadoColors: Record<EstadoEnvio, string> = {
 };
 
 export default function ConfiguracionAEAT() {
+  const { t } = useTranslation(["configuracion", "common"]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [testing, setTesting] = useState(false);
@@ -50,7 +52,7 @@ export default function ConfiguracionAEAT() {
   useEffect(() => {
     fetchVeriFactuConfig()
       .then(setConfig)
-      .catch((e) => setError(e?.message ?? "Error cargando configuracion"))
+      .catch((e) => setError(e?.message ?? t("configuracion:aeat.errors.loadingConfig")))
       .finally(() => setLoading(false));
   }, []);
 
@@ -90,10 +92,10 @@ export default function ConfiguracionAEAT() {
     try {
       const updated = await updateVeriFactuConfig(config);
       setConfig(updated);
-      setSuccess("Configuracion guardada correctamente");
+      setSuccess(t("configuracion:aeat.messages.saved"));
       setTimeout(() => setSuccess(null), 3000);
     } catch (e: any) {
-      setError(e?.response?.data?.error ?? e?.message ?? "Error guardando");
+      setError(e?.response?.data?.error ?? e?.message ?? t("configuracion:aeat.errors.saving"));
     } finally {
       setSaving(false);
     }
@@ -116,7 +118,7 @@ export default function ConfiguracionAEAT() {
         setError(null);
       }, 5000);
     } catch (e: any) {
-      setError(e?.response?.data?.mensaje ?? e?.message ?? "Error en test de conexion");
+      setError(e?.response?.data?.mensaje ?? e?.message ?? t("configuracion:aeat.errors.connectionTest"));
     } finally {
       setTesting(false);
     }
@@ -127,9 +129,9 @@ export default function ConfiguracionAEAT() {
     try {
       const result = await reintentarEnvio(idLog);
       if (result.success) {
-        setSuccess("Reenvio exitoso");
+        setSuccess(t("configuracion:aeat.messages.resendSuccess"));
       } else {
-        setError(result.error || result.mensaje || "Error en reenvio");
+        setError(result.error || result.mensaje || t("configuracion:aeat.errors.resend"));
       }
       setTimeout(() => {
         setSuccess(null);
@@ -137,7 +139,7 @@ export default function ConfiguracionAEAT() {
       }, 3000);
       loadLogs();
     } catch (e: any) {
-      setError(e?.response?.data?.error ?? e?.message ?? "Error reintentando");
+      setError(e?.response?.data?.error ?? e?.message ?? t("configuracion:aeat.errors.retrying"));
     } finally {
       setReintentando(null);
     }
@@ -157,7 +159,7 @@ export default function ConfiguracionAEAT() {
   if (loading) {
     return (
       <div className="h-full flex items-center justify-center">
-        <div className="text-slate-500">Cargando...</div>
+        <div className="text-slate-500">{t("configuracion:aeat.loading")}</div>
       </div>
     );
   }
@@ -168,9 +170,9 @@ export default function ConfiguracionAEAT() {
       <div className="flex-shrink-0 p-6 pb-4 border-b border-slate-200 bg-white">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Configuracion AEAT - VeriFactu</h2>
+            <h2 className="text-xl font-bold text-slate-900">{t("configuracion:aeat.title")}</h2>
             <p className="text-slate-500 text-sm">
-              Gestiona el envio de facturas a la Agencia Tributaria
+              {t("configuracion:aeat.subtitle")}
             </p>
           </div>
           <button
@@ -178,7 +180,7 @@ export default function ConfiguracionAEAT() {
             disabled={saving}
             className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium disabled:opacity-50"
           >
-            {saving ? "Guardando..." : "Guardar cambios"}
+            {saving ? t("configuracion:aeat.saving") : t("configuracion:aeat.saveChanges")}
           </button>
         </div>
 
@@ -207,7 +209,7 @@ export default function ConfiguracionAEAT() {
             {/* Estado VeriFactu */}
             <div>
               <h3 className="text-sm font-bold text-slate-700 mb-4 pb-2 border-b border-slate-200">
-                Estado VeriFactu
+                {t("configuracion:aeat.sections.verifactuStatus")}
               </h3>
               <div className="space-y-4">
                 <label className="flex items-center gap-3 cursor-pointer">
@@ -218,9 +220,9 @@ export default function ConfiguracionAEAT() {
                     className="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                   />
                   <div>
-                    <span className="font-medium text-slate-700">Activar VeriFactu</span>
+                    <span className="font-medium text-slate-700">{t("configuracion:aeat.activateVerifactu")}</span>
                     <p className="text-xs text-slate-500">
-                      Habilita el envio de facturas a la AEAT
+                      {t("configuracion:aeat.activateVerifactuHelp")}
                     </p>
                   </div>
                 </label>
@@ -235,10 +237,10 @@ export default function ConfiguracionAEAT() {
                   />
                   <div>
                     <span className={`font-medium ${config.modoActivo ? "text-slate-700" : "text-slate-400"}`}>
-                      Enviar facturas automaticamente al crear
+                      {t("configuracion:aeat.autoSend")}
                     </span>
                     <p className="text-xs text-slate-500">
-                      Las facturas se enviaran a AEAT inmediatamente despues de crearlas
+                      {t("configuracion:aeat.autoSendHelp")}
                     </p>
                   </div>
                 </label>
@@ -248,7 +250,7 @@ export default function ConfiguracionAEAT() {
             {/* Entorno AEAT */}
             <div>
               <h3 className="text-sm font-bold text-slate-700 mb-4 pb-2 border-b border-slate-200">
-                Entorno AEAT
+                {t("configuracion:aeat.sections.aeatEnvironment")}
               </h3>
               <div className="flex items-center gap-6">
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -260,7 +262,7 @@ export default function ConfiguracionAEAT() {
                     onChange={() => handleConfigChange("ambienteAEAT", "PRUEBAS")}
                     className="w-4 h-4 text-blue-600 focus:ring-blue-500"
                   />
-                  <span className="text-slate-700">Pruebas</span>
+                  <span className="text-slate-700">{t("configuracion:aeat.testing")}</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -271,20 +273,19 @@ export default function ConfiguracionAEAT() {
                     onChange={() => handleConfigChange("ambienteAEAT", "PRODUCCION")}
                     className="w-4 h-4 text-blue-600 focus:ring-blue-500"
                   />
-                  <span className="text-slate-700">Produccion</span>
+                  <span className="text-slate-700">{t("configuracion:aeat.production")}</span>
                 </label>
                 <button
                   onClick={handleTestConexion}
                   disabled={testing || !config.modoActivo}
                   className="ml-4 px-4 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 text-sm font-medium disabled:opacity-50"
                 >
-                  {testing ? "Probando..." : "Probar conexion"}
+                  {testing ? t("configuracion:aeat.testingConnection") : t("configuracion:aeat.testConnection")}
                 </button>
               </div>
               {config.ambienteAEAT === "PRODUCCION" && (
                 <p className="mt-2 text-xs text-amber-600 bg-amber-50 p-2 rounded">
-                  En modo produccion, las facturas se enviaran al sistema real de la AEAT.
-                  Asegurese de tener el certificado digital configurado.
+                  {t("configuracion:aeat.productionWarning")}
                 </p>
               )}
             </div>
@@ -292,7 +293,7 @@ export default function ConfiguracionAEAT() {
             {/* Certificado Digital */}
             <div>
               <h3 className="text-sm font-bold text-slate-700 mb-4 pb-2 border-b border-slate-200">
-                Certificado Digital
+                {t("configuracion:aeat.sections.digitalCertificate")}
               </h3>
               <div className="bg-slate-50 p-4 rounded-lg">
                 {config.certificadoNombre ? (
@@ -300,21 +301,21 @@ export default function ConfiguracionAEAT() {
                     <div className="flex-1">
                       <p className="font-medium text-slate-700">{config.certificadoNombre}</p>
                       <p className="text-sm text-slate-500">
-                        Expira: {config.certificadoExpiracion ? formatFecha(config.certificadoExpiracion) : "Sin fecha"}
+                        {t("configuracion:aeat.expires")}: {config.certificadoExpiracion ? formatFecha(config.certificadoExpiracion) : t("configuracion:aeat.noDate")}
                       </p>
                     </div>
                     <button className="px-4 py-2 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm">
-                      Cambiar certificado
+                      {t("configuracion:aeat.changeCertificate")}
                     </button>
                   </div>
                 ) : (
                   <div className="text-center py-4">
-                    <p className="text-slate-500 mb-3">No hay certificado configurado</p>
+                    <p className="text-slate-500 mb-3">{t("configuracion:aeat.noCertificate")}</p>
                     <button className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium">
-                      Subir certificado
+                      {t("configuracion:aeat.uploadCertificate")}
                     </button>
                     <p className="text-xs text-slate-400 mt-2">
-                      Necesario para enviar facturas en modo produccion
+                      {t("configuracion:aeat.certificateHelp")}
                     </p>
                   </div>
                 )}
@@ -324,12 +325,12 @@ export default function ConfiguracionAEAT() {
             {/* Info SIF */}
             <div>
               <h3 className="text-sm font-bold text-slate-700 mb-4 pb-2 border-b border-slate-200">
-                Sistema Informatico de Facturacion
+                {t("configuracion:aeat.sections.sif")}
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-slate-500 mb-1">
-                    Nombre del SIF
+                    {t("configuracion:aeat.sifName")}
                   </label>
                   <input
                     type="text"
@@ -340,7 +341,7 @@ export default function ConfiguracionAEAT() {
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-500 mb-1">
-                    Version del SIF
+                    {t("configuracion:aeat.sifVersion")}
                   </label>
                   <input
                     type="text"
@@ -357,14 +358,14 @@ export default function ConfiguracionAEAT() {
           <div className="bg-white rounded-xl border border-slate-200 p-6">
             <div className="flex items-center justify-between mb-4 pb-2 border-b border-slate-200">
               <h3 className="text-sm font-bold text-slate-700">
-                Registro de Comunicaciones
+                {t("configuracion:aeat.communicationsLog")}
               </h3>
               <button
                 onClick={loadLogs}
                 disabled={loadingLogs}
                 className="text-sm text-blue-600 hover:text-blue-700"
               >
-                Actualizar
+                {t("configuracion:aeat.refresh")}
               </button>
             </div>
 
@@ -378,9 +379,9 @@ export default function ConfiguracionAEAT() {
                 }}
                 className="rounded-lg border border-slate-200 px-3 py-2 text-sm"
               >
-                <option value="">Todos los tipos</option>
-                <option value="FACTURA_VENTA">Facturas de venta</option>
-                <option value="FACTURA_COMPRA">Facturas de compra</option>
+                <option value="">{t("configuracion:aeat.filters.allTypes")}</option>
+                <option value="FACTURA_VENTA">{t("configuracion:aeat.filters.salesInvoices")}</option>
+                <option value="FACTURA_COMPRA">{t("configuracion:aeat.filters.purchaseInvoices")}</option>
               </select>
               <select
                 value={filtroEstado}
@@ -390,11 +391,11 @@ export default function ConfiguracionAEAT() {
                 }}
                 className="rounded-lg border border-slate-200 px-3 py-2 text-sm"
               >
-                <option value="">Todos los estados</option>
-                <option value="PENDIENTE">Pendiente</option>
-                <option value="ACEPTADO">Aceptado</option>
-                <option value="RECHAZADO">Rechazado</option>
-                <option value="ERROR">Error</option>
+                <option value="">{t("configuracion:aeat.filters.allStatuses")}</option>
+                <option value="PENDIENTE">{t("configuracion:aeat.status.pending")}</option>
+                <option value="ACEPTADO">{t("configuracion:aeat.status.accepted")}</option>
+                <option value="RECHAZADO">{t("configuracion:aeat.status.rejected")}</option>
+                <option value="ERROR">{t("configuracion:aeat.status.error")}</option>
               </select>
             </div>
 
@@ -403,26 +404,26 @@ export default function ConfiguracionAEAT() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-slate-200">
-                    <th className="text-left py-3 px-2 font-medium text-slate-600">Fecha</th>
-                    <th className="text-left py-3 px-2 font-medium text-slate-600">Factura</th>
-                    <th className="text-left py-3 px-2 font-medium text-slate-600">Tipo</th>
-                    <th className="text-left py-3 px-2 font-medium text-slate-600">Estado</th>
-                    <th className="text-left py-3 px-2 font-medium text-slate-600">CSV</th>
-                    <th className="text-left py-3 px-2 font-medium text-slate-600">Mensaje</th>
-                    <th className="text-right py-3 px-2 font-medium text-slate-600">Accion</th>
+                    <th className="text-left py-3 px-2 font-medium text-slate-600">{t("configuracion:aeat.table.date")}</th>
+                    <th className="text-left py-3 px-2 font-medium text-slate-600">{t("configuracion:aeat.table.invoice")}</th>
+                    <th className="text-left py-3 px-2 font-medium text-slate-600">{t("configuracion:aeat.table.type")}</th>
+                    <th className="text-left py-3 px-2 font-medium text-slate-600">{t("configuracion:aeat.table.status")}</th>
+                    <th className="text-left py-3 px-2 font-medium text-slate-600">{t("configuracion:aeat.table.csv")}</th>
+                    <th className="text-left py-3 px-2 font-medium text-slate-600">{t("configuracion:aeat.table.message")}</th>
+                    <th className="text-right py-3 px-2 font-medium text-slate-600">{t("configuracion:aeat.table.action")}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {loadingLogs ? (
                     <tr>
                       <td colSpan={7} className="text-center py-8 text-slate-500">
-                        Cargando...
+                        {t("configuracion:aeat.loading")}
                       </td>
                     </tr>
                   ) : logs.length === 0 ? (
                     <tr>
                       <td colSpan={7} className="text-center py-8 text-slate-500">
-                        No hay registros de comunicaciones
+                        {t("configuracion:aeat.noRecords")}
                       </td>
                     </tr>
                   ) : (
@@ -438,7 +439,7 @@ export default function ConfiguracionAEAT() {
                           </span>
                         </td>
                         <td className="py-3 px-2 text-slate-600">
-                          {log.tipoDocumento === "FACTURA_VENTA" ? "Venta" : "Compra"}
+                          {log.tipoDocumento === "FACTURA_VENTA" ? t("configuracion:aeat.sale") : t("configuracion:aeat.purchase")}
                         </td>
                         <td className="py-3 px-2">
                           <span
@@ -462,7 +463,7 @@ export default function ConfiguracionAEAT() {
                               disabled={reintentando === log.id}
                               className="text-blue-600 hover:text-blue-700 text-xs font-medium disabled:opacity-50"
                             >
-                              {reintentando === log.id ? "Reintentando..." : "Reintentar"}
+                              {reintentando === log.id ? t("configuracion:aeat.retrying") : t("configuracion:aeat.retry")}
                             </button>
                           )}
                         </td>
@@ -477,7 +478,7 @@ export default function ConfiguracionAEAT() {
             {totalLogs > 10 && (
               <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-200">
                 <span className="text-sm text-slate-500">
-                  Mostrando {logs.length} de {totalLogs} registros
+                  {t("configuracion:aeat.showing", { shown: logs.length, total: totalLogs })}
                 </span>
                 <div className="flex gap-2">
                   <button
@@ -485,14 +486,14 @@ export default function ConfiguracionAEAT() {
                     disabled={paginaLog === 1}
                     className="px-3 py-1 rounded border border-slate-200 text-sm disabled:opacity-50"
                   >
-                    Anterior
+                    {t("configuracion:aeat.previous")}
                   </button>
                   <button
                     onClick={() => setPaginaLog((p) => p + 1)}
                     disabled={paginaLog * 10 >= totalLogs}
                     className="px-3 py-1 rounded border border-slate-200 text-sm disabled:opacity-50"
                   >
-                    Siguiente
+                    {t("configuracion:aeat.next")}
                   </button>
                 </div>
               </div>

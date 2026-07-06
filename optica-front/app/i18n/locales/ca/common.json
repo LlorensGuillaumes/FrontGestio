@@ -140,5 +140,115 @@
     "noChanges": "Sense canvis",
     "pendingChanges": "Canvis pendents"
   },
-  "loading": "Carregant..."
+  "loading": "Carregant...",
+  "home": {
+    "greeting": "Benvingut, {{name}}",
+    "defaultUser": "Usuari",
+    "localTime": "Hora local",
+    "loading": "Carregant...",
+    "stats": {
+      "salesToday": "Vendes Avui",
+      "month": "Mes: {{value}}",
+      "activeClients": "Clients Actius",
+      "viewAllClients": "Veure tots els clients →",
+      "pendingQuotes": "Pressupostos Pendents",
+      "invoicesToCollect": "{{count}} factures per cobrar",
+      "purchasesMonth": "Compres del Mes",
+      "viewPurchases": "Veure compres →"
+    },
+    "quickActions": {
+      "title": "Accions Ràpides",
+      "newClient": "Nou Client",
+      "newSale": "Nova Venda",
+      "viewProducts": "Veure Productes",
+      "purchases": "Compres"
+    },
+    "system": {
+      "currentCompany": "Empresa Actual",
+      "noSelection": "Sense seleccionar",
+      "user": "Usuari",
+      "role": "Rol"
+    },
+    "summary": {
+      "title": "Resum del Dia",
+      "realtime": "Dades en temps real",
+      "salesMade": "Vendes realitzades",
+      "newClients": "Nous clients",
+      "purchasesReceived": "Compres rebudes"
+    },
+    "activity": {
+      "title": "Activitat Recent",
+      "loading": "Carregant activitat...",
+      "empty": "No hi ha activitat recent",
+      "now": "Ara mateix",
+      "minutesAgo": "Fa {{count}} minuts",
+      "hoursAgo": "Fa {{count}} hores",
+      "yesterday": "Ahir",
+      "daysAgo": "Fa {{count}} dies"
+    }
+  },
+  "protected": {
+    "loading": "Carregant...",
+    "accessDenied": "Accés denegat",
+    "noRolePermission": "No tens permisos suficients per accedir a aquesta secció.",
+    "noPermissions": "Sense permisos",
+    "noResourcePermission": "No tens permisos per accedir a aquest recurs."
+  },
+  "dbSelector": {
+    "selectCompany": "Seleccionar empresa"
+  },
+  "topbar": {
+    "connected": "Connectat",
+    "workingIn": "Treballant a:",
+    "changeStore": "Canviar de botiga",
+    "changeStoreHint": "Selecciona la botiga on vols treballar",
+    "billingSeries": "Sèrie facturació",
+    "roleMaster": "Master",
+    "roleAdmin": "Admin",
+    "roleUser": "Usuari"
+  },
+  "nestedTable": {
+    "detail": "Detall",
+    "subdetail": "Subdetall",
+    "empty": "No hi ha registres.",
+    "records": "{{count}} registres"
+  },
+  "picker": {
+    "families": "Famílies",
+    "subfamilies": "Subfamílies",
+    "selectFamily": "— Selecciona família —",
+    "selectSubfamily": "— Selecciona subfamília —",
+    "chooseFamilyHint": "Tria una família per veure les seves subfamílies.",
+    "add": "+ Add",
+    "remove": "Treure",
+    "alreadyAddedSuffix": " (ja afegida)",
+    "selectedSubfamilies": "Subfamílies seleccionades",
+    "noSubfamiliesAdded": "No hi ha subfamílies afegides.",
+    "assignedSubfamilies": "Subfamílies assignades",
+    "noSubfamiliesAssigned": "No hi ha subfamílies assignades.",
+    "addHintClient": "Selecciona una subfamília i prem Add per afegir-la al client.",
+    "assignHintProduct": "Selecciona i prem Add per assignar al producte.",
+    "assignHintProvider": "Selecciona i prem Add per assignar al proveïdor.",
+    "assignHintService": "Selecciona i prem Add per assignar al servei."
+  },
+  "root": {
+    "cargando": "Carregant..."
+  },
+  "breadcrumb": {
+    "ventas": "Vendes",
+    "clientes": "Clients",
+    "compras": "Compres",
+    "contabilidad": "Comptabilitat",
+    "productos": "Productes",
+    "proveedores": "Proveïdors",
+    "stock": "Estoc",
+    "familia": "Família",
+    "subfamilia": "Subfamília",
+    "facturas": "Factures",
+    "ordenes": "Ordres",
+    "recepciones": "Recepcions",
+    "listado": "Llistat",
+    "ver": "Veure",
+    "editar": "Editar"
+  }
 }

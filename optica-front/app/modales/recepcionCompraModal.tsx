@@ -359,7 +359,7 @@ export default function RecepcionCompraModal({
 
                 {isNew && (
                   <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-100 text-sm text-emerald-700">
-                    <strong>Stock:</strong> {t("receptions.stockNote")}
+                    <strong>{t("compras:recepcionModal.stockLabel")}</strong> {t("receptions.stockNote")}
                   </div>
                 )}
 
@@ -464,7 +464,7 @@ export default function RecepcionCompraModal({
                                       type="button"
                                       onClick={() => removeLinea(idx)}
                                       className="p-1 text-red-500 hover:bg-red-50 rounded"
-                                      title="Eliminar linea (no ha llegado)"
+                                      title={t("compras:recepcionModal.eliminarLineaTooltip")}
                                     >
                                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

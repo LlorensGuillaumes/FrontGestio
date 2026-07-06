@@ -140,5 +140,115 @@
     "noChanges": "Sin cambios",
     "pendingChanges": "Cambios pendientes"
   },
-  "loading": "Cargando..."
+  "loading": "Cargando...",
+  "home": {
+    "greeting": "Bienvenido, {{name}}",
+    "defaultUser": "Usuario",
+    "localTime": "Hora local",
+    "loading": "Cargando...",
+    "stats": {
+      "salesToday": "Ventas Hoy",
+      "month": "Mes: {{value}}",
+      "activeClients": "Clientes Activos",
+      "viewAllClients": "Ver todos los clientes →",
+      "pendingQuotes": "Presupuestos Pendientes",
+      "invoicesToCollect": "{{count}} facturas por cobrar",
+      "purchasesMonth": "Compras del Mes",
+      "viewPurchases": "Ver compras →"
+    },
+    "quickActions": {
+      "title": "Acciones Rápidas",
+      "newClient": "Nuevo Cliente",
+      "newSale": "Nueva Venta",
+      "viewProducts": "Ver Productos",
+      "purchases": "Compras"
+    },
+    "system": {
+      "currentCompany": "Empresa Actual",
+      "noSelection": "Sin seleccionar",
+      "user": "Usuario",
+      "role": "Rol"
+    },
+    "summary": {
+      "title": "Resumen del Día",
+      "realtime": "Datos en tiempo real",
+      "salesMade": "Ventas realizadas",
+      "newClients": "Nuevos clientes",
+      "purchasesReceived": "Compras recibidas"
+    },
+    "activity": {
+      "title": "Actividad Reciente",
+      "loading": "Cargando actividad...",
+      "empty": "No hay actividad reciente",
+      "now": "Ahora mismo",
+      "minutesAgo": "Hace {{count}} minutos",
+      "hoursAgo": "Hace {{count}} horas",
+      "yesterday": "Ayer",
+      "daysAgo": "Hace {{count}} días"
+    }
+  },
+  "protected": {
+    "loading": "Cargando...",
+    "accessDenied": "Acceso denegado",
+    "noRolePermission": "No tienes permisos suficientes para acceder a esta sección.",
+    "noPermissions": "Sin permisos",
+    "noResourcePermission": "No tienes permisos para acceder a este recurso."
+  },
+  "dbSelector": {
+    "selectCompany": "Seleccionar empresa"
+  },
+  "topbar": {
+    "connected": "Conectado",
+    "workingIn": "Trabajando en:",
+    "changeStore": "Cambiar de tienda",
+    "changeStoreHint": "Selecciona la tienda donde quieres trabajar",
+    "billingSeries": "Serie facturacion",
+    "roleMaster": "Master",
+    "roleAdmin": "Admin",
+    "roleUser": "Usuario"
+  },
+  "nestedTable": {
+    "detail": "Detalle",
+    "subdetail": "Subdetalle",
+    "empty": "No hay registros.",
+    "records": "{{count}} registros"
+  },
+  "picker": {
+    "families": "Familias",
+    "subfamilies": "Subfamilias",
+    "selectFamily": "— Selecciona familia —",
+    "selectSubfamily": "— Selecciona subfamilia —",
+    "chooseFamilyHint": "Elige una familia para ver sus subfamilias.",
+    "add": "+ Add",
+    "remove": "Quitar",
+    "alreadyAddedSuffix": " (ya añadida)",
+    "selectedSubfamilies": "Subfamilias seleccionadas",
+    "noSubfamiliesAdded": "No hay subfamilias añadidas.",
+    "assignedSubfamilies": "Subfamilias asignadas",
+    "noSubfamiliesAssigned": "No hay subfamilias asignadas.",
+    "addHintClient": "Selecciona una subfamilia y pulsa Add para añadirla al cliente.",
+    "assignHintProduct": "Selecciona y pulsa Add para asignar al producto.",
+    "assignHintProvider": "Selecciona y pulsa Add para asignar al proveedor.",
+    "assignHintService": "Selecciona y pulsa Add para asignar al servicio."
+  },
+  "root": {
+    "cargando": "Cargando..."
+  },
+  "breadcrumb": {
+    "ventas": "Ventas",
+    "clientes": "Clientes",
+    "compras": "Compras",
+    "contabilidad": "Contabilidad",
+    "productos": "Productos",
+    "proveedores": "Proveedores",
+    "stock": "Stock",
+    "familia": "Familia",
+    "subfamilia": "Subfamilia",
+    "facturas": "Facturas",
+    "ordenes": "Órdenes",
+    "recepciones": "Recepciones",
+    "listado": "Listado",
+    "ver": "Ver",
+    "editar": "Editar"
+  }
 }

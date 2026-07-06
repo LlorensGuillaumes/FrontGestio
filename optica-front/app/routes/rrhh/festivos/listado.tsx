@@ -11,7 +11,14 @@ import {
 type ModalMode = "new" | "edit" | null;
 
 export default function FestivosListado() {
-  const { t } = useTranslation("controlHorario");
+  const { t } = useTranslation(["trabajadores", "common"]);
+
+  const TIPO_FESTIVO_KEYS: Record<string, string> = {
+    NACIONAL: "festivos.tipoNacional",
+    AUTONOMICO: "festivos.tipoAutonomico",
+    LOCAL: "festivos.tipoLocal",
+    OTRO: "festivos.tipoOtro",
+  };
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [festivos, setFestivos] = useState<FestivoEmpresa[]>([]);
@@ -48,7 +55,7 @@ export default function FestivosListado() {
       const data = await fetchFestivos(anyo, !showInactivos);
       setFestivos(data);
     } catch (e: any) {
-      setError(e.message ?? "Error cargando festivos");
+      setError(e.message ?? t("festivos.errorLoading", "Error cargando festivos"));
     } finally {
       setLoading(false);
     }
@@ -96,7 +103,7 @@ export default function FestivosListado() {
 
   const handleSave = async () => {
     if (!formData.Nombre.trim() || !formData.FechaInicio) {
-      setFormError(t("nameAndDateRequired", "Nombre y fecha de inicio son obligatorios"));
+      setFormError(t("festivos.nameAndDateRequired", "Nombre y fecha de inicio son obligatorios"));
       return;
     }
 
@@ -118,21 +125,21 @@ export default function FestivosListado() {
       closeModal();
       loadData();
     } catch (e: any) {
-      setFormError(e.message ?? "Error guardando festivo");
+      setFormError(e.message ?? t("festivos.errorSaving", "Error guardando festivo"));
     } finally {
       setSaving(false);
     }
   };
 
   const handleDeactivate = async (id: number) => {
-    const confirmed = window.confirm(t("confirmDeactivate", "¿Desactivar este festivo?"));
+    const confirmed = window.confirm(t("festivos.confirmDeactivate", "¿Desactivar este festivo?"));
     if (!confirmed) return;
 
     try {
       await updateFestivo(id, { Activo: 0 });
       loadData();
     } catch (e: any) {
-      alert(e.message ?? "Error al desactivar");
+      alert(e.message ?? t("festivos.errorDeactivating", "Error al desactivar"));
     }
   };
 
@@ -153,9 +160,9 @@ export default function FestivosListado() {
     <div className="p-6 max-w-4xl mx-auto space-y-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">{t("holidays", "Festivos")}</h1>
+          <h1 className="text-2xl font-bold text-slate-900">{t("festivos.title", "Festivos")}</h1>
           <p className="text-slate-500 text-sm">
-            {loading ? t("loading", "Cargando...") : `${festivos.length} ${t("holidaysRegistered", "festivos registrados")}`}
+            {loading ? t("festivos.loading", "Cargando...") : `${festivos.length} ${t("festivos.holidaysRegistered", "festivos registrados")}`}
           </p>
         </div>
 
@@ -182,7 +189,7 @@ export default function FestivosListado() {
               onChange={(e) => setShowInactivos(e.target.checked)}
               className="rounded border-slate-300"
             />
-            {t("showInactive", "Inactivos")}
+            {t("festivos.showInactive", "Inactivos")}
           </label>
 
           <button
@@ -190,7 +197,7 @@ export default function FestivosListado() {
             onClick={openNewModal}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"
           >
-            + {t("newHoliday", "Nuevo festivo")}
+            + {t("festivos.newHoliday", "Nuevo festivo")}
           </button>
         </div>
       </div>
@@ -205,18 +212,18 @@ export default function FestivosListado() {
         <table className="w-full">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
-              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("name", "Nombre")}</th>
-              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("type", "Tipo")}</th>
-              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("date", "Fecha")}</th>
-              <th className="text-center p-4 text-sm font-semibold text-slate-600">{t("annual", "Anual")}</th>
-              <th className="text-right p-4 text-sm font-semibold text-slate-600">{t("actions", "Acciones")}</th>
+              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("festivos.name", "Nombre")}</th>
+              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("festivos.type", "Tipo")}</th>
+              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("festivos.date", "Fecha")}</th>
+              <th className="text-center p-4 text-sm font-semibold text-slate-600">{t("festivos.annual", "Anual")}</th>
+              <th className="text-right p-4 text-sm font-semibold text-slate-600">{t("festivos.actions", "Acciones")}</th>
             </tr>
           </thead>
           <tbody>
             {festivos.length === 0 && !loading && (
               <tr>
                 <td colSpan={5} className="p-8 text-center text-slate-500">
-                  {t("noHolidays", "No hay festivos registrados.")}
+                  {t("festivos.noHolidays", "No hay festivos registrados.")}
                 </td>
               </tr>
             )}
@@ -230,7 +237,9 @@ export default function FestivosListado() {
                 </td>
                 <td className="p-4">
                   <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${getTipoColor(f.TipoFestivo)}`}>
-                    {TIPOS_FESTIVO.find((t) => t.value === f.TipoFestivo)?.label ?? f.TipoFestivo}
+                    {TIPO_FESTIVO_KEYS[f.TipoFestivo]
+                      ? t(TIPO_FESTIVO_KEYS[f.TipoFestivo], TIPOS_FESTIVO.find((tf) => tf.value === f.TipoFestivo)?.label ?? f.TipoFestivo)
+                      : f.TipoFestivo}
                   </span>
                 </td>
                 <td className="p-4 text-slate-600">
@@ -241,9 +250,9 @@ export default function FestivosListado() {
                 </td>
                 <td className="p-4 text-center">
                   {f.Anual ? (
-                    <span className="text-green-600">Si</span>
+                    <span className="text-green-600">{t("festivos.yes", "Sí")}</span>
                   ) : (
-                    <span className="text-slate-400">No</span>
+                    <span className="text-slate-400">{t("festivos.no", "No")}</span>
                   )}
                 </td>
                 <td className="p-4 text-right">
@@ -252,7 +261,7 @@ export default function FestivosListado() {
                       type="button"
                       onClick={() => openEditModal(f)}
                       className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50"
-                      title={t("edit", "Editar")}
+                      title={t("festivos.edit", "Editar")}
                     >
                       <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -263,7 +272,7 @@ export default function FestivosListado() {
                         type="button"
                         onClick={() => handleDeactivate(f.IdFestivo)}
                         className="p-1.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50"
-                        title={t("deactivate", "Desactivar")}
+                        title={t("festivos.deactivate", "Desactivar")}
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
@@ -286,7 +295,7 @@ export default function FestivosListado() {
             <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
               <div className="px-6 py-4 border-b border-slate-200">
                 <h2 className="text-lg font-bold text-slate-900">
-                  {modalMode === "new" ? t("newHoliday", "Nuevo festivo") : t("editHoliday", "Editar festivo")}
+                  {modalMode === "new" ? t("festivos.newHoliday", "Nuevo festivo") : t("festivos.editHoliday", "Editar festivo")}
                 </h2>
               </div>
 
@@ -298,26 +307,26 @@ export default function FestivosListado() {
                 )}
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700">{t("name", "Nombre")} *</label>
+                  <label className="text-sm font-medium text-slate-700">{t("festivos.name", "Nombre")} *</label>
                   <input
                     type="text"
                     value={formData.Nombre}
                     onChange={(e) => setFormData({ ...formData, Nombre: e.target.value })}
                     className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                    placeholder="Ej: Navidad, Sant Jordi..."
+                    placeholder={t("festivos.namePlaceholder", "Ej: Navidad, Sant Jordi...")}
                   />
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700">{t("type", "Tipo")} *</label>
+                  <label className="text-sm font-medium text-slate-700">{t("festivos.type", "Tipo")} *</label>
                   <select
                     value={formData.TipoFestivo}
                     onChange={(e) => setFormData({ ...formData, TipoFestivo: e.target.value as "NACIONAL" | "AUTONOMICO" | "LOCAL" | "OTRO" })}
                     className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
                   >
-                    {TIPOS_FESTIVO.map((t) => (
-                      <option key={t.value} value={t.value}>
-                        {t.label}
+                    {TIPOS_FESTIVO.map((tf) => (
+                      <option key={tf.value} value={tf.value}>
+                        {TIPO_FESTIVO_KEYS[tf.value] ? t(TIPO_FESTIVO_KEYS[tf.value], tf.label) : tf.label}
                       </option>
                     ))}
                   </select>
@@ -325,7 +334,7 @@ export default function FestivosListado() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium text-slate-700">{t("startDate", "Fecha inicio")} *</label>
+                    <label className="text-sm font-medium text-slate-700">{t("festivos.startDate", "Fecha inicio")} *</label>
                     <input
                       type="date"
                       value={formData.FechaInicio}
@@ -334,7 +343,7 @@ export default function FestivosListado() {
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-slate-700">{t("endDate", "Fecha fin")}</label>
+                    <label className="text-sm font-medium text-slate-700">{t("festivos.endDate", "Fecha fin")}</label>
                     <input
                       type="date"
                       value={formData.FechaFin}
@@ -342,7 +351,7 @@ export default function FestivosListado() {
                       className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
                     />
                     <p className="mt-1 text-xs text-slate-500">
-                      {t("leaveEmptyForSingleDay", "Dejar vacío para día suelto")}
+                      {t("festivos.leaveEmptyForSingleDay", "Dejar vacío para día suelto")}
                     </p>
                   </div>
                 </div>
@@ -355,12 +364,12 @@ export default function FestivosListado() {
                       onChange={(e) => setFormData({ ...formData, Anual: e.target.checked })}
                       className="rounded border-slate-300"
                     />
-                    {t("annualHoliday", "Festivo anual (se repite cada año)")}
+                    {t("festivos.annualHoliday", "Festivo anual (se repite cada año)")}
                   </label>
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700">{t("notes", "Observaciones")}</label>
+                  <label className="text-sm font-medium text-slate-700">{t("festivos.notes", "Observaciones")}</label>
                   <textarea
                     value={formData.Observaciones}
                     onChange={(e) => setFormData({ ...formData, Observaciones: e.target.value })}
@@ -378,7 +387,7 @@ export default function FestivosListado() {
                         onChange={(e) => setFormData({ ...formData, Activo: e.target.checked ? 1 : 0 })}
                         className="rounded border-slate-300"
                       />
-                      {t("active", "Activo")}
+                      {t("festivos.active", "Activo")}
                     </label>
                   </div>
                 )}
@@ -391,7 +400,7 @@ export default function FestivosListado() {
                   className="px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-sm"
                   disabled={saving}
                 >
-                  {t("cancel", "Cancelar")}
+                  {t("festivos.cancel", "Cancelar")}
                 </button>
                 <button
                   type="button"
@@ -399,7 +408,7 @@ export default function FestivosListado() {
                   className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm disabled:opacity-50"
                   disabled={saving}
                 >
-                  {saving ? t("saving", "Guardando...") : t("save", "Guardar")}
+                  {saving ? t("festivos.saving", "Guardando...") : t("festivos.save", "Guardar")}
                 </button>
               </div>
             </div>

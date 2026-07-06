@@ -39,6 +39,11 @@ const Icons = {
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
     </svg>
   ),
+  school: (
+    <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+    </svg>
+  ),
   hr: (
     <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -93,6 +98,7 @@ function DashboardContent() {
   const [ventasOpen, setVentasOpen] = useState(false);
   const [comprasOpen, setComprasOpen] = useState(false);
   const [serviciosOpen, setServiciosOpen] = useState(false);
+  const [escuelaOpen, setEscuelaOpen] = useState(false);
   const [contabilidadOpen, setContabilidadOpen] = useState(false);
   const [configOpen, setConfigOpen] = useState(false);
   const [rrhhOpen, setRrhhOpen] = useState(false);
@@ -107,6 +113,7 @@ function DashboardContent() {
       setVentasOpen(false);
       setComprasOpen(false);
       setServiciosOpen(false);
+      setEscuelaOpen(false);
       setContabilidadOpen(false);
       setConfigOpen(false);
       setRrhhOpen(false);
@@ -373,12 +380,30 @@ function DashboardContent() {
             <DirectLink to="/agenda" icon={Icons.agenda} label={t("agenda", "Agenda")} />
           </PermissionGate>
 
+          {/* ESCUELA */}
+          <PermissionGate menuCode="escuela.clases">
+            <MenuItem icon={Icons.school} label={t("school", "Escuela")} menuId="escuela" isOpen={escuelaOpen} setOpen={setEscuelaOpen}>
+              <PermissionGate menuCode="escuela.clases">
+                <NavLink to="/escuela/clases-recurrentes" className={subLinkStyle} onClick={() => setFlyoutMenu(null)}>{t("recurringClasses", "Clases recurrentes")}</NavLink>
+              </PermissionGate>
+              <PermissionGate menuCode="escuela.matriculas">
+                <NavLink to="/escuela/matriculas" className={subLinkStyle} onClick={() => setFlyoutMenu(null)}>{t("enrollments", "Matrículas")}</NavLink>
+              </PermissionGate>
+              <PermissionGate menuCode="escuela.contactos">
+                <NavLink to="/escuela/contactos" className={subLinkStyle} onClick={() => setFlyoutMenu(null)}>{t("contacts", "Contactos")}</NavLink>
+              </PermissionGate>
+              <NavLink to="/escuela/descuentos" className={subLinkStyle} onClick={() => setFlyoutMenu(null)}>{t("discounts", "Descuentos")}</NavLink>
+              <NavLink to="/escuela/aulas" className={subLinkStyle} onClick={() => setFlyoutMenu(null)}>{t("classrooms", "Aulas")}</NavLink>
+            </MenuItem>
+          </PermissionGate>
+
           {/* RECURSOS HUMANOS */}
           <PermissionGate menuCode="rrhh.trabajadores">
             <MenuItem icon={Icons.hr} label={t("humanResources", "RRHH")} menuId="rrhh" isOpen={rrhhOpen} setOpen={setRrhhOpen}>
               <PermissionGate menuCode="rrhh.trabajadores">
                 <NavLink to="/rrhh/trabajadores" className={subLinkStyle} onClick={() => setFlyoutMenu(null)}>{t("workers", "Trabajadores")}</NavLink>
               </PermissionGate>
+              <NavLink to="/rrhh/nominas" className={subLinkStyle} onClick={() => setFlyoutMenu(null)}>{t("payrolls", "Nóminas")}</NavLink>
               <PermissionGate menuCode="rrhh.fichajes">
                 <NavLink to="/rrhh/fichajes" className={subLinkStyle} onClick={() => setFlyoutMenu(null)}>{t("clockInOut", "Fichajes")}</NavLink>
               </PermissionGate>

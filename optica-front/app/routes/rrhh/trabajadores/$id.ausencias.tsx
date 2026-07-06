@@ -10,15 +10,15 @@ import {
 } from "~/lib/trabajadoresRest";
 
 const TIPOS_AUSENCIA = [
-  { value: "VACACIONES", label: "Vacaciones", computable: true },
-  { value: "CONVENIO", label: "Días convenio", computable: true },
-  { value: "BAJA_MEDICA", label: "Baja médica", computable: false },
-  { value: "ASUNTOS_PROPIOS", label: "Asuntos propios", computable: true },
-  { value: "OTRO", label: "Otro", computable: true },
+  { value: "VACACIONES", key: "ausencias.tipoVacaciones", label: "Vacaciones", computable: true },
+  { value: "CONVENIO", key: "ausencias.tipoConvenio", label: "Días convenio", computable: true },
+  { value: "BAJA_MEDICA", key: "ausencias.tipoBajaMedica", label: "Baja médica", computable: false },
+  { value: "ASUNTOS_PROPIOS", key: "ausencias.tipoAsuntosPropios", label: "Asuntos propios", computable: true },
+  { value: "OTRO", key: "ausencias.tipoOtro", label: "Otro", computable: true },
 ];
 
 export default function TrabajadorAusencias() {
-  const { t } = useTranslation("trabajadores");
+  const { t } = useTranslation(["trabajadores", "common"]);
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -51,7 +51,7 @@ export default function TrabajadorAusencias() {
       setTrabajador(trab);
       setAusencias(aus);
     } catch (e: any) {
-      setError(e.message ?? "Error cargando datos");
+      setError(e.message ?? t("ausencias.errorLoading", "Error cargando datos"));
     } finally {
       setLoading(false);
     }
@@ -79,7 +79,7 @@ export default function TrabajadorAusencias() {
   };
 
   const handleTipoChange = (tipo: string) => {
-    const tipoInfo = TIPOS_AUSENCIA.find((t) => t.value === tipo);
+    const tipoInfo = TIPOS_AUSENCIA.find((ta) => ta.value === tipo);
     setFormData({
       ...formData,
       TipoAusencia: tipo,
@@ -90,7 +90,7 @@ export default function TrabajadorAusencias() {
   const handleSave = async () => {
     if (!id) return;
     if (!formData.FechaInicio) {
-      setFormError(t("startDateRequired", "La fecha de inicio es obligatoria"));
+      setFormError(t("ausencias.startDateRequired", "La fecha de inicio es obligatoria"));
       return;
     }
 
@@ -108,7 +108,7 @@ export default function TrabajadorAusencias() {
       closeModal();
       loadData();
     } catch (e: any) {
-      setFormError(e.message ?? "Error guardando ausencia");
+      setFormError(e.message ?? t("ausencias.errorSaving", "Error guardando ausencia"));
     } finally {
       setSaving(false);
     }
@@ -123,7 +123,8 @@ export default function TrabajadorAusencias() {
   };
 
   const getTipoLabel = (tipo: string) => {
-    return TIPOS_AUSENCIA.find((t) => t.value === tipo)?.label ?? tipo;
+    const info = TIPOS_AUSENCIA.find((ta) => ta.value === tipo);
+    return info ? t(info.key, info.label) : tipo;
   };
 
   const getTipoColor = (tipo: string) => {
@@ -151,7 +152,7 @@ export default function TrabajadorAusencias() {
   if (loading) {
     return (
       <div className="p-6 flex items-center justify-center">
-        <div className="text-slate-500">{t("loading", "Cargando...")}</div>
+        <div className="text-slate-500">{t("ausencias.loading", "Cargando...")}</div>
       </div>
     );
   }
@@ -170,7 +171,7 @@ export default function TrabajadorAusencias() {
           </button>
           <div>
             <h1 className="text-2xl font-bold text-slate-900">
-              {t("absences", "Ausencias")}
+              {t("ausencias.title", "Ausencias")}
             </h1>
             <p className="text-slate-500 text-sm">
               {trabajador?.Nombre} {trabajador?.Apellidos}
@@ -199,7 +200,7 @@ export default function TrabajadorAusencias() {
             onClick={openModal}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"
           >
-            + {t("newAbsence", "Nueva ausencia")}
+            + {t("ausencias.newAbsence", "Nueva ausencia")}
           </button>
         </div>
       </div>
@@ -214,9 +215,9 @@ export default function TrabajadorAusencias() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {TIPOS_AUSENCIA.slice(0, 4).map((tipo) => (
           <div key={tipo.value} className="bg-white rounded-xl border border-slate-200 p-4">
-            <div className="text-sm text-slate-500">{tipo.label}</div>
+            <div className="text-sm text-slate-500">{t(tipo.key, tipo.label)}</div>
             <div className="text-2xl font-bold text-slate-900">
-              {totalesPorTipo[tipo.value] || 0} {t("days", "días")}
+              {totalesPorTipo[tipo.value] || 0} {t("ausencias.days", "días")}
             </div>
           </div>
         ))}
@@ -227,18 +228,18 @@ export default function TrabajadorAusencias() {
         <table className="w-full">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
-              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("type", "Tipo")}</th>
-              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("period", "Período")}</th>
-              <th className="text-center p-4 text-sm font-semibold text-slate-600">{t("days", "Días")}</th>
-              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("description", "Descripción")}</th>
-              <th className="text-center p-4 text-sm font-semibold text-slate-600">{t("computable", "Computable")}</th>
+              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("ausencias.type", "Tipo")}</th>
+              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("ausencias.period", "Período")}</th>
+              <th className="text-center p-4 text-sm font-semibold text-slate-600">{t("ausencias.daysCol", "Días")}</th>
+              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("ausencias.description", "Descripción")}</th>
+              <th className="text-center p-4 text-sm font-semibold text-slate-600">{t("ausencias.computable", "Computable")}</th>
             </tr>
           </thead>
           <tbody>
             {ausencias.length === 0 && (
               <tr>
                 <td colSpan={5} className="p-8 text-center text-slate-500">
-                  {t("noAbsences", "No hay ausencias registradas este año.")}
+                  {t("ausencias.noAbsences", "No hay ausencias registradas este año.")}
                 </td>
               </tr>
             )}
@@ -263,9 +264,9 @@ export default function TrabajadorAusencias() {
                 </td>
                 <td className="p-4 text-center">
                   {a.Computable ? (
-                    <span className="text-green-600">Si</span>
+                    <span className="text-green-600">{t("ausencias.yes", "Sí")}</span>
                   ) : (
-                    <span className="text-slate-400">No</span>
+                    <span className="text-slate-400">{t("ausencias.no", "No")}</span>
                   )}
                 </td>
               </tr>
@@ -282,7 +283,7 @@ export default function TrabajadorAusencias() {
             <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
               <div className="px-6 py-4 border-b border-slate-200">
                 <h2 className="text-lg font-bold text-slate-900">
-                  {t("newAbsence", "Nueva ausencia")}
+                  {t("ausencias.newAbsence", "Nueva ausencia")}
                 </h2>
               </div>
 
@@ -294,15 +295,15 @@ export default function TrabajadorAusencias() {
                 )}
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700">{t("type", "Tipo")} *</label>
+                  <label className="text-sm font-medium text-slate-700">{t("ausencias.type", "Tipo")} *</label>
                   <select
                     value={formData.TipoAusencia}
                     onChange={(e) => handleTipoChange(e.target.value)}
                     className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
                   >
-                    {TIPOS_AUSENCIA.map((t) => (
-                      <option key={t.value} value={t.value}>
-                        {t.label}
+                    {TIPOS_AUSENCIA.map((ta) => (
+                      <option key={ta.value} value={ta.value}>
+                        {t(ta.key, ta.label)}
                       </option>
                     ))}
                   </select>
@@ -310,7 +311,7 @@ export default function TrabajadorAusencias() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium text-slate-700">{t("startDate", "Fecha inicio")} *</label>
+                    <label className="text-sm font-medium text-slate-700">{t("ausencias.startDate", "Fecha inicio")} *</label>
                     <input
                       type="date"
                       value={formData.FechaInicio}
@@ -319,7 +320,7 @@ export default function TrabajadorAusencias() {
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-slate-700">{t("endDate", "Fecha fin")}</label>
+                    <label className="text-sm font-medium text-slate-700">{t("ausencias.endDate", "Fecha fin")}</label>
                     <input
                       type="date"
                       value={formData.FechaFin}
@@ -327,13 +328,13 @@ export default function TrabajadorAusencias() {
                       className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
                     />
                     <p className="mt-1 text-xs text-slate-500">
-                      {t("leaveEmptyForSingleDay", "Dejar vacío para día suelto")}
+                      {t("ausencias.leaveEmptyForSingleDay", "Dejar vacío para día suelto")}
                     </p>
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700">{t("description", "Descripción")}</label>
+                  <label className="text-sm font-medium text-slate-700">{t("ausencias.description", "Descripción")}</label>
                   <textarea
                     value={formData.Descripcion}
                     onChange={(e) => setFormData({ ...formData, Descripcion: e.target.value })}
@@ -350,10 +351,10 @@ export default function TrabajadorAusencias() {
                       onChange={(e) => setFormData({ ...formData, Computable: e.target.checked })}
                       className="rounded border-slate-300"
                     />
-                    {t("computableHours", "Computable (resta del cálculo de horas)")}
+                    {t("ausencias.computableHours", "Computable (resta del cálculo de horas)")}
                   </label>
                   <p className="mt-1 text-xs text-slate-500 ml-6">
-                    {t("computableHelp", "Las bajas médicas normalmente no son computables")}
+                    {t("ausencias.computableHelp", "Las bajas médicas normalmente no son computables")}
                   </p>
                 </div>
               </div>
@@ -365,7 +366,7 @@ export default function TrabajadorAusencias() {
                   className="px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-sm"
                   disabled={saving}
                 >
-                  {t("cancel", "Cancelar")}
+                  {t("ausencias.cancel", "Cancelar")}
                 </button>
                 <button
                   type="button"
@@ -373,7 +374,7 @@ export default function TrabajadorAusencias() {
                   className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm disabled:opacity-50"
                   disabled={saving}
                 >
-                  {saving ? t("saving", "Guardando...") : t("save", "Guardar")}
+                  {saving ? t("ausencias.saving", "Guardando...") : t("ausencias.save", "Guardar")}
                 </button>
               </div>
             </div>

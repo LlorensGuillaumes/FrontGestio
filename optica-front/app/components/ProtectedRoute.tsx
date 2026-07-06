@@ -1,5 +1,6 @@
 // app/components/ProtectedRoute.tsx
 import { Navigate, useLocation } from "react-router";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "~/contexts/AuthContext";
 import type { UserRole } from "~/lib/authRest";
 
@@ -18,6 +19,7 @@ export function ProtectedRoute({
   action = "ver",
   redirectTo = "/login",
 }: ProtectedRouteProps) {
+  const { t } = useTranslation("common");
   const { isAuthenticated, isLoading, hasRole, canAccess } = useAuth();
   const location = useLocation();
 
@@ -27,7 +29,7 @@ export function ProtectedRoute({
       <div className="flex items-center justify-center h-screen bg-gray-50">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-gray-600">Cargando...</p>
+          <p className="text-gray-600">{t("protected.loading")}</p>
         </div>
       </div>
     );
@@ -48,8 +50,8 @@ export function ProtectedRoute({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
-          <h2 className="text-xl font-semibold text-gray-800 mb-2">Acceso denegado</h2>
-          <p className="text-gray-600">No tienes permisos suficientes para acceder a esta sección.</p>
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">{t("protected.accessDenied")}</h2>
+          <p className="text-gray-600">{t("protected.noRolePermission")}</p>
         </div>
       </div>
     );
@@ -65,8 +67,8 @@ export function ProtectedRoute({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
-          <h2 className="text-xl font-semibold text-gray-800 mb-2">Sin permisos</h2>
-          <p className="text-gray-600">No tienes permisos para acceder a este recurso.</p>
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">{t("protected.noPermissions")}</h2>
+          <p className="text-gray-600">{t("protected.noResourcePermission")}</p>
         </div>
       </div>
     );
@@ -77,6 +79,7 @@ export function ProtectedRoute({
 
 // Componente para proteger el layout del dashboard
 export function RequireAuth({ children }: { children: React.ReactNode }) {
+  const { t } = useTranslation("common");
   const { isAuthenticated, isLoading } = useAuth();
   const location = useLocation();
 
@@ -85,7 +88,7 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
       <div className="flex items-center justify-center h-screen bg-gray-50">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-gray-600">Cargando...</p>
+          <p className="text-gray-600">{t("protected.loading")}</p>
         </div>
       </div>
     );

@@ -30,7 +30,76 @@
     "email": "Email"
   },
   "aeat": {
-    "title": "AEAT / VeriFactu"
+    "title": "Configuracion AEAT - VeriFactu",
+    "loading": "Cargando...",
+    "subtitle": "Gestiona el envio de facturas a la Agencia Tributaria",
+    "saving": "Guardando...",
+    "saveChanges": "Guardar cambios",
+    "sections": {
+      "verifactuStatus": "Estado VeriFactu",
+      "aeatEnvironment": "Entorno AEAT",
+      "digitalCertificate": "Certificado Digital",
+      "sif": "Sistema Informatico de Facturacion"
+    },
+    "activateVerifactu": "Activar VeriFactu",
+    "activateVerifactuHelp": "Habilita el envio de facturas a la AEAT",
+    "autoSend": "Enviar facturas automaticamente al crear",
+    "autoSendHelp": "Las facturas se enviaran a AEAT inmediatamente despues de crearlas",
+    "testing": "Pruebas",
+    "production": "Produccion",
+    "testingConnection": "Probando...",
+    "testConnection": "Probar conexion",
+    "productionWarning": "En modo produccion, las facturas se enviaran al sistema real de la AEAT. Asegurese de tener el certificado digital configurado.",
+    "expires": "Expira",
+    "noDate": "Sin fecha",
+    "changeCertificate": "Cambiar certificado",
+    "noCertificate": "No hay certificado configurado",
+    "uploadCertificate": "Subir certificado",
+    "certificateHelp": "Necesario para enviar facturas en modo produccion",
+    "sifName": "Nombre del SIF",
+    "sifVersion": "Version del SIF",
+    "communicationsLog": "Registro de Comunicaciones",
+    "refresh": "Actualizar",
+    "filters": {
+      "allTypes": "Todos los tipos",
+      "salesInvoices": "Facturas de venta",
+      "purchaseInvoices": "Facturas de compra",
+      "allStatuses": "Todos los estados"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "accepted": "Aceptado",
+      "rejected": "Rechazado",
+      "error": "Error"
+    },
+    "table": {
+      "date": "Fecha",
+      "invoice": "Factura",
+      "type": "Tipo",
+      "status": "Estado",
+      "csv": "CSV",
+      "message": "Mensaje",
+      "action": "Accion"
+    },
+    "noRecords": "No hay registros de comunicaciones",
+    "sale": "Venta",
+    "purchase": "Compra",
+    "retrying": "Reintentando...",
+    "retry": "Reintentar",
+    "showing": "Mostrando {{shown}} de {{total}} registros",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "messages": {
+      "saved": "Configuracion guardada correctamente",
+      "resendSuccess": "Reenvio exitoso"
+    },
+    "errors": {
+      "loadingConfig": "Error cargando configuracion",
+      "saving": "Error guardando",
+      "connectionTest": "Error en test de conexion",
+      "resend": "Error en reenvio",
+      "retrying": "Error reintentando"
+    }
   },
   "databases": {
     "title": "Gestion de Bases de Datos",
@@ -134,6 +203,274 @@
       "changesApplied": "cambios aplicados",
       "syncCompleted": "Sincronizacion completada",
       "appliedTo": "Cambios aplicados a"
+    }
+  },
+  "basesDatos": {
+    "loading": "Cargando...",
+    "inactiveBadge": "INACTIVA",
+    "errors": {
+      "loadingData": "Error cargando datos",
+      "sync": "Error al sincronizar",
+      "update": "Error al actualizar",
+      "changeStatus": "Error al cambiar estado",
+      "suffixNameRequired": "El sufijo y el nombre son obligatorios",
+      "create": "Error al crear la base de datos",
+      "analyzeSchemas": "Error al analizar esquemas",
+      "errorsWord": "errores",
+      "syncSchemas": "Error al sincronizar esquemas",
+      "applyChanges": "Error al aplicar cambios",
+      "delete": "Error al eliminar la base de datos"
+    },
+    "titles": {
+      "clickDeactivate": "Clic para desactivar",
+      "clickReactivate": "Clic para reactivar",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "editName": "Editar nombre",
+      "deletePermanently": "Eliminar permanentemente"
+    }
+  },
+  "servicios": {
+    "title": "Servicios",
+    "loading": "Cargando...",
+    "count": "{{count}} servicios",
+    "allFamilies": "Todas las familias",
+    "allSubfamilies": "Todas las subfamilias",
+    "showInactive": "Mostrar inactivos",
+    "newService": "+ Nuevo servicio",
+    "noServices": "No hay servicios registrados.",
+    "minutes": "{{count}} min",
+    "yes": "Sí",
+    "no": "No",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "edit": "Editar",
+    "deactivate": "Desactivar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "confirmDeactivate": "¿Desactivar este servicio? Podrá reactivarlo más tarde.",
+    "errors": {
+      "loading": "Error cargando servicios",
+      "nameRequired": "El nombre es obligatorio",
+      "saving": "Error guardando servicio",
+      "deactivating": "Error al desactivar servicio"
+    },
+    "table": {
+      "code": "Código",
+      "name": "Nombre",
+      "family": "Familia",
+      "pvp": "PVP",
+      "duration": "Duración",
+      "appointment": "Cita",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "modal": {
+      "newTitle": "Nuevo servicio",
+      "editTitle": "Editar servicio"
+    },
+    "form": {
+      "code": "Código",
+      "codePlaceholder": "Ej: SRV001",
+      "name": "Nombre *",
+      "namePlaceholder": "Ej: Sesión de terapia visual",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Descripción del servicio...",
+      "pvp": "PVP (€)",
+      "iva": "% IVA",
+      "enrollmentAmount": "Importe matrícula (€/año)",
+      "durationMinutes": "Duración (minutos)",
+      "durationPlaceholder": "0 si no aplica",
+      "requiresAppointment": "Requiere cita previa",
+      "observations": "Observaciones",
+      "observationsPlaceholder": "Notas internas...",
+      "familiesSubfamilies": "Familias / Subfamilias",
+      "active": "Activo"
+    }
+  },
+  "modosPago": {
+    "title": "Modos de Pago",
+    "loading": "Cargando...",
+    "count": "{{count}} modos de pago",
+    "showInactive": "Mostrar inactivos",
+    "newPaymentMethod": "+ Nuevo modo de pago",
+    "noPaymentMethods": "No hay modos de pago registrados.",
+    "cardTerminal": "Datafono",
+    "no": "No",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "edit": "Editar",
+    "deactivate": "Desactivar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "confirmDeactivate": "¿Desactivar este modo de pago? Podra reactivarlo mas tarde.",
+    "errors": {
+      "loading": "Error cargando modos de pago",
+      "descriptionRequired": "La descripcion es obligatoria",
+      "saving": "Error guardando modo de pago",
+      "deactivating": "Error al desactivar modo de pago"
+    },
+    "table": {
+      "order": "Orden",
+      "description": "Descripcion",
+      "usesCardTerminal": "Usa Datafono",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "info": {
+      "title": "Informacion:",
+      "cardTerminal": "Marca los metodos de pago que requieren terminal de tarjetas (TPV fisico).",
+      "order": "Determina el orden en que aparecen en los desplegables y listados."
+    },
+    "modal": {
+      "newTitle": "Nuevo modo de pago",
+      "editTitle": "Editar modo de pago"
+    },
+    "form": {
+      "description": "Descripcion *",
+      "descriptionPlaceholder": "Ej: Tarjeta de credito, Efectivo, Bizum...",
+      "order": "Orden",
+      "orderHelp": "Determina la posicion en listados y desplegables (menor = primero).",
+      "usesCardTerminal": "Usa datafono / TPV",
+      "usesCardTerminalHelp": "Activar si este metodo requiere terminal de tarjetas",
+      "active": "Activo"
+    }
+  },
+  "profesionales": {
+    "title": "Profesionales",
+    "loading": "Cargando...",
+    "count": "{{count}} profesionales",
+    "showInactive": "Mostrar inactivos",
+    "newProfessional": "+ Nuevo profesional",
+    "noProfessionals": "No hay profesionales registrados.",
+    "linked": "Vinculado",
+    "freelance": "Autónomo",
+    "payroll": "Nómina",
+    "notLinked": "⚠ sin vincular",
+    "freelanceLower": "autónomo",
+    "payrollLower": "nómina",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "edit": "Editar",
+    "deactivate": "Desactivar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "confirmDeactivate": "¿Desactivar este profesional? Podrá reactivarlo más tarde.",
+    "errors": {
+      "loading": "Error cargando profesionales",
+      "nameRequired": "El nombre completo es obligatorio",
+      "saving": "Error guardando profesional",
+      "deactivating": "Error al desactivar profesional"
+    },
+    "table": {
+      "fullName": "Nombre completo",
+      "specialty": "Especialidad",
+      "worker": "Trabajador (RRHH)",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "modal": {
+      "newTitle": "Nuevo profesional",
+      "editTitle": "Editar profesional"
+    },
+    "form": {
+      "fullName": "Nombre completo *",
+      "fullNamePlaceholder": "Ej: Dr. Juan García López",
+      "specialty": "Especialidad",
+      "specialtyPlaceholder": "Ej: Cuerda, Viento, Piano...",
+      "linkedWorker": "Trabajador vinculado (RRHH)",
+      "unlinkedOption": "— Sin vincular —",
+      "linkedWorkerHelp": "El profesor es un trabajador de la escuela. Vincúlalo para nóminas, IBAN y facturas de autónomos.",
+      "active": "Activo"
+    }
+  },
+  "usuarios": {
+    "noAccess": "No tienes permisos para acceder a esta seccion.",
+    "roleAdmin": "Admin",
+    "roleUser": "Usuario",
+    "statusActive": "Activo",
+    "statusInactive": "Inactivo",
+    "contactToActivate": "Contacta para activar este modulo",
+    "notContracted": "No contratado",
+    "confirmDelete": "¿Seguro que deseas eliminar al usuario \"{{name}}\"?",
+    "permissions": {
+      "all": "Todos",
+      "view": "Ver",
+      "create": "Crear",
+      "edit": "Editar",
+      "delete": "Eliminar"
+    },
+    "errors": {
+      "loading": "Error al cargar usuarios",
+      "selectDatabase": "Debes seleccionar al menos una base de datos",
+      "saving": "Error al guardar usuario",
+      "deleting": "Error al eliminar usuario",
+      "loadingPermissions": "Error al cargar permisos",
+      "savingPermissions": "Error al guardar permisos",
+      "resettingPassword": "Error al restablecer contrasena"
+    }
+  },
+  "empresa": {
+    "loading": "Cargando...",
+    "title": "Datos de la Empresa",
+    "subtitle": "Configura los datos que aparecen en los documentos",
+    "saving": "Guardando...",
+    "saveChanges": "Guardar cambios",
+    "savedSuccess": "Datos guardados correctamente",
+    "sections": {
+      "fiscalData": "Datos Fiscales",
+      "address": "Dirección",
+      "contact": "Contacto",
+      "documentsConfig": "Configuración de Documentos"
+    },
+    "fiscalName": "Nombre Fiscal *",
+    "fiscalNamePlaceholder": "Razón social",
+    "commercialName": "Nombre Comercial",
+    "commercialNamePlaceholder": "Nombre comercial",
+    "cifNif": "CIF / NIF",
+    "address": "Dirección",
+    "addressPlaceholder": "Calle, número, piso...",
+    "postalCode": "C.P.",
+    "postalCodePlaceholder": "28001",
+    "city": "Población",
+    "cityPlaceholder": "Madrid",
+    "province": "Provincia",
+    "provincePlaceholder": "Madrid",
+    "country": "País",
+    "countryPlaceholder": "España",
+    "phone": "Teléfono",
+    "phonePlaceholder": "912345678",
+    "email": "Email",
+    "emailPlaceholder": "info@empresa.com",
+    "web": "Web",
+    "webPlaceholder": "www.empresa.com",
+    "logoUrl": "URL del Logo",
+    "confirmationDays": "Plazo confirmación (días)",
+    "footerText": "Texto pie de documento",
+    "footerTextPlaceholder": "Condiciones legales, forma de pago, etc.",
+    "logoPreview": "Vista previa del Logo",
+    "logoAlt": "Logo empresa",
+    "invoiceSeries": "Serie de Facturacion",
+    "masterOnly": "Solo Master",
+    "invoiceSeriesHelp": "Define la serie que se usara para numerar las facturas de esta tienda. Cada tienda debe tener una serie unica para evitar conflictos de numeracion.",
+    "series": "Serie",
+    "seriesPlaceholder": "Ej: OC, SN, 01...",
+    "seriesFormat": "Las facturas tendran formato: {{serie}}-0001, {{serie}}-0002...",
+    "saveSeries": "Guardar serie",
+    "seriesUpdated": "Serie de facturacion actualizada correctamente",
+    "importantTitle": "Importante:",
+    "importantList": {
+      "unique": "Cada tienda debe tener una serie diferente para evitar duplicados",
+      "noChange": "Una vez emitida una factura con una serie, no la cambies",
+      "examples": "Ejemplos: \"OC\" para Optica Central, \"SN\" para Sucursal Norte"
+    },
+    "errors": {
+      "loading": "Error al cargar los datos de la empresa",
+      "saving": "Error al guardar los datos de la empresa",
+      "savingSeries": "Error al guardar la serie de facturación"
     }
   }
 }

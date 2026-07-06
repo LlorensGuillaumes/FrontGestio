@@ -892,7 +892,7 @@ export default function DocumentoModal({
 
                         {/* OI */}
                         <div className="p-3 rounded-xl border border-slate-200 bg-slate-50">
-                          <div className="text-xs font-bold text-slate-600 mb-2">Ojo Izquierdo (OI)</div>
+                          <div className="text-xs font-bold text-slate-600 mb-2">{t("graduation.leftEye")}</div>
                           <div className="grid grid-cols-3 gap-2">
                             <div>
                               <label className="block text-xs text-slate-500">Esf</label>

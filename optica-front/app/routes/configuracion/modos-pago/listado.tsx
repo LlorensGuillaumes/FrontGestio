@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   fetchModosPago,
   createModoPago,
@@ -10,6 +11,7 @@ import {
 type ModalMode = "new" | "edit" | null;
 
 export default function ModosPagoListado() {
+  const { t } = useTranslation(["configuracion", "common"]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [modosPago, setModosPago] = useState<ModoPago[]>([]);
@@ -34,7 +36,7 @@ export default function ModosPagoListado() {
       const data = await fetchModosPago(!showInactivos);
       setModosPago(data);
     } catch (e: any) {
-      setError(e.message ?? "Error cargando modos de pago");
+      setError(e.message ?? t("configuracion:modosPago.errors.loading"));
     } finally {
       setLoading(false);
     }
@@ -77,7 +79,7 @@ export default function ModosPagoListado() {
 
   const handleSave = async () => {
     if (!formData.descripcion.trim()) {
-      setFormError("La descripcion es obligatoria");
+      setFormError(t("configuracion:modosPago.errors.descriptionRequired"));
       return;
     }
 
@@ -102,21 +104,21 @@ export default function ModosPagoListado() {
       closeModal();
       loadModosPago();
     } catch (e: any) {
-      setFormError(e.message ?? "Error guardando modo de pago");
+      setFormError(e.message ?? t("configuracion:modosPago.errors.saving"));
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async (id: number) => {
-    const confirmed = window.confirm("¿Desactivar este modo de pago? Podra reactivarlo mas tarde.");
+    const confirmed = window.confirm(t("configuracion:modosPago.confirmDeactivate"));
     if (!confirmed) return;
 
     try {
       await deleteModoPago(id);
       loadModosPago();
     } catch (e: any) {
-      alert(e.message ?? "Error al desactivar modo de pago");
+      alert(e.message ?? t("configuracion:modosPago.errors.deactivating"));
     }
   };
 
@@ -124,9 +126,9 @@ export default function ModosPagoListado() {
     <div className="p-6 max-w-4xl mx-auto space-y-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Modos de Pago</h1>
+          <h1 className="text-2xl font-bold text-slate-900">{t("configuracion:modosPago.title")}</h1>
           <p className="text-slate-500 text-sm">
-            {loading ? "Cargando..." : `${modosPago.length} modos de pago`}
+            {loading ? t("configuracion:modosPago.loading") : t("configuracion:modosPago.count", { count: modosPago.length })}
           </p>
         </div>
 
@@ -138,7 +140,7 @@ export default function ModosPagoListado() {
               onChange={(e) => setShowInactivos(e.target.checked)}
               className="rounded border-slate-300"
             />
-            Mostrar inactivos
+            {t("configuracion:modosPago.showInactive")}
           </label>
 
           <button
@@ -146,7 +148,7 @@ export default function ModosPagoListado() {
             onClick={openNewModal}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"
           >
-            + Nuevo modo de pago
+            {t("configuracion:modosPago.newPaymentMethod")}
           </button>
         </div>
       </div>
@@ -161,18 +163,18 @@ export default function ModosPagoListado() {
         <table className="w-full">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
-              <th className="text-left p-4 text-sm font-semibold text-slate-600 w-16">Orden</th>
-              <th className="text-left p-4 text-sm font-semibold text-slate-600">Descripcion</th>
-              <th className="text-center p-4 text-sm font-semibold text-slate-600">Usa Datafono</th>
-              <th className="text-center p-4 text-sm font-semibold text-slate-600">Estado</th>
-              <th className="text-right p-4 text-sm font-semibold text-slate-600">Acciones</th>
+              <th className="text-left p-4 text-sm font-semibold text-slate-600 w-16">{t("configuracion:modosPago.table.order")}</th>
+              <th className="text-left p-4 text-sm font-semibold text-slate-600">{t("configuracion:modosPago.table.description")}</th>
+              <th className="text-center p-4 text-sm font-semibold text-slate-600">{t("configuracion:modosPago.table.usesCardTerminal")}</th>
+              <th className="text-center p-4 text-sm font-semibold text-slate-600">{t("configuracion:modosPago.table.status")}</th>
+              <th className="text-right p-4 text-sm font-semibold text-slate-600">{t("configuracion:modosPago.table.actions")}</th>
             </tr>
           </thead>
           <tbody>
             {modosPago.length === 0 && !loading && (
               <tr>
                 <td colSpan={5} className="p-8 text-center text-slate-500">
-                  No hay modos de pago registrados.
+                  {t("configuracion:modosPago.noPaymentMethods")}
                 </td>
               </tr>
             )}
@@ -188,10 +190,10 @@ export default function ModosPagoListado() {
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                       </svg>
-                      Datafono
+                      {t("configuracion:modosPago.cardTerminal")}
                     </span>
                   ) : (
-                    <span className="text-slate-400 text-sm">No</span>
+                    <span className="text-slate-400 text-sm">{t("configuracion:modosPago.no")}</span>
                   )}
                 </td>
                 <td className="p-4 text-center">
@@ -202,7 +204,7 @@ export default function ModosPagoListado() {
                         : "bg-slate-100 text-slate-500"
                     }`}
                   >
-                    {m.activo ? "Activo" : "Inactivo"}
+                    {m.activo ? t("configuracion:modosPago.active") : t("configuracion:modosPago.inactive")}
                   </span>
                 </td>
                 <td className="p-4 text-right">
@@ -211,7 +213,7 @@ export default function ModosPagoListado() {
                       type="button"
                       onClick={() => openEditModal(m)}
                       className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50"
-                      title="Editar"
+                      title={t("configuracion:modosPago.edit")}
                     >
                       <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -222,7 +224,7 @@ export default function ModosPagoListado() {
                         type="button"
                         onClick={() => handleDelete(m.id)}
                         className="p-1.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50"
-                        title="Desactivar"
+                        title={t("configuracion:modosPago.deactivate")}
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
@@ -239,10 +241,10 @@ export default function ModosPagoListado() {
 
       {/* Leyenda */}
       <div className="text-sm text-slate-500 bg-slate-50 rounded-lg p-4">
-        <p className="font-medium text-slate-700 mb-2">Informacion:</p>
+        <p className="font-medium text-slate-700 mb-2">{t("configuracion:modosPago.info.title")}</p>
         <ul className="list-disc list-inside space-y-1">
-          <li><strong>Usa Datafono:</strong> Marca los metodos de pago que requieren terminal de tarjetas (TPV fisico).</li>
-          <li><strong>Orden:</strong> Determina el orden en que aparecen en los desplegables y listados.</li>
+          <li><strong>{t("configuracion:modosPago.table.usesCardTerminal")}:</strong> {t("configuracion:modosPago.info.cardTerminal")}</li>
+          <li><strong>{t("configuracion:modosPago.table.order")}:</strong> {t("configuracion:modosPago.info.order")}</li>
         </ul>
       </div>
 
@@ -254,7 +256,7 @@ export default function ModosPagoListado() {
             <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
               <div className="px-6 py-4 border-b border-slate-200">
                 <h2 className="text-lg font-bold text-slate-900">
-                  {modalMode === "new" ? "Nuevo modo de pago" : "Editar modo de pago"}
+                  {modalMode === "new" ? t("configuracion:modosPago.modal.newTitle") : t("configuracion:modosPago.modal.editTitle")}
                 </h2>
               </div>
 
@@ -266,18 +268,18 @@ export default function ModosPagoListado() {
                 )}
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700">Descripcion *</label>
+                  <label className="text-sm font-medium text-slate-700">{t("configuracion:modosPago.form.description")}</label>
                   <input
                     type="text"
                     value={formData.descripcion}
                     onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
                     className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                    placeholder="Ej: Tarjeta de credito, Efectivo, Bizum..."
+                    placeholder={t("configuracion:modosPago.form.descriptionPlaceholder")}
                   />
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-slate-700">Orden</label>
+                  <label className="text-sm font-medium text-slate-700">{t("configuracion:modosPago.form.order")}</label>
                   <input
                     type="number"
                     value={formData.orden}
@@ -286,7 +288,7 @@ export default function ModosPagoListado() {
                     min="0"
                   />
                   <p className="mt-1 text-xs text-slate-500">
-                    Determina la posicion en listados y desplegables (menor = primero).
+                    {t("configuracion:modosPago.form.orderHelp")}
                   </p>
                 </div>
 
@@ -299,9 +301,9 @@ export default function ModosPagoListado() {
                       className="rounded border-slate-300 w-5 h-5 text-purple-600 focus:ring-purple-500"
                     />
                     <div>
-                      <span className="text-sm font-medium text-slate-700">Usa datafono / TPV</span>
+                      <span className="text-sm font-medium text-slate-700">{t("configuracion:modosPago.form.usesCardTerminal")}</span>
                       <p className="text-xs text-slate-500">
-                        Activar si este metodo requiere terminal de tarjetas
+                        {t("configuracion:modosPago.form.usesCardTerminalHelp")}
                       </p>
                     </div>
                   </label>
@@ -316,7 +318,7 @@ export default function ModosPagoListado() {
                         onChange={(e) => setFormData({ ...formData, activo: e.target.checked })}
                         className="rounded border-slate-300"
                       />
-                      Activo
+                      {t("configuracion:modosPago.form.active")}
                     </label>
                   </div>
                 )}
@@ -329,7 +331,7 @@ export default function ModosPagoListado() {
                   className="px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-sm"
                   disabled={saving}
                 >
-                  Cancelar
+                  {t("configuracion:modosPago.cancel")}
                 </button>
                 <button
                   type="button"
@@ -337,7 +339,7 @@ export default function ModosPagoListado() {
                   className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm disabled:opacity-50"
                   disabled={saving}
                 >
-                  {saving ? "Guardando..." : "Guardar"}
+                  {saving ? t("configuracion:modosPago.saving") : t("configuracion:modosPago.save")}
                 </button>
               </div>
             </div>

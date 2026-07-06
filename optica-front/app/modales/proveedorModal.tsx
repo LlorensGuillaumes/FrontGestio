@@ -9,6 +9,7 @@ import {
   fetchSubfamiliasProveedores,
 } from "~/lib/proveedoresRest";
 import { SubfamiliasProveedoresPicker } from "~/components/recuadros/subFamiliasProveedoresPicker";
+import { useAuth } from "~/contexts/AuthContext";
 
 export type ProveedorModalMode = "new" | "view" | "edit";
 
@@ -27,6 +28,8 @@ type SubfamiliaRel = { id?: number; id_subfamilia: number; descripcion?: string 
 
 export default function ProveedorModal({ mode, id, onClose, onSaved, onEdit, onView }: Props) {
   const { t } = useTranslation(["proveedores", "common"]);
+  const { canAccess } = useAuth();
+  const verBancarios = canAccess("proveedores.datos_bancarios", "ver");
   const isNew = mode === "new";
   const isView = mode === "view";
   const isEdit = mode === "edit";
@@ -47,6 +50,11 @@ export default function ProveedorModal({ mode, id, onClose, onSaved, onEdit, onV
   const [email, setEmail] = useState("");
   const [web, setWeb] = useState("");
   const [observaciones, setObservaciones] = useState("");
+
+  // Datos bancarios (SEPA pago)
+  const [iban, setIban] = useState("");
+  const [titularCuenta, setTitularCuenta] = useState("");
+  const [bic, setBic] = useState("");
 
   const [telefonos, setTelefonos] = useState<Telefono[]>([]);
   const [contactos, setContactos] = useState<Contacto[]>([]);
@@ -88,6 +96,9 @@ export default function ProveedorModal({ mode, id, onClose, onSaved, onEdit, onV
       setEmail("");
       setWeb("");
       setObservaciones("");
+      setIban("");
+      setTitularCuenta("");
+      setBic("");
       setTelefonos([]);
       setContactos([]);
       setSubfamiliasRel([]);
@@ -112,6 +123,9 @@ export default function ProveedorModal({ mode, id, onClose, onSaved, onEdit, onV
         setEmail(data.Email ?? "");
         setWeb(data.Web ?? "");
         setObservaciones(data.Observaciones ?? "");
+        setIban((data as any).Iban ?? "");
+        setTitularCuenta((data as any).TitularCuenta ?? "");
+        setBic((data as any).Bic ?? "");
         setTelefonos(
           (data.telefonos ?? []).map((t: any) => ({
             id: t.id,
@@ -155,6 +169,9 @@ export default function ProveedorModal({ mode, id, onClose, onSaved, onEdit, onV
         email: email.trim() || null,
         web: web.trim() || null,
         observaciones: observaciones.trim() || null,
+        iban: iban.trim() || null,
+        titularCuenta: titularCuenta.trim() || null,
+        bic: bic.trim() || null,
         telefonos: telefonos.filter((t) => t.Telefono.trim()),
         contactos: contactos.filter((c) => c.Nombre.trim()),
         subfamilias: subfamiliasRel.map((s) => ({ id_subfamilia: s.id_subfamilia })),
@@ -334,6 +351,48 @@ export default function ProveedorModal({ mode, id, onClose, onSaved, onEdit, onV
                     />
                   </div>
                 </div>
+
+                {/* Datos bancarios (SEPA) — requiere permiso */}
+                {verBancarios && (
+                <div className="border border-slate-200 rounded-xl p-4">
+                  <div className="text-sm font-bold text-slate-700 mb-1">{t("modal.bankDataTitle")}</div>
+                  <p className="text-xs text-slate-500 mb-3">
+                    {t("modal.bankDataHelp")}
+                  </p>
+                  <div className="grid grid-cols-12 gap-4">
+                    <div className="col-span-12 md:col-span-7">
+                      <label className="text-xs font-bold text-slate-500">IBAN</label>
+                      <input
+                        className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm font-mono"
+                        value={iban}
+                        onChange={(e) => setIban(e.target.value.toUpperCase())}
+                        placeholder="ES00 0000 0000 0000 0000 0000"
+                        disabled={isView}
+                      />
+                    </div>
+                    <div className="col-span-6 md:col-span-2">
+                      <label className="text-xs font-bold text-slate-500">BIC</label>
+                      <input
+                        className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm font-mono"
+                        value={bic}
+                        onChange={(e) => setBic(e.target.value.toUpperCase())}
+                        placeholder="XXXXESMMXXX"
+                        disabled={isView}
+                      />
+                    </div>
+                    <div className="col-span-12 md:col-span-3">
+                      <label className="text-xs font-bold text-slate-500">{t("modal.accountHolder")}</label>
+                      <input
+                        className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
+                        value={titularCuenta}
+                        onChange={(e) => setTitularCuenta(e.target.value)}
+                        placeholder={t("modal.accountHolderPlaceholder")}
+                        disabled={isView}
+                      />
+                    </div>
+                  </div>
+                </div>
+                )}
 
                 {/* Teléfonos */}
                 <div className="border border-slate-200 rounded-xl p-4">

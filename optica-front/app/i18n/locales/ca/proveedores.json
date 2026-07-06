@@ -66,5 +66,76 @@
     "errorCreatingFamilies": "Error creant families",
     "errorCreatingSubfamilies": "Error creant subfamilies",
     "selectFamilyFirst": "Selecciona una familia abans de crear subfamilies."
+  },
+  "detalle": {
+    "newTitle": "Nou Proveïdor",
+    "editTitle": "Modificar Proveïdor",
+    "viewTitle": "Detall del Proveïdor",
+    "typeCompany": "Empresa / SL",
+    "typePerson": "Autònom / Persona",
+    "legalName": "Raó Social",
+    "commercialName": "Nom Comercial",
+    "contact": "Contacte",
+    "name": "Nom",
+    "firstSurname": "1r Cognom",
+    "secondSurname": "2n Cognom",
+    "nif": "NIF / CIF",
+    "email": "Email",
+    "phone": "Telèfon",
+    "mobile": "Mòbil",
+    "address": "Adreça",
+    "postalCode": "C.P.",
+    "city": "Població",
+    "province": "Província",
+    "country": "País",
+    "close": "Tancar",
+    "editButton": "Modificar Proveïdor",
+    "saveChanges": "Desar Canvis"
+  },
+  "listado": {
+    "verProveedor": "Veure proveïdor",
+    "editarProveedor": "Editar proveïdor",
+    "codigo": "Codi",
+    "producto": "Producte",
+    "refProveedor": "Ref. Proveïdor",
+    "precioCoste": "Preu Cost",
+    "pvp": "PVP",
+    "titulo": "Proveïdors",
+    "cargando": "Carregant...",
+    "contador": "{{count}} proveïdors"
+  },
+  "gestionarFamilias": "Gestionar famílies",
+  "listadoCols": {
+    "nuevoProveedor": "+ Nou proveïdor",
+    "inactivo": "Inactiu",
+    "sinFamilias": "Sense famílies",
+    "cargando": "Carregant...",
+    "cargandoProductos": "Carregant productes...",
+    "sinProductos": "Aquest proveïdor no té productes associats.",
+    "productosSuministrados": "Productes subministrats ({{count}})",
+    "empty": "No hi ha proveïdors.",
+    "emptyConFiltros": "No s'han trobat proveïdors amb aquests filtres.",
+    "filtros": {
+      "buscar": "CERCAR",
+      "buscarPlaceholder": "Nom, raó social...",
+      "nif": "NIF/CIF",
+      "nifPlaceholder": "NIF/CIF...",
+      "email": "EMAIL",
+      "emailPlaceholder": "correu@...",
+      "telefono": "TELÈFON",
+      "telefonoPlaceholder": "Tel / mòbil..."
+    },
+    "cols": {
+      "proveedor": "Proveïdor",
+      "contacto": "Contacte",
+      "telefono": "Telèfon",
+      "acciones": "Accions"
+    }
+  },
+  "modal": {
+    "bankDataTitle": "Dades bancàries (SEPA)",
+    "bankDataHelp": "Per pagar a aquest proveïdor per remesa SEPA. En autònoms s'emplena automàticament des de la fitxa del treballador.",
+    "accountHolder": "Titular",
+    "accountHolderPlaceholder": "Titular del compte"
   }
 }

@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Outlet, NavLink, type NavLinkRenderProps, useSearchParams } from "react-router";
 import { GestionarFamiliasProveedorModal } from "~/modales/familiasProveedorModal";
 import ProveedorModal from "~/modales/proveedorModal";
@@ -13,6 +14,7 @@ export type ProveedoresOutletContext = {
 type ModalType = "proveedor" | "familias" | null;
 
 export default function ProveedoresLayout() {
+  const { t } = useTranslation(["proveedores", "common"]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [refreshToken, setRefreshToken] = useState(0);
 
@@ -69,18 +71,18 @@ export default function ProveedoresLayout() {
     <div className="flex flex-col h-full">
       <header className="bg-slate-50/80 backdrop-blur-sm border-b border-slate-200 px-8 py-3 flex items-center justify-between">
         <nav className="flex items-center space-x-2 text-sm">
-          <span className="text-slate-400 font-medium">Compras</span>
+          <span className="text-slate-400 font-medium">{t("common:breadcrumb.compras")}</span>
           <svg className="w-4 h-4 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
           </svg>
           <span className="text-slate-900 font-bold tracking-tight px-2 py-0.5 bg-slate-200/50 rounded-md">
-            Proveedores
+            {t("common:breadcrumb.proveedores")}
           </span>
         </nav>
 
         <nav className="flex space-x-1 bg-slate-200/40 p-1 rounded-xl border border-slate-200/50">
           <NavLink to="." end className={linkStyle}>
-            Listado
+            {t("common:breadcrumb.listado")}
           </NavLink>
 
           <button
@@ -88,7 +90,7 @@ export default function ProveedoresLayout() {
             onClick={openGestionarFamiliasModal}
             className="px-3 py-1.5 text-sm font-medium rounded-md transition-colors text-slate-500 hover:text-slate-700 hover:bg-slate-50"
           >
-            Gestionar familias
+            {t("proveedores:gestionarFamilias")}
           </button>
         </nav>
       </header>

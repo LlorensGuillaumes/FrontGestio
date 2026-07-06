@@ -45,7 +45,7 @@ interface SchemaAnalysisSummary {
 }
 
 export default function ConfiguracionBasesDatos() {
-  const { t } = useTranslation("configuracion");
+  const { t } = useTranslation(["configuracion", "common"]);
   const { isMaster, isLoading: authLoading } = useAuth();
   const [loading, setLoading] = useState(true);
   const [databases, setDatabases] = useState<BaseDatos[]>([]);
@@ -95,7 +95,7 @@ export default function ConfiguracionBasesDatos() {
       setDatabases(dbResponse.data.databases || []);
       setPostgresDbs(pgResponse.data.databases || []);
     } catch (e: any) {
-      setError(e?.response?.data?.message || "Error cargando datos");
+      setError(e?.response?.data?.message || t("configuracion:basesDatos.errors.loadingData"));
     } finally {
       setLoading(false);
     }
@@ -111,7 +111,7 @@ export default function ConfiguracionBasesDatos() {
   if (authLoading) {
     return (
       <div className="h-full flex items-center justify-center">
-        <div className="text-slate-500">Cargando...</div>
+        <div className="text-slate-500">{t("configuracion:basesDatos.loading")}</div>
       </div>
     );
   }
@@ -142,7 +142,7 @@ export default function ConfiguracionBasesDatos() {
       }
       await fetchData();
     } catch (e: any) {
-      setError(e?.response?.data?.message || "Error al sincronizar");
+      setError(e?.response?.data?.message || t("configuracion:basesDatos.errors.sync"));
     } finally {
       setSyncing(false);
     }
@@ -164,7 +164,7 @@ export default function ConfiguracionBasesDatos() {
       await fetchData();
       setTimeout(() => setSuccess(null), 3000);
     } catch (e: any) {
-      setError(e?.response?.data?.message || "Error al actualizar");
+      setError(e?.response?.data?.message || t("configuracion:basesDatos.errors.update"));
     }
   };
 
@@ -178,13 +178,13 @@ export default function ConfiguracionBasesDatos() {
       await fetchData();
       setTimeout(() => setSuccess(null), 3000);
     } catch (e: any) {
-      setError(e?.response?.data?.message || "Error al cambiar estado");
+      setError(e?.response?.data?.message || t("configuracion:basesDatos.errors.changeStatus"));
     }
   };
 
   const handleCreateDatabase = async () => {
     if (!createForm.suffix || !createForm.nombre) {
-      setError("El sufijo y el nombre son obligatorios");
+      setError(t("configuracion:basesDatos.errors.suffixNameRequired"));
       return;
     }
 
@@ -200,7 +200,7 @@ export default function ConfiguracionBasesDatos() {
       setCreateForm({ suffix: "", nombre: "" });
       await fetchData();
     } catch (e: any) {
-      setError(e?.response?.data?.message || "Error al crear la base de datos");
+      setError(e?.response?.data?.message || t("configuracion:basesDatos.errors.create"));
     } finally {
       setCreating(false);
     }
@@ -228,7 +228,7 @@ export default function ConfiguracionBasesDatos() {
         setSuccess(t("databases.schemas.allSynced"));
       }
     } catch (e: any) {
-      setError(e?.response?.data?.message || "Error al analizar esquemas");
+      setError(e?.response?.data?.message || t("configuracion:basesDatos.errors.analyzeSchemas"));
     } finally {
       setAnalyzingSchemas(false);
     }
@@ -250,7 +250,7 @@ export default function ConfiguracionBasesDatos() {
       }>("/admin/schemas/sync");
 
       if (response.data.errors.length > 0) {
-        setError(`${response.data.applied} ${t("databases.messages.changesApplied")} (${response.data.errors.length} errors)`);
+        setError(`${response.data.applied} ${t("databases.messages.changesApplied")} (${response.data.errors.length} ${t("configuracion:basesDatos.errors.errorsWord")})`);
       } else {
         setSuccess(`${t("databases.messages.syncCompleted")}: ${response.data.applied} ${t("databases.messages.changesApplied")}`);
       }
@@ -258,7 +258,7 @@ export default function ConfiguracionBasesDatos() {
       // Reanalizar para actualizar la vista
       await handleAnalyzeSchemas();
     } catch (e: any) {
-      setError(e?.response?.data?.message || "Error al sincronizar esquemas");
+      setError(e?.response?.data?.message || t("configuracion:basesDatos.errors.syncSchemas"));
     } finally {
       setSyncingSchemas(false);
     }
@@ -272,7 +272,7 @@ export default function ConfiguracionBasesDatos() {
       // Reanalizar
       await handleAnalyzeSchemas();
     } catch (e: any) {
-      setError(e?.response?.data?.message || "Error al aplicar cambios");
+      setError(e?.response?.data?.message || t("configuracion:basesDatos.errors.applyChanges"));
     }
   };
 
@@ -291,7 +291,7 @@ export default function ConfiguracionBasesDatos() {
       setDeletePassword("");
       await fetchData();
     } catch (e: any) {
-      setError(e?.response?.data?.message || "Error al eliminar la base de datos");
+      setError(e?.response?.data?.message || t("configuracion:basesDatos.errors.delete"));
     } finally {
       setDeleting(false);
     }
@@ -300,7 +300,7 @@ export default function ConfiguracionBasesDatos() {
   if (loading) {
     return (
       <div className="h-full flex items-center justify-center">
-        <div className="text-slate-500">Cargando...</div>
+        <div className="text-slate-500">{t("configuracion:basesDatos.loading")}</div>
       </div>
     );
   }
@@ -506,7 +506,7 @@ export default function ConfiguracionBasesDatos() {
                             </span>
                             {!db.activa && (
                               <span className="text-xs bg-red-100 text-red-600 px-1.5 py-0.5 rounded">
-                                INACTIVA
+                                {t("configuracion:basesDatos.inactiveBadge")}
                               </span>
                             )}
                           </div>
@@ -533,7 +533,7 @@ export default function ConfiguracionBasesDatos() {
                               ? "bg-green-100 text-green-700 hover:bg-green-200"
                               : "bg-amber-100 text-amber-700 hover:bg-amber-200"
                           }`}
-                          title={db.activa ? "Clic para desactivar" : "Clic para reactivar"}
+                          title={db.activa ? t("configuracion:basesDatos.titles.clickDeactivate") : t("configuracion:basesDatos.titles.clickReactivate")}
                         >
                           {db.activa ? (
                             <>
@@ -559,7 +559,7 @@ export default function ConfiguracionBasesDatos() {
                               <button
                                 onClick={() => handleSaveEdit(db)}
                                 className="p-1 text-green-600 hover:bg-green-50 rounded"
-                                title="Guardar"
+                                title={t("configuracion:basesDatos.titles.save")}
                               >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
@@ -568,7 +568,7 @@ export default function ConfiguracionBasesDatos() {
                               <button
                                 onClick={() => setEditingId(null)}
                                 className="p-1 text-slate-400 hover:bg-slate-50 rounded"
-                                title="Cancelar"
+                                title={t("configuracion:basesDatos.titles.cancel")}
                               >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -580,7 +580,7 @@ export default function ConfiguracionBasesDatos() {
                               <button
                                 onClick={() => handleEdit(db)}
                                 className="p-1 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded"
-                                title="Editar nombre"
+                                title={t("configuracion:basesDatos.titles.editName")}
                               >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -590,7 +590,7 @@ export default function ConfiguracionBasesDatos() {
                                 <button
                                   onClick={() => handleOpenDeleteModal(db)}
                                   className="p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded"
-                                  title="Eliminar permanentemente"
+                                  title={t("configuracion:basesDatos.titles.deletePermanently")}
                                 >
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

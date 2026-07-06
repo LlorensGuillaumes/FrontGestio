@@ -1,5 +1,6 @@
 // app/modales/facturaDetalle.tsx
 import React, { useEffect, useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import type { FacturaVenta, FacturaVentaLinea } from "~/types/facturas";
 import { fetchModosPago, type ModoPago } from "~/lib/cajaRest";
 import { createFacturaAbono, fetchFactura, type Factura } from "~/lib/facturasRest";
@@ -17,6 +18,7 @@ const num2 = (n: number) =>
   Number(n ?? 0).toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
+  const { t } = useTranslation(["ventas", "common"]);
   const [showPDF, setShowPDF] = useState(false);
   const [showAbonoModal, setShowAbonoModal] = useState(false);
   const [modosPago, setModosPago] = useState<ModoPago[]>([]);
@@ -85,7 +87,7 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
 
   const handleCrearAbono = async () => {
     if (!selectedModoPago) {
-      setError("Selecciona un modo de pago");
+      setError(t("ventas:detalleFactura.errorSeleccionaModoPago"));
       return;
     }
 
@@ -105,7 +107,7 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
           .map(l => ({ idLinea: l.idLinea, cantidad: l.cantidad }));
 
         if (lineasSeleccionadas.length === 0) {
-          setError("Selecciona al menos una linea para abonar");
+          setError(t("ventas:detalleFactura.errorSeleccionaLinea"));
           setCreandoAbono(false);
           return;
         }
@@ -116,7 +118,7 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
       setShowAbonoModal(false);
       onRefresh?.();
     } catch (e: any) {
-      setError(e?.response?.data?.error ?? e?.message ?? "Error al crear abono");
+      setError(e?.response?.data?.error ?? e?.message ?? t("ventas:detalleFactura.errorCrearAbono"));
     } finally {
       setCreandoAbono(false);
     }
@@ -149,7 +151,7 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
           {/* Top bar con acciones */}
           <div className="flex items-center justify-between px-5 py-3 border-b border-slate-200 bg-slate-50">
             <div className="flex items-center gap-3">
-              <h2 className="text-sm font-bold text-slate-900">Factura {numeroFactura}</h2>
+              <h2 className="text-sm font-bold text-slate-900">{t("ventas:detalleFactura.facturaNumero", { numero: numeroFactura })}</h2>
               <span className="text-xs text-slate-500">{factura.nombreCliente ?? ""}</span>
             </div>
 
@@ -164,7 +166,7 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                 </svg>
-                Imprimir / PDF
+                {t("ventas:detalleFactura.imprimirPdf")}
               </button>
 
               {(factura as any).estadoFiscal !== "RECTIFICATIVA" && total > 0 && (
@@ -176,7 +178,7 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
                   </svg>
-                  Crear Abono
+                  {t("ventas:detalleFactura.crearAbono")}
                 </button>
               )}
 
@@ -184,7 +186,7 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
                 type="button"
                 onClick={onClose}
                 className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-100"
-                aria-label="Cerrar"
+                aria-label={t("ventas:detalleFactura.cerrar")}
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -201,10 +203,10 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
                 <div className="flex items-start justify-between gap-6 mb-6">
                   <div>
                     <div className="text-2xl font-bold text-slate-800">
-                      {(factura as any).tipoFactura === "RECTIFICATIVA" ? "FACTURA RECTIFICATIVA" : "FACTURA"}
+                      {(factura as any).tipoFactura === "RECTIFICATIVA" ? t("ventas:detalleFactura.tituloRectificativa") : t("ventas:detalleFactura.tituloFactura")}
                     </div>
                     <div className="mt-1 text-lg font-semibold text-blue-600">{numeroFactura}</div>
-                    <div className="mt-2 text-sm text-slate-600">Fecha: {fecha}</div>
+                    <div className="mt-2 text-sm text-slate-600">{t("ventas:detalleFactura.fechaLabel", { fecha })}</div>
                     <div className="mt-2 flex gap-2">
                       <span className="px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-700">
                         {(factura as any).estadoFiscal}
@@ -218,7 +220,7 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
                     {datosEmpresa && (
                       <>
                         <div className="font-bold text-slate-800">{datosEmpresa.NombreComercial || datosEmpresa.NombreEmpresa}</div>
-                        <div>CIF: {datosEmpresa.CIF}</div>
+                        <div>{t("ventas:detalleFactura.cifLabel", { cif: datosEmpresa.CIF })}</div>
                       </>
                     )}
                   </div>
@@ -226,23 +228,23 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
 
                 {/* Cliente */}
                 <div className="mb-6 p-4 bg-slate-50 rounded-lg">
-                  <div className="text-xs font-bold text-slate-500 uppercase mb-2">Cliente</div>
+                  <div className="text-xs font-bold text-slate-500 uppercase mb-2">{t("ventas:detalleFactura.cliente")}</div>
                   <div className="text-base font-medium text-slate-800">{factura.nombreCliente || "-"}</div>
                 </div>
 
                 {/* Lineas */}
                 <div className="mb-6">
-                  <div className="text-xs font-bold text-slate-500 uppercase mb-2">Detalle ({lineas.length} lineas)</div>
+                  <div className="text-xs font-bold text-slate-500 uppercase mb-2">{t("ventas:detalleFactura.detalleLineas", { count: lineas.length })}</div>
                   <div className="border border-slate-200 rounded-lg overflow-hidden">
                     <table className="w-full text-sm">
                       <thead className="bg-slate-50 border-b border-slate-200">
                         <tr>
-                          <th className="px-3 py-2 text-left text-xs font-bold text-slate-600">Descripcion</th>
-                          <th className="px-3 py-2 text-right text-xs font-bold text-slate-600 w-16">Cant.</th>
-                          <th className="px-3 py-2 text-right text-xs font-bold text-slate-600 w-20">Precio</th>
-                          <th className="px-3 py-2 text-right text-xs font-bold text-slate-600 w-20">Base</th>
-                          <th className="px-3 py-2 text-right text-xs font-bold text-slate-600 w-16">IVA%</th>
-                          <th className="px-3 py-2 text-right text-xs font-bold text-slate-600 w-20">Total</th>
+                          <th className="px-3 py-2 text-left text-xs font-bold text-slate-600">{t("ventas:detalleFactura.colDescripcion")}</th>
+                          <th className="px-3 py-2 text-right text-xs font-bold text-slate-600 w-16">{t("ventas:detalleFactura.colCantidad")}</th>
+                          <th className="px-3 py-2 text-right text-xs font-bold text-slate-600 w-20">{t("ventas:detalleFactura.colPrecio")}</th>
+                          <th className="px-3 py-2 text-right text-xs font-bold text-slate-600 w-20">{t("ventas:detalleFactura.colBase")}</th>
+                          <th className="px-3 py-2 text-right text-xs font-bold text-slate-600 w-16">{t("ventas:detalleFactura.colIva")}</th>
+                          <th className="px-3 py-2 text-right text-xs font-bold text-slate-600 w-20">{t("ventas:detalleFactura.colTotal")}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -265,19 +267,19 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
                 <div className="flex justify-end">
                   <div className="w-64 border border-slate-200 rounded-lg overflow-hidden">
                     <div className="px-4 py-2 bg-slate-50 border-b border-slate-200">
-                      <div className="text-xs font-bold text-slate-600 uppercase">Totales</div>
+                      <div className="text-xs font-bold text-slate-600 uppercase">{t("ventas:detalleFactura.totales")}</div>
                     </div>
                     <div className="p-4 space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span className="text-slate-600">Base imponible:</span>
+                        <span className="text-slate-600">{t("ventas:detalleFactura.baseImponible")}</span>
                         <span className="font-mono">{money(base)}</span>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span className="text-slate-600">IVA:</span>
+                        <span className="text-slate-600">{t("ventas:detalleFactura.iva")}</span>
                         <span className="font-mono">{money(iva)}</span>
                       </div>
                       <div className="flex justify-between text-base font-bold pt-2 border-t border-slate-200">
-                        <span>TOTAL:</span>
+                        <span>{t("ventas:detalleFactura.total")}</span>
                         <span className="font-mono">{money(total)}</span>
                       </div>
                     </div>
@@ -298,21 +300,21 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
       {showAbonoModal && (
         <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-auto">
-            <h3 className="text-lg font-bold text-slate-800 mb-4">Crear Abono</h3>
+            <h3 className="text-lg font-bold text-slate-800 mb-4">{t("ventas:detalleFactura.crearAbono")}</h3>
 
             {error && (
               <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>
             )}
 
             <div className="mb-4 p-4 bg-slate-50 rounded-lg">
-              <div className="text-sm text-slate-600">Factura original:</div>
+              <div className="text-sm text-slate-600">{t("ventas:detalleFactura.facturaOriginal")}</div>
               <div className="text-base font-bold text-slate-800">{numeroFactura}</div>
-              <div className="text-sm text-slate-600">Total: {money(total)}</div>
+              <div className="text-sm text-slate-600">{t("ventas:detalleFactura.totalLabel", { total: money(total) })}</div>
             </div>
 
             {/* Tipo de abono */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-slate-700 mb-2">Tipo de abono</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">{t("ventas:detalleFactura.tipoAbono")}</label>
               <div className="flex gap-2">
                 <button
                   type="button"
@@ -323,7 +325,7 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
                       : "bg-white text-slate-700 border-slate-200 hover:border-red-300"
                   }`}
                 >
-                  Abono Total
+                  {t("ventas:detalleFactura.abonoTotal")}
                 </button>
                 <button
                   type="button"
@@ -334,7 +336,7 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
                       : "bg-white text-slate-700 border-slate-200 hover:border-red-300"
                   }`}
                 >
-                  Abono Parcial
+                  {t("ventas:detalleFactura.abonoParcial")}
                 </button>
               </div>
             </div>
@@ -342,7 +344,7 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
             {/* Seleccion de lineas para abono parcial */}
             {tipoAbono === "parcial" && facturaCompleta && (
               <div className="mb-4">
-                <label className="block text-sm font-medium text-slate-700 mb-2">Lineas a abonar</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">{t("ventas:detalleFactura.lineasAbonar")}</label>
                 <div className="border border-slate-200 rounded-lg divide-y divide-slate-100 max-h-48 overflow-auto">
                   {(facturaCompleta.lineas || []).map((l: any, idx: number) => {
                     const lineaAbono = lineasAbono.find(la => la.idLinea === l.id);
@@ -374,7 +376,7 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
 
             {/* Modo de pago */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-slate-700 mb-2">Forma de devolucion</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">{t("ventas:detalleFactura.formaDevolucion")}</label>
               <div className="grid grid-cols-2 gap-2">
                 {modosPago.map((mp) => (
                   <button
@@ -395,12 +397,12 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
 
             {/* Motivo */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-slate-700 mb-1">Motivo del abono (opcional)</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">{t("ventas:detalleFactura.motivoAbono")}</label>
               <textarea
                 value={motivoAbono}
                 onChange={(e) => setMotivoAbono(e.target.value)}
                 rows={2}
-                placeholder="Ej: Devolucion por defecto de producto"
+                placeholder={t("ventas:detalleFactura.motivoAbonoPlaceholder")}
                 className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
               />
             </div>
@@ -412,7 +414,7 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
                 onClick={() => setShowAbonoModal(false)}
                 className="px-4 py-2 rounded-lg border border-slate-200 text-sm hover:bg-slate-50"
               >
-                Cancelar
+                {t("ventas:detalleFactura.cancelar")}
               </button>
               <button
                 type="button"
@@ -420,7 +422,7 @@ export default function FacturaDetalle({ factura, onClose, onRefresh }: Props) {
                 disabled={!selectedModoPago || creandoAbono}
                 className="px-4 py-2 rounded-lg bg-red-600 text-white text-sm hover:bg-red-700 disabled:opacity-50"
               >
-                {creandoAbono ? "Creando..." : "Crear Factura de Abono"}
+                {creandoAbono ? t("ventas:detalleFactura.creando") : t("ventas:detalleFactura.crearFacturaAbono")}
               </button>
             </div>
           </div>

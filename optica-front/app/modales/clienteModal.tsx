@@ -4,6 +4,9 @@ import { useTranslation } from "react-i18next";
 import { ListEditorModal } from "./listEditorModal";
 import { apiGet, apiPost, apiPut } from "~/lib/apiClient";
 import { SubfamiliasPicker } from "~/components/recuadros";
+import ResponsablesSection from "~/components/ResponsablesSection";
+import ClasesAlumnoSection from "~/components/ClasesAlumnoSection";
+import { useAuth } from "~/contexts/AuthContext";
 import type {
   Familia,
   Subfamilia,
@@ -101,6 +104,14 @@ export function ClienteModal({ mode, id, onClose, onSaved, onEdit, onView }: Pro
   const [pApellido1, setPApellido1] = useState("");
   const [pApellido2, setPApellido2] = useState("");
   const [pFechaNac, setPFechaNac] = useState("");
+
+  // datos bancarios (SEPA) del alumno
+  const [iban, setIban] = useState("");
+  const [titularCuenta, setTitularCuenta] = useState("");
+  const [bic, setBic] = useState("");
+
+  const { canAccess } = useAuth();
+  const verBancarios = canAccess("clientes.datos_bancarios", "ver");
 
   // empresa
   const [eRazonSocial, setERazonSocial] = useState("");
@@ -236,6 +247,10 @@ export function ClienteModal({ mode, id, onClose, onSaved, onEdit, onView }: Pro
           setPApellido2(c.P_Apellido2 ?? "");
           setPFechaNac(c.P_FechaNac ?? "");
 
+          setIban(raw?.iban ?? "");
+          setTitularCuenta(raw?.titular_cuenta ?? "");
+          setBic(raw?.bic ?? "");
+
           setERazonSocial(c.E_RazonSocial ?? "");
           setENombreFiscal(c.E_NombreFiscal ?? "");
           setEContacto(c.E_Contacto ?? "");
@@ -267,6 +282,10 @@ export function ClienteModal({ mode, id, onClose, onSaved, onEdit, onView }: Pro
           setPApellido1("");
           setPApellido2("");
           setPFechaNac("");
+
+          setIban("");
+          setTitularCuenta("");
+          setBic("");
 
           setERazonSocial("");
           setENombreFiscal("");
@@ -310,6 +329,10 @@ export function ClienteModal({ mode, id, onClose, onSaved, onEdit, onView }: Pro
         codigo_postal: codigoPostal.trim() || null,
         poblacion: poblacion.trim() || null,
         pais: (pais.trim() || "España") ?? "España",
+
+        iban: iban.trim() || null,
+        titular_cuenta: titularCuenta.trim() || null,
+        bic: bic.trim() || null,
 
         persona:
           tipoCliente === "P"
@@ -643,6 +666,52 @@ export function ClienteModal({ mode, id, onClose, onSaved, onEdit, onView }: Pro
                 )}
               </div>
             </section>
+
+            {/* Datos bancarios (SEPA) — requiere permiso */}
+            {verBancarios && (
+            <section className="rounded-xl border border-slate-200 overflow-hidden">
+              <div className="px-4 py-3 bg-slate-50 border-b border-slate-200">
+                <div className="font-medium text-slate-900">{t("modal.bankDataTitle")}</div>
+              </div>
+              <div className="p-4 space-y-3">
+                {(() => {
+                  const edad = pFechaNac ? Math.floor((Date.now() - new Date(pFechaNac).getTime()) / (365.25 * 24 * 3600 * 1000)) : null;
+                  return edad !== null && edad < 18 ? (
+                    <div className="p-3 rounded-lg bg-amber-50 text-amber-700 text-sm border border-amber-100">
+                      {t("modal.minorWarning")}
+                    </div>
+                  ) : null;
+                })()}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="md:col-span-2">
+                    <label className="text-sm font-medium text-slate-700">IBAN</label>
+                    <input value={iban} onChange={(e) => setIban(e.target.value)} disabled={disabled}
+                      className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm" placeholder="ES.." />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-slate-700">BIC</label>
+                    <input value={bic} onChange={(e) => setBic(e.target.value)} disabled={disabled}
+                      className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm" />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-slate-700">{t("modal.accountHolder")}</label>
+                  <input value={titularCuenta} onChange={(e) => setTitularCuenta(e.target.value)} disabled={disabled}
+                    className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm" />
+                </div>
+              </div>
+            </section>
+            )}
+
+            {/* Clases matriculadas (solo personas existentes) */}
+            {tipoCliente === "P" && !isNew && clienteId ? (
+              <ClasesAlumnoSection idCliente={clienteId} disabled={disabled} />
+            ) : null}
+
+            {/* Responsables (solo personas existentes) */}
+            {tipoCliente === "P" && !isNew && clienteId ? (
+              <ResponsablesSection idCliente={clienteId} disabled={disabled} />
+            ) : null}
           </div>
 
           {/* footer */}
