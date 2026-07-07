@@ -1,0 +1,23 @@
+{
+  "title": "El Meu Perfil",
+  "username": "Usuari",
+  "name": "Nom",
+  "email": "Email",
+  "role": "Rol",
+  "currentDatabase": "Base de dades actual",
+  "security": "Seguretat",
+  "changePassword": "Canviar contrasenya",
+  "currentPassword": "Contrasenya actual",
+  "newPassword": "Nova contrasenya",
+  "confirmPassword": "Confirmar contrasenya",
+  "passwordDescription": "Pots canviar la teva contrasenya per mantenir el teu compte segur.",
+  "passwordsDoNotMatch": "Les contrasenyes no coincideixen",
+  "passwordTooShort": "La contrasenya ha de tenir almenys 6 caracters",
+  "passwordChanged": "Contrasenya canviada correctament",
+  "errorChangingPassword": "Error en canviar la contrasenya",
+  "masterUser": "Usuari Master",
+  "masterPasswordInfo": "La contrasenya de l'usuari Master es configura al fitxer .env del servidor.",
+  "cancel": "Cancel·lar",
+  "save": "Desar",
+  "saving": "Desant..."
+}

@@ -1,0 +1,254 @@
+{
+  "buttons": {
+    "save": "Desar",
+    "saving": "Desant...",
+    "cancel": "Cancel·lar",
+    "close": "Tancar",
+    "new": "Nou",
+    "edit": "Editar",
+    "modify": "Modificar",
+    "delete": "Eliminar",
+    "search": "Cercar",
+    "apply": "Aplicar",
+    "clear": "Netejar",
+    "previous": "Anterior",
+    "next": "Seguent",
+    "loadMore": "Carregar mes",
+    "add": "Afegir",
+    "manage": "Gestionar",
+    "print": "Imprimir",
+    "downloadPdf": "Descarregar PDF",
+    "send": "Enviar",
+    "retry": "Reintentar"
+  },
+  "messages": {
+    "loading": "Carregant...",
+    "noResults": "No s'han trobat resultats.",
+    "noRecords": "No hi ha registres.",
+    "error": "Error",
+    "errorLoading": "Error carregant dades",
+    "errorSaving": "Error desant",
+    "confirmDelete": "Estas segur d'eliminar?",
+    "confirmDeleteDetail": "Aquesta accio no es pot desfer.",
+    "success": "Exit",
+    "required": "Obligatori"
+  },
+  "pagination": {
+    "page": "Pagina {{current}} de {{total}}",
+    "showing": "Mostrant {{count}} de {{total}}",
+    "items": "{{count}} elements"
+  },
+  "filters": {
+    "all": "Tots",
+    "active": "Actiu",
+    "inactive": "Inactiu",
+    "enabled": "Activat"
+  },
+  "fields": {
+    "name": "Nom",
+    "description": "Descripcio",
+    "code": "Codi",
+    "date": "Data",
+    "status": "Estat",
+    "type": "Tipus",
+    "total": "Total",
+    "price": "Preu",
+    "quantity": "Quantitat",
+    "observations": "Observacions",
+    "address": "Adreca",
+    "postalCode": "Codi postal",
+    "city": "Poblacio",
+    "country": "Pais",
+    "phone": "Telefon",
+    "phones": "Telefons",
+    "email": "Correu electronic",
+    "extension": "Extensio",
+    "optional": "Opcional",
+    "main": "Principal",
+    "reference": "Referencia"
+  },
+  "modes": {
+    "reading": "Mode lectura",
+    "editing": "Mode edicio",
+    "creating": "Mode creacio"
+  },
+  "person": {
+    "person": "Persona",
+    "company": "Empresa"
+  },
+  "statuses": {
+    "pending": "PENDENT",
+    "confirmed": "CONFIRMAT",
+    "inProcess": "EN_PROCES",
+    "ready": "LLEST",
+    "delivered": "LLIURAT",
+    "expired": "CADUCAT"
+  },
+  "language": {
+    "language": "Idioma",
+    "spanish": "Castella",
+    "catalan": "Catala"
+  },
+  "pdf": {
+    "documentGenerated": "Document generat el {{date}} a les {{time}}",
+    "clientData": "Dades del Client",
+    "clientSignature": "Signatura del client:",
+    "companySignature": "Signatura empresa:",
+    "agree": "Conforme",
+    "observations": "Observacions",
+    "graduation": "Graduacio",
+    "validUntil": "Valid fins: {{date}} ({{days}} dies)",
+    "expectedDelivery": "Data prevista lliurament: {{date}}",
+    "orderRef": "Ref. Encarrec: {{ref}}",
+    "associatedAdvanceInvoice": "Factura d'avancament associada:",
+    "advanceNote": "Aquest avancament es descomptara de la factura final en lliurar la comanda."
+  },
+  "table": {
+    "description": "Descripcio",
+    "quantity": "Quant.",
+    "price": "Preu",
+    "discount": "Dte%",
+    "vat": "IVA%",
+    "amount": "Import",
+    "code": "Codi"
+  },
+  "totals": {
+    "taxBase": "Base Imposable:",
+    "vat": "IVA:",
+    "vatPercent": "IVA ({{percent}}%):",
+    "total": "TOTAL:",
+    "totalInvoice": "TOTAL FACTURA:",
+    "appliedDiscounts": "Descomptes aplicats:",
+    "previousAdvance": "Avancament previ:",
+    "pendingPayment": "PENDENT DE PAGAMENT:",
+    "pending": "PENDENT:",
+    "advancePayment": "Pagament a compte:"
+  },
+  "verifactu": {
+    "notSent": "No enviada",
+    "pending": "Pendent",
+    "accepted": "Acceptat",
+    "rejected": "Rebutjat",
+    "error": "Error",
+    "sendError": "Error en l'enviament",
+    "errorSending": "Error en enviar"
+  },
+  "listEditor": {
+    "element": "Element {{number}}",
+    "remove": "Treure",
+    "add": "+ Afegir",
+    "noChanges": "Sense canvis",
+    "pendingChanges": "Canvis pendents"
+  },
+  "loading": "Carregant...",
+  "home": {
+    "greeting": "Benvingut, {{name}}",
+    "defaultUser": "Usuari",
+    "localTime": "Hora local",
+    "loading": "Carregant...",
+    "stats": {
+      "salesToday": "Vendes Avui",
+      "month": "Mes: {{value}}",
+      "activeClients": "Clients Actius",
+      "viewAllClients": "Veure tots els clients →",
+      "pendingQuotes": "Pressupostos Pendents",
+      "invoicesToCollect": "{{count}} factures per cobrar",
+      "purchasesMonth": "Compres del Mes",
+      "viewPurchases": "Veure compres →"
+    },
+    "quickActions": {
+      "title": "Accions Ràpides",
+      "newClient": "Nou Client",
+      "newSale": "Nova Venda",
+      "viewProducts": "Veure Productes",
+      "purchases": "Compres"
+    },
+    "system": {
+      "currentCompany": "Empresa Actual",
+      "noSelection": "Sense seleccionar",
+      "user": "Usuari",
+      "role": "Rol"
+    },
+    "summary": {
+      "title": "Resum del Dia",
+      "realtime": "Dades en temps real",
+      "salesMade": "Vendes realitzades",
+      "newClients": "Nous clients",
+      "purchasesReceived": "Compres rebudes"
+    },
+    "activity": {
+      "title": "Activitat Recent",
+      "loading": "Carregant activitat...",
+      "empty": "No hi ha activitat recent",
+      "now": "Ara mateix",
+      "minutesAgo": "Fa {{count}} minuts",
+      "hoursAgo": "Fa {{count}} hores",
+      "yesterday": "Ahir",
+      "daysAgo": "Fa {{count}} dies"
+    }
+  },
+  "protected": {
+    "loading": "Carregant...",
+    "accessDenied": "Accés denegat",
+    "noRolePermission": "No tens permisos suficients per accedir a aquesta secció.",
+    "noPermissions": "Sense permisos",
+    "noResourcePermission": "No tens permisos per accedir a aquest recurs."
+  },
+  "dbSelector": {
+    "selectCompany": "Seleccionar empresa"
+  },
+  "topbar": {
+    "connected": "Connectat",
+    "workingIn": "Treballant a:",
+    "changeStore": "Canviar de botiga",
+    "changeStoreHint": "Selecciona la botiga on vols treballar",
+    "billingSeries": "Sèrie facturació",
+    "roleMaster": "Master",
+    "roleAdmin": "Admin",
+    "roleUser": "Usuari"
+  },
+  "nestedTable": {
+    "detail": "Detall",
+    "subdetail": "Subdetall",
+    "empty": "No hi ha registres.",
+    "records": "{{count}} registres"
+  },
+  "picker": {
+    "families": "Famílies",
+    "subfamilies": "Subfamílies",
+    "selectFamily": "— Selecciona família —",
+    "selectSubfamily": "— Selecciona subfamília —",
+    "chooseFamilyHint": "Tria una família per veure les seves subfamílies.",
+    "add": "+ Add",
+    "remove": "Treure",
+    "alreadyAddedSuffix": " (ja afegida)",
+    "selectedSubfamilies": "Subfamílies seleccionades",
+    "noSubfamiliesAdded": "No hi ha subfamílies afegides.",
+    "assignedSubfamilies": "Subfamílies assignades",
+    "noSubfamiliesAssigned": "No hi ha subfamílies assignades.",
+    "addHintClient": "Selecciona una subfamília i prem Add per afegir-la al client.",
+    "assignHintProduct": "Selecciona i prem Add per assignar al producte.",
+    "assignHintProvider": "Selecciona i prem Add per assignar al proveïdor.",
+    "assignHintService": "Selecciona i prem Add per assignar al servei."
+  },
+  "root": {
+    "cargando": "Carregant..."
+  },
+  "breadcrumb": {
+    "ventas": "Vendes",
+    "clientes": "Clients",
+    "compras": "Compres",
+    "contabilidad": "Comptabilitat",
+    "productos": "Productes",
+    "proveedores": "Proveïdors",
+    "stock": "Estoc",
+    "familia": "Família",
+    "subfamilia": "Subfamília",
+    "facturas": "Factures",
+    "ordenes": "Ordres",
+    "recepciones": "Recepcions",
+    "listado": "Llistat",
+    "ver": "Veure",
+    "editar": "Editar"
+  }
+}
