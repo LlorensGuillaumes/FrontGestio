@@ -3,20 +3,15 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "npm",
+      "use": "@vercel/static-build",
       "config": {
-        "distDir": "build/client"
+        "distDir": "build/client",
+        "installCommand": "npm install",
+        "buildCommand": "npm run build"
       }
     }
   ],
   "routes": [
-    {
-      "src": "/assets/(.*)",
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
-      },
-      "continue": true
-    },
     {
       "handle": "filesystem"
     },
