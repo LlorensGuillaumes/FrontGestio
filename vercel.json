@@ -3,7 +3,10 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "npm"
+      "use": "npm",
+      "config": {
+        "distDir": "build/client"
+      }
     }
   ],
   "routes": [
