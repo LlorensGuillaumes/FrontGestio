@@ -39,5 +39,7 @@
   "notifications": "Notificacions",
   "messages": "Missatges",
   "chat": "Xat",
-  "departments": "Departaments"
+  "departments": "Departaments",
+  "students": "Alumnes",
+  "teachers": "Professors"
 }

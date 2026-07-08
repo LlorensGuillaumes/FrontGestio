@@ -39,5 +39,7 @@
   "notifications": "Notificaciones",
   "messages": "Mensajes",
   "chat": "Chat",
-  "departments": "Departamentos"
+  "departments": "Departamentos",
+  "students": "Alumnos",
+  "teachers": "Profesores"
 }

@@ -318,17 +318,14 @@ function DashboardContent() {
 
         {/* Navigation */}
         <nav className="flex-1 p-2 space-y-1 overflow-y-auto overflow-x-hidden">
-          {/* VENTAS */}
-          <PermissionGate menuCode="ventas.clientes">
-            <MenuItem icon={Icons.sales} label={t("sales")} menuId="ventas" isOpen={ventasOpen} setOpen={setVentasOpen}>
-              <PermissionGate menuCode="ventas.clientes">
-                <NavLink to="/clientes" className={subLinkStyle} onClick={() => setFlyoutMenu(null)}>{t("clients")}</NavLink>
-              </PermissionGate>
-              <PermissionGate menuCode="ventas.caja">
-                <NavLink to="/contabilidad/caja" className={subLinkStyle} onClick={() => setFlyoutMenu(null)}>{t("cashRegister")}</NavLink>
-              </PermissionGate>
-            </MenuItem>
-          </PermissionGate>
+           {/* VENTAS (solo caja) */}
+           <PermissionGate menuCode="ventas.caja">
+             <MenuItem icon={Icons.sales} label={t("sales")} menuId="ventas" isOpen={ventasOpen} setOpen={setVentasOpen}>
+               <PermissionGate menuCode="ventas.caja">
+                 <NavLink to="/contabilidad/caja" className={subLinkStyle} onClick={() => setFlyoutMenu(null)}>{t("cashRegister")}</NavLink>
+               </PermissionGate>
+             </MenuItem>
+           </PermissionGate>
 
           {/* COMPRAS */}
           <PermissionGate menuCode="compras.proveedores">
@@ -383,6 +380,12 @@ function DashboardContent() {
           {/* ESCUELA */}
           <PermissionGate menuCode="escuela.clases">
             <MenuItem icon={Icons.school} label={t("school", "Escuela")} menuId="escuela" isOpen={escuelaOpen} setOpen={setEscuelaOpen}>
+              <PermissionGate menuCode="ventas.clientes">
+                <NavLink to="/clientes" className={subLinkStyle} onClick={() => setFlyoutMenu(null)}>{t("students", "Alumnos")}</NavLink>
+              </PermissionGate>
+              <PermissionGate menuCode="configuracion.profesionales">
+                <NavLink to="/configuracion/profesionales" className={subLinkStyle} onClick={() => setFlyoutMenu(null)}>{t("teachers", "Profesores")}</NavLink>
+              </PermissionGate>
               <PermissionGate menuCode="escuela.clases">
                 <NavLink to="/escuela/clases-recurrentes" className={subLinkStyle} onClick={() => setFlyoutMenu(null)}>{t("recurringClasses", "Clases recurrentes")}</NavLink>
               </PermissionGate>
