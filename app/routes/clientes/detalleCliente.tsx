@@ -15,6 +15,18 @@ import {
   type Responsable,
   type Contacto,
 } from "~/lib/clientesRest";
+import {
+  fetchOpcionesEscola,
+  fetchClasesRecurrentes,
+  createClaseRecurrente,
+  createMatricula,
+  fetchMatriculas,
+  updateMatricula,
+  deleteMatricula,
+  fetchAulas,
+  type ClaseRecurrente,
+  type Matricula,
+} from "~/lib/escolaRest";
 
 const emptyForm = {
   nombre: "", apellido1: "", apellido2: "", fechaNacimiento: "",
@@ -38,6 +50,10 @@ export default function DetalleClientePage() {
   const [responsables, setResponsables] = useState<Responsable[]>([]);
   const [pagador, setPagador] = useState<{ origen: string | null; iban: string | null; titular: string | null; edad: number | null; aviso?: string } | null>(null);
   const [addingResp, setAddingResp] = useState(false);
+
+  // Clases del alumno
+  const [clases, setClases] = useState<Matricula[]>([]);
+  const [addingClase, setAddingClase] = useState(false);
 
   const handleClose = () => navigate("/clientes");
 
@@ -83,6 +99,16 @@ export default function DetalleClientePage() {
     }
   };
 
+  const loadClases = async () => {
+    if (!id || isNew) return;
+    try {
+      const { data } = await fetchMatriculas({ idCliente: Number(id) });
+      setClases(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
     if (isNew) {
       setForm({ ...emptyForm });
@@ -90,6 +116,7 @@ export default function DetalleClientePage() {
     } else {
       loadCliente();
       loadResponsables();
+      loadClases();
     }
   }, [id]);
 
@@ -260,6 +287,36 @@ export default function DetalleClientePage() {
               {addingResp && <AddResponsableForm idCliente={id!} onDone={() => { setAddingResp(false); loadResponsables(); }} onCancel={() => setAddingResp(false)} />}
             </section>
           )}
+
+          {/* Clases del alumno (solo alumnos existentes) */}
+          {!isNew && (
+            <section className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-bold uppercase tracking-wide text-slate-400">{t("clientes:detalle.clases")}</h3>
+                <button onClick={() => setAddingClase(true)} className="text-sm text-blue-600 hover:underline font-medium">{t("clientes:detalle.anadirClase")}</button>
+              </div>
+              {clases.length === 0 && <p className="text-sm text-slate-500">{t("clientes:detalle.sinClases")}</p>}
+              {clases.map((c) => (
+                <div key={c.id} className="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2">
+                  <div>
+                    <div className="font-medium text-slate-900 text-sm">
+                      {c.NombreClase}
+                      {c.Tipo && <span className="text-slate-400 font-normal"> · {c.Tipo}</span>}
+                    </div>
+                    <div className="text-xs text-slate-500">
+                      {c.CuotaMensual && <span>{t("clientes:detalle.cuotaMensual")}: {c.CuotaMensual}€</span>}
+                      {c.Estado && <span className="ml-2">{t("clientes:detalle.estado")}: {c.Estado}</span>}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button onClick={async () => { if (confirm(t("clientes:detalle.confirmarQuitarClase"))) { await deleteMatricula(c.id); loadClases(); } }}
+                      className="text-xs px-2 py-1 rounded border border-red-200 text-red-600 hover:bg-red-50">{t("clientes:detalle.quitar")}</button>
+                  </div>
+                </div>
+              ))}
+              {addingClase && <AddClaseForm idCliente={id!} onDone={() => { setAddingClase(false); loadClases(); }} onCancel={() => setAddingClase(false)} />}
+            </section>
+          )}
         </div>
 
         <footer className="px-6 py-4 border-t border-slate-100 bg-slate-50 flex justify-end space-x-3">
@@ -352,6 +409,149 @@ function AddResponsableForm({ idCliente, onDone, onCancel }: { idCliente: string
           <input type="checkbox" checked={esPagador} onChange={(e) => setEsPagador(e.target.checked)} /> {t("clientes:detalle.esPagador")}
         </label>
       </div>
+
+      <div className="flex justify-end gap-2">
+        <button onClick={onCancel} className="px-3 py-1.5 text-sm rounded border border-slate-200">{t("clientes:detalle.cancelar")}</button>
+        <button onClick={guardar} disabled={saving} className="px-3 py-1.5 text-sm rounded bg-blue-600 text-white disabled:opacity-50">{saving ? "..." : t("clientes:detalle.anadir")}</button>
+      </div>
+    </div>
+  );
+}
+
+// ===== Subcomponente: añadir clase al alumno =====
+function AddClaseForm({ idCliente, onDone, onCancel }: { idCliente: string; onDone: () => void; onCancel: () => void }) {
+  const { t } = useTranslation(["clientes", "common"]);
+  const [modo, setModo] = useState<"existente" | "nuevo">("existente");
+  const [clases, setClases] = useState<ClaseRecurrente[]>([]);
+  const [aulas, setAulas] = useState<{ id: number; Nombre: string }[]>([]);
+  const [idClase, setIdClase] = useState<number | "">("");
+  const [saving, setSaving] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  // Campos para crear nueva clase
+  const [nuevaClase, setNuevaClase] = useState({
+    nombre: "",
+    idServicio: "" as number | "",
+    idProfesional: "" as number | "",
+    tipo: "INDIVIDUAL" as "INDIVIDUAL" | "GRUPAL",
+    capacidadMax: 1,
+    fechaInicio: "",
+    fechaFin: "",
+    observaciones: "",
+  });
+  const [sesiones, setSesiones] = useState<Array<{ dia: number; hora: string; duracion: number; idAula: number | "" }>>([]);
+
+  useEffect(() => {
+    fetchClasesRecurrentes().then((r) => setClases(r.data)).catch(() => {});
+    fetchAulas().then((r) => setAulas(r)).catch(() => {});
+  }, []);
+
+  const addSesion = () => {
+    setSesiones([...sesiones, { dia: 1, hora: "17:00", duracion: 60, idAula: "" }]);
+  };
+
+  const updateSesion = (idx: number, field: string, value: any) => {
+    setSesiones(sesiones.map((s, i) => i === idx ? { ...s, [field]: value } : s));
+  };
+
+  const removeSesion = (idx: number) => {
+    setSesiones(sesiones.filter((_, i) => i !== idx));
+  };
+
+  const guardar = async () => {
+    setSaving(true);
+    setErr(null);
+    try {
+      let idClaseRecurrente = Number(idClase);
+
+      if (modo === "nuevo") {
+        if (!nuevaClase.nombre.trim() || sesiones.length === 0) {
+          setErr(t("clientes:detalle.errorClaseDatos"));
+          setSaving(false);
+          return;
+        }
+        const created = await createClaseRecurrente({
+          ...nuevaClase,
+          idServicio: nuevaClase.idServicio || null,
+          idProfesional: nuevaClase.idProfesional || null,
+          sesiones: sesiones.map(s => ({ ...s, idAula: s.idAula || null })),
+        });
+        idClaseRecurrente = created.id;
+      }
+
+      if (!idClaseRecurrente) {
+        setErr(t("clientes:detalle.errorSeleccionaClase"));
+        setSaving(false);
+        return;
+      }
+
+      await createMatricula({ idClaseRecurrente, idCliente: Number(idCliente), cuotaMensual: 0 });
+      onDone();
+    } catch (e: any) {
+      setErr(e?.response?.data?.error ?? t("clientes:detalle.errorAnadirClase"));
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const inputClass = "w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white";
+
+  return (
+    <div className="rounded-lg border border-blue-200 bg-blue-50/40 p-3 space-y-3">
+      <div className="flex gap-2 text-sm">
+        <button onClick={() => setModo("existente")} className={`px-3 py-1 rounded ${modo === "existente" ? "bg-blue-600 text-white" : "bg-white border border-slate-200"}`}>{t("clientes:detalle.claseExistente")}</button>
+        <button onClick={() => setModo("nuevo")} className={`px-3 py-1 rounded ${modo === "nuevo" ? "bg-blue-600 text-white" : "bg-white border border-slate-200"}`}>{t("clientes:detalle.nuevaClase")}</button>
+      </div>
+      {err && <div className="text-xs text-red-600">{err}</div>}
+
+      {modo === "existente" ? (
+        <select value={idClase} onChange={(e) => setIdClase(e.target.value ? Number(e.target.value) : "")} className={inputClass}>
+          <option value="">{t("clientes:detalle.seleccionaClase")}</option>
+          {clases.map((c) => (
+            <option key={c.id} value={c.id}>{c.Nombre} ({c.Tipo}) - {c.NombreProfesor || "Sin profesor"}</option>
+          ))}
+        </select>
+      ) : (
+        <div className="space-y-3">
+          <input placeholder={t("clientes:detalle.phNombreClase")} value={nuevaClase.nombre} onChange={(e) => setNuevaClase({ ...nuevaClase, nombre: e.target.value })} className={inputClass} />
+
+          <div className="grid grid-cols-2 gap-2">
+            <select value={nuevaClase.tipo} onChange={(e) => setNuevaClase({ ...nuevaClase, tipo: e.target.value as "INDIVIDUAL" | "GRUPAL" })} className={inputClass}>
+              <option value="INDIVIDUAL">{t("clientes:detalle.tipoIndividual")}</option>
+              <option value="GRUPAL">{t("clientes:detalle.tipoGrupal")}</option>
+            </select>
+            <input type="number" placeholder={t("clientes:detalle.phCapacidad")} value={nuevaClase.capacidadMax} onChange={(e) => setNuevaClase({ ...nuevaClase, capacidadMax: Number(e.target.value) })} className={inputClass} min="1" />
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-medium text-slate-700">{t("clientes:detalle.sesiones")}</span>
+              <button type="button" onClick={addSesion} className="text-xs px-2 py-1 rounded bg-blue-600 text-white">{t("clientes:detalle.agregarSesion")}</button>
+            </div>
+            {sesiones.map((s, idx) => (
+              <div key={idx} className="grid grid-cols-4 gap-2 items-end">
+                <select value={s.dia} onChange={(e) => updateSesion(idx, "dia", Number(e.target.value))} className={inputClass}>
+                  <option value={1}>Lunes</option>
+                  <option value={2}>Martes</option>
+                  <option value={3}>Miércoles</option>
+                  <option value={4}>Jueves</option>
+                  <option value={5}>Viernes</option>
+                  <option value={6}>Sábado</option>
+                  <option value={7}>Domingo</option>
+                </select>
+                <input type="time" value={s.hora} onChange={(e) => updateSesion(idx, "hora", e.target.value)} className={inputClass} />
+                <select value={s.idAula} onChange={(e) => updateSesion(idx, "idAula", e.target.value ? Number(e.target.value) : "")} className={inputClass}>
+                  <option value="">{t("clientes:detalle.seleccionaAula")}</option>
+                  {aulas.map((a) => (
+                    <option key={a.id} value={a.id}>{a.Nombre}</option>
+                  ))}
+                </select>
+                <button type="button" onClick={() => removeSesion(idx)} className="text-xs px-2 py-1 rounded border border-red-200 text-red-600">{t("clientes:detalle.quitar")}</button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="flex justify-end gap-2">
         <button onClick={onCancel} className="px-3 py-1.5 text-sm rounded border border-slate-200">{t("clientes:detalle.cancelar")}</button>
