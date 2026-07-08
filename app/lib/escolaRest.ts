@@ -93,6 +93,8 @@ export type ClaseRecurrenteInput = {
   idProfesional?: number | null;
   tipo: "INDIVIDUAL" | "GRUPAL";
   capacidadMax: number;
+  fechaInicio?: string | null;
+  fechaFin?: string | null;
   sesiones: { dia: number; hora: string; duracion: number; idAula: number | null }[];
   observaciones?: string | null;
   activo?: boolean;

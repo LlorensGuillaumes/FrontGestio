@@ -29,18 +29,15 @@ export default function ClasesAlumnoSection({ idCliente, disabled }: { idCliente
   const [err, setErr] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
-  // Campos para crear nueva clase
+  // Campos para crear nueva clase (siempre individual)
   const [nuevaClase, setNuevaClase] = useState({
-    nombre: "",
     idServicio: "" as number | "",
     idProfesional: "" as number | "",
-    tipo: "INDIVIDUAL" as "INDIVIDUAL" | "GRUPAL",
-    capacidadMax: 1,
     fechaInicio: "",
     fechaFin: "",
     observaciones: "",
   });
-  const [sesiones, setSesiones] = useState<Array<{ dia: number; hora: string; duracion: number; idAula: number | "" }>>([]);
+  const [sesiones, setSesiones] = useState<Array<{ dia: number; hora: string; duracion: number; horaFin: string; idAula: number | "" }>>([]);
 
   const load = async () => {
     try {
@@ -75,11 +72,8 @@ export default function ClasesAlumnoSection({ idCliente, disabled }: { idCliente
     setAddingNueva(true);
     setAdding(false);
     setNuevaClase({
-      nombre: "",
       idServicio: "",
       idProfesional: "",
-      tipo: "INDIVIDUAL",
-      capacidadMax: 1,
       fechaInicio: "",
       fechaFin: "",
       observaciones: "",
@@ -88,7 +82,7 @@ export default function ClasesAlumnoSection({ idCliente, disabled }: { idCliente
   };
 
   const addSesion = () => {
-    setSesiones([...sesiones, { dia: 1, hora: "17:00", duracion: 60, idAula: "" }]);
+    setSesiones([...sesiones, { dia: 1, hora: "17:00", duracion: 60, horaFin: "18:00", idAula: "" }]);
   };
 
   const updateSesion = (idx: number, field: string, value: any) => {
@@ -100,18 +94,23 @@ export default function ClasesAlumnoSection({ idCliente, disabled }: { idCliente
   };
 
   const crearYMatricular = async () => {
-    if (!nuevaClase.nombre.trim() || sesiones.length === 0) {
-      setErr("Nombre y al menos una sesión son obligatorios");
+    if (sesiones.length === 0) {
+      setErr("Al menos una sesión es obligatoria");
       return;
     }
     setSaving(true);
     setErr(null);
     try {
       const created = await createClaseRecurrente({
-        ...nuevaClase,
+        nombre: "Clase individual",
+        tipo: "INDIVIDUAL",
+        capacidadMax: 1,
         idServicio: nuevaClase.idServicio || null,
         idProfesional: nuevaClase.idProfesional || null,
-        sesiones: sesiones.map(s => ({ ...s, idAula: s.idAula || null })),
+        fechaInicio: nuevaClase.fechaInicio || null,
+        fechaFin: nuevaClase.fechaFin || null,
+        observaciones: nuevaClase.observaciones || null,
+        sesiones: sesiones.map(s => ({ dia: s.dia, hora: s.hora, duracion: s.duracion, idAula: s.idAula || null })),
       });
       await createMatricula({ idClaseRecurrente: created.id, idCliente: Number(idCliente), cuotaMensual: Number(cuota) });
       setAddingNueva(false);
@@ -228,23 +227,6 @@ export default function ClasesAlumnoSection({ idCliente, disabled }: { idCliente
         {addingNueva && (
           <div className="rounded-lg border border-green-200 bg-green-50/40 p-3 space-y-3 mt-2">
             {err && <div className="text-xs text-red-600">{err}</div>}
-            
-            <div className="grid grid-cols-2 gap-2">
-              <input
-                placeholder={t("escola:clasesAlumno.phNombreClase")}
-                value={nuevaClase.nombre}
-                onChange={(e) => setNuevaClase({ ...nuevaClase, nombre: e.target.value })}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
-              />
-              <select
-                value={nuevaClase.tipo}
-                onChange={(e) => setNuevaClase({ ...nuevaClase, tipo: e.target.value as "INDIVIDUAL" | "GRUPAL" })}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
-              >
-                <option value="INDIVIDUAL">{t("escola:clasesAlumno.tipoIndividual")}</option>
-                <option value="GRUPAL">{t("escola:clasesAlumno.tipoGrupal")}</option>
-              </select>
-            </div>
 
             <div className="grid grid-cols-2 gap-2">
               <select
@@ -292,7 +274,7 @@ export default function ClasesAlumnoSection({ idCliente, disabled }: { idCliente
                 <button type="button" onClick={addSesion} className="text-xs px-2 py-1 rounded bg-green-600 text-white">{t("escola:clasesAlumno.agregarSesion")}</button>
               </div>
               {sesiones.map((s, idx) => (
-                <div key={idx} className="grid grid-cols-4 gap-2 items-end">
+                <div key={idx} className="grid grid-cols-5 gap-2 items-end">
                   <select
                     value={s.dia}
                     onChange={(e) => updateSesion(idx, "dia", Number(e.target.value))}
@@ -310,6 +292,12 @@ export default function ClasesAlumnoSection({ idCliente, disabled }: { idCliente
                     type="time"
                     value={s.hora}
                     onChange={(e) => updateSesion(idx, "hora", e.target.value)}
+                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  />
+                  <input
+                    type="time"
+                    value={s.horaFin}
+                    onChange={(e) => updateSesion(idx, "horaFin", e.target.value)}
                     className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
                   />
                   <select
