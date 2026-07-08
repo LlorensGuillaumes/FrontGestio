@@ -612,25 +612,7 @@ export function ClienteModal({ mode, id, onClose, onSaved, onEdit, onView }: Pro
               </section>
             )}
 
-            {/* Subfamilias */}
-            <section className="rounded-xl border border-slate-200 overflow-hidden">
-              <div className="px-4 py-3 bg-slate-50 border-b border-slate-200">
-                <div className="font-medium text-slate-900">{t("fields.familiesSubfamilies")}</div>
-              </div>
-
-              <div className="p-4">
-                <SubfamiliasPicker
-                  disabled={disabled}
-                  familias={familias}
-                  subfamilias={subfamilias}
-                  selected={selectedSubfamilias}
-                  onChangeSelected={setSelectedSubfamilias}
-                  mode={isView ? "view" : "edit"}
-                />
-              </div>
-            </section>
-
-            {/* Telefonos */}
+             {/* Telefonos */}
             <section className="rounded-xl border border-slate-200 overflow-hidden">
               <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between gap-3">
                 <div className="font-medium text-slate-900">{t("common:fields.phones", { ns: "common" })}</div>

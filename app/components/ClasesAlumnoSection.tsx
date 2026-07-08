@@ -89,9 +89,7 @@ export default function ClasesAlumnoSection({ idCliente, disabled }: { idCliente
         <h3 className="text-sm font-semibold text-slate-700">
           {t("escola:clasesAlumno.titulo")} {matriculas.length > 0 && <span className="text-slate-400 font-normal">· {t("escola:clasesAlumno.euroMes", { importe: totalMes.toFixed(2) })}</span>}
         </h3>
-        {!disabled && (
-          <button type="button" onClick={openAdd} className="text-sm text-blue-600 hover:underline font-medium">{t("escola:clasesAlumno.apuntar")}</button>
-        )}
+         <button type="button" onClick={openAdd} className="text-sm text-blue-600 hover:underline font-medium">{t("escola:clasesAlumno.apuntar")}</button>
       </div>
       <div className="p-4 space-y-2">
         {matriculas.length === 0 && <p className="text-sm text-slate-500">{t("escola:clasesAlumno.sinClases")}</p>}
