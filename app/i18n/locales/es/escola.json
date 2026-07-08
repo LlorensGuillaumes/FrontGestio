@@ -188,6 +188,7 @@
     "titulo": "Clases matriculadas",
     "euroMes": "{{importe}} €/mes",
     "apuntar": "+ Apuntar a una clase",
+    "nuevaClase": "+ Nueva clase",
     "sinClases": "No está apuntado a ninguna clase.",
     "tipoGrupal": "Grupal",
     "tipoIndividual": "Individual",
@@ -202,7 +203,18 @@
     "errorCrearFactura": "Error creando la factura de matrícula",
     "errorMatricular": "Error al matricular",
     "confirmBaja": "¿Dar de baja de \"{{clase}}\"?",
-    "errorBaja": "Error al dar de baja"
+    "errorBaja": "Error al dar de baja",
+    "phNombreClase": "Nombre de la clase",
+    "seleccionaInstrumento": "— Selecciona instrumento —",
+    "seleccionaProfesor": "— Selecciona profesor —",
+    "seleccionaAula": "— Selecciona aula —",
+    "agregarSesion": "+ Añadir sesión",
+    "sesiones": "Sesiones",
+    "quitar": "Quitar",
+    "crearYMatricular": "Crear y matricular",
+    "errorCrearClase": "Error al crear la clase",
+    "fechaInicio": "Fecha inicio",
+    "fechaFin": "Fecha fin"
   },
   "descuentos": {
     "escuela": "Escuela",

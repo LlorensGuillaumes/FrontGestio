@@ -4,9 +4,13 @@ import {
   fetchClasesRecurrentes,
   createMatricula,
   deleteMatricula,
+  createClaseRecurrente,
+  fetchOpcionesEscola,
+  fetchAulas,
   DIAS_SEMANA,
   type Matricula,
   type ClaseRecurrente,
+  type Aula,
 } from "~/lib/escolaRest";
 import { generarMatriculaAlumno } from "~/lib/facturacionMensualRest";
 import { useTranslation } from "react-i18next";
@@ -16,11 +20,27 @@ export default function ClasesAlumnoSection({ idCliente, disabled }: { idCliente
   const { t } = useTranslation(["escola", "common"]);
   const [matriculas, setMatriculas] = useState<Matricula[]>([]);
   const [clases, setClases] = useState<ClaseRecurrente[]>([]);
+  const [aulas, setAulas] = useState<Aula[]>([]);
+  const [opciones, setOpciones] = useState<{ instrumentos: { id: number; Nombre: string }[]; profesores: { id: number; NombreCompleto: string; Especialidad: string | null }[] }>({ instrumentos: [], profesores: [] });
   const [adding, setAdding] = useState(false);
+  const [addingNueva, setAddingNueva] = useState(false);
   const [idClase, setIdClase] = useState<number | "">("");
   const [cuota, setCuota] = useState<number>(0);
   const [err, setErr] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+
+  // Campos para crear nueva clase
+  const [nuevaClase, setNuevaClase] = useState({
+    nombre: "",
+    idServicio: "" as number | "",
+    idProfesional: "" as number | "",
+    tipo: "INDIVIDUAL" as "INDIVIDUAL" | "GRUPAL",
+    capacidadMax: 1,
+    fechaInicio: "",
+    fechaFin: "",
+    observaciones: "",
+  });
+  const [sesiones, setSesiones] = useState<Array<{ dia: number; hora: string; duracion: number; idAula: number | "" }>>([]);
 
   const load = async () => {
     try {
@@ -32,7 +52,11 @@ export default function ClasesAlumnoSection({ idCliente, disabled }: { idCliente
   };
 
   useEffect(() => {
-    if (idCliente) load();
+    if (idCliente) {
+      load();
+      fetchAulas().then(setAulas).catch(() => {});
+      fetchOpcionesEscola().then(setOpciones).catch(() => {});
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idCliente]);
 
@@ -43,6 +67,59 @@ export default function ClasesAlumnoSection({ idCliente, disabled }: { idCliente
     setAdding(true);
     if (!clases.length) {
       try { setClases((await fetchClasesRecurrentes({ soloActivas: true })).data); } catch {}
+    }
+  };
+
+  const openAddNueva = () => {
+    setErr(null);
+    setAddingNueva(true);
+    setAdding(false);
+    setNuevaClase({
+      nombre: "",
+      idServicio: "",
+      idProfesional: "",
+      tipo: "INDIVIDUAL",
+      capacidadMax: 1,
+      fechaInicio: "",
+      fechaFin: "",
+      observaciones: "",
+    });
+    setSesiones([]);
+  };
+
+  const addSesion = () => {
+    setSesiones([...sesiones, { dia: 1, hora: "17:00", duracion: 60, idAula: "" }]);
+  };
+
+  const updateSesion = (idx: number, field: string, value: any) => {
+    setSesiones(sesiones.map((s, i) => i === idx ? { ...s, [field]: value } : s));
+  };
+
+  const removeSesion = (idx: number) => {
+    setSesiones(sesiones.filter((_, i) => i !== idx));
+  };
+
+  const crearYMatricular = async () => {
+    if (!nuevaClase.nombre.trim() || sesiones.length === 0) {
+      setErr("Nombre y al menos una sesión son obligatorios");
+      return;
+    }
+    setSaving(true);
+    setErr(null);
+    try {
+      const created = await createClaseRecurrente({
+        ...nuevaClase,
+        idServicio: nuevaClase.idServicio || null,
+        idProfesional: nuevaClase.idProfesional || null,
+        sesiones: sesiones.map(s => ({ ...s, idAula: s.idAula || null })),
+      });
+      await createMatricula({ idClaseRecurrente: created.id, idCliente: Number(idCliente), cuotaMensual: Number(cuota) });
+      setAddingNueva(false);
+      load();
+    } catch (e: any) {
+      setErr(e?.response?.data?.error ?? t("escola:clasesAlumno.errorCrearClase"));
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -89,7 +166,10 @@ export default function ClasesAlumnoSection({ idCliente, disabled }: { idCliente
         <h3 className="text-sm font-semibold text-slate-700">
           {t("escola:clasesAlumno.titulo")} {matriculas.length > 0 && <span className="text-slate-400 font-normal">· {t("escola:clasesAlumno.euroMes", { importe: totalMes.toFixed(2) })}</span>}
         </h3>
-         <button type="button" onClick={openAdd} className="text-sm text-blue-600 hover:underline font-medium">{t("escola:clasesAlumno.apuntar")}</button>
+        <div className="flex gap-2">
+          <button type="button" onClick={openAdd} className="text-sm text-blue-600 hover:underline font-medium">{t("escola:clasesAlumno.apuntar")}</button>
+          <button type="button" onClick={openAddNueva} className="text-sm text-green-600 hover:underline font-medium">{t("escola:clasesAlumno.nuevaClase")}</button>
+        </div>
       </div>
       <div className="p-4 space-y-2">
         {matriculas.length === 0 && <p className="text-sm text-slate-500">{t("escola:clasesAlumno.sinClases")}</p>}
@@ -141,6 +221,115 @@ export default function ClasesAlumnoSection({ idCliente, disabled }: { idCliente
               </div>
               <button type="button" onClick={matricular} disabled={saving} className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 text-sm font-medium disabled:opacity-50">{saving ? "..." : t("escola:clasesAlumno.matricular")}</button>
               <button type="button" onClick={() => setAdding(false)} className="px-3 py-2 rounded-lg border border-slate-200 text-sm">{t("escola:clasesAlumno.cancelar")}</button>
+            </div>
+          </div>
+        )}
+
+        {addingNueva && (
+          <div className="rounded-lg border border-green-200 bg-green-50/40 p-3 space-y-3 mt-2">
+            {err && <div className="text-xs text-red-600">{err}</div>}
+            
+            <div className="grid grid-cols-2 gap-2">
+              <input
+                placeholder={t("escola:clasesAlumno.phNombreClase")}
+                value={nuevaClase.nombre}
+                onChange={(e) => setNuevaClase({ ...nuevaClase, nombre: e.target.value })}
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              />
+              <select
+                value={nuevaClase.tipo}
+                onChange={(e) => setNuevaClase({ ...nuevaClase, tipo: e.target.value as "INDIVIDUAL" | "GRUPAL" })}
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              >
+                <option value="INDIVIDUAL">{t("escola:clasesAlumno.tipoIndividual")}</option>
+                <option value="GRUPAL">{t("escola:clasesAlumno.tipoGrupal")}</option>
+              </select>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <select
+                value={nuevaClase.idServicio}
+                onChange={(e) => setNuevaClase({ ...nuevaClase, idServicio: e.target.value ? Number(e.target.value) : "" })}
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              >
+                <option value="">{t("escola:clasesAlumno.seleccionaInstrumento")}</option>
+                {opciones.instrumentos.map((i) => (
+                  <option key={i.id} value={i.id}>{i.Nombre}</option>
+                ))}
+              </select>
+              <select
+                value={nuevaClase.idProfesional}
+                onChange={(e) => setNuevaClase({ ...nuevaClase, idProfesional: e.target.value ? Number(e.target.value) : "" })}
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              >
+                <option value="">{t("escola:clasesAlumno.seleccionaProfesor")}</option>
+                {opciones.profesores.map((p) => (
+                  <option key={p.id} value={p.id}>{p.NombreCompleto}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <input
+                type="date"
+                value={nuevaClase.fechaInicio}
+                onChange={(e) => setNuevaClase({ ...nuevaClase, fechaInicio: e.target.value })}
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                placeholder={t("escola:clasesAlumno.fechaInicio")}
+              />
+              <input
+                type="date"
+                value={nuevaClase.fechaFin}
+                onChange={(e) => setNuevaClase({ ...nuevaClase, fechaFin: e.target.value })}
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                placeholder={t("escola:clasesAlumno.fechaFin")}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium text-slate-700">{t("escola:clasesAlumno.sesiones")}</span>
+                <button type="button" onClick={addSesion} className="text-xs px-2 py-1 rounded bg-green-600 text-white">{t("escola:clasesAlumno.agregarSesion")}</button>
+              </div>
+              {sesiones.map((s, idx) => (
+                <div key={idx} className="grid grid-cols-4 gap-2 items-end">
+                  <select
+                    value={s.dia}
+                    onChange={(e) => updateSesion(idx, "dia", Number(e.target.value))}
+                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  >
+                    <option value={1}>Lunes</option>
+                    <option value={2}>Martes</option>
+                    <option value={3}>Miércoles</option>
+                    <option value={4}>Jueves</option>
+                    <option value={5}>Viernes</option>
+                    <option value={6}>Sábado</option>
+                    <option value={7}>Domingo</option>
+                  </select>
+                  <input
+                    type="time"
+                    value={s.hora}
+                    onChange={(e) => updateSesion(idx, "hora", e.target.value)}
+                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  />
+                  <select
+                    value={s.idAula}
+                    onChange={(e) => updateSesion(idx, "idAula", e.target.value ? Number(e.target.value) : "")}
+                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  >
+                    <option value="">{t("escola:clasesAlumno.seleccionaAula")}</option>
+                    {aulas.map((a) => (
+                      <option key={a.id} value={a.id}>{a.Nombre}</option>
+                    ))}
+                  </select>
+                  <button type="button" onClick={() => removeSesion(idx)} className="text-xs px-2 py-1 rounded border border-red-200 text-red-600">{t("escola:clasesAlumno.quitar")}</button>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-end gap-2">
+              <button type="button" onClick={() => setAddingNueva(false)} className="px-3 py-2 rounded-lg border border-slate-200 text-sm">{t("escola:clasesAlumno.cancelar")}</button>
+              <button type="button" onClick={crearYMatricular} disabled={saving} className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 text-sm font-medium disabled:opacity-50">{saving ? "..." : t("escola:clasesAlumno.crearYMatricular")}</button>
             </div>
           </div>
         )}
