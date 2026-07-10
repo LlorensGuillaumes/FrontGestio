@@ -81,6 +81,12 @@ export type Matricula = {
   Activo: number;
 };
 
+export type Asignatura = {
+  id: number;
+  Nombre: string;
+  Descripcion: string | null;
+};
+
 export type OpcionesEscola = {
   instrumentos: { id: number; Nombre: string }[];
   profesores: { id: number; NombreCompleto: string; Especialidad: string | null }[];
@@ -141,6 +147,26 @@ export async function regenerarCitasClases() {
 
 export async function sincronizarAutonomos() {
   const { data } = await api.post<{ creados: number; actualizados: number; total: number }>("/proveedores/sincronizar-autonomos", {});
+  return data;
+}
+
+// =========================================================
+// Asignaturas (Servicios de tipo asignatura)
+// =========================================================
+export async function fetchAsignaturas() {
+  const { data } = await api.get<{ data: Asignatura[] }>("/asignaturas");
+  return data.data;
+}
+export async function createAsignatura(input: { nombre: string; descripcion?: string | null }) {
+  const { data } = await api.post<{ id: number }>("/asignaturas", input);
+  return data;
+}
+export async function updateAsignatura(id: number, input: { nombre?: string; descripcion?: string | null }) {
+  const { data } = await api.put(`/asignaturas/${id}`, input);
+  return data;
+}
+export async function deleteAsignatura(id: number) {
+  const { data } = await api.delete(`/asignaturas/${id}`);
   return data;
 }
 

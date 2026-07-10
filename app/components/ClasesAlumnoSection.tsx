@@ -234,7 +234,7 @@ export default function ClasesAlumnoSection({ idCliente, disabled }: { idCliente
                 onChange={(e) => setNuevaClase({ ...nuevaClase, idServicio: e.target.value ? Number(e.target.value) : "" })}
                 className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
               >
-                <option value="">{t("escola:clasesAlumno.seleccionaInstrumento")}</option>
+                <option value="">{t("escola:clasesAlumno.seleccionaAsignatura")}</option>
                 {opciones.instrumentos.map((i) => (
                   <option key={i.id} value={i.id}>{i.Nombre}</option>
                 ))}

@@ -41,5 +41,7 @@
   "chat": "Chat",
   "departments": "Departamentos",
   "students": "Alumnos",
-  "teachers": "Profesores"
+  "teachers": "Profesores",
+  "subjects": "Asignaturas",
+  "groupClasses": "Clases grupales"
 }

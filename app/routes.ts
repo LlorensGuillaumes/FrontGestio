@@ -144,11 +144,11 @@ export default [
     ]),
 
     // ===============================
-    // ESCUELA (Clases recurrentes y Matrículas)
+    // ESCUELA (Clases grupales y Matrículas)
     // ===============================
-    route("escuela/clases-recurrentes", "routes/escuela/clases-recurrentes/layout.tsx", [
-      index("routes/escuela/clases-recurrentes/listado.tsx"),
-    ]),
+     route("escuela/clases-grupales", "routes/escuela/clases-grupales/layout.tsx", [
+       index("routes/escuela/clases-grupales/listadoSimple.tsx"),
+     ]),
     route("escuela/matriculas", "routes/escuela/matriculas/layout.tsx", [
       index("routes/escuela/matriculas/listado.tsx"),
     ]),
@@ -160,6 +160,9 @@ export default [
     ]),
     route("escuela/aulas", "routes/escuela/aulas/layout.tsx", [
       index("routes/escuela/aulas/listado.tsx"),
+    ]),
+    route("escuela/asignaturas", "routes/escuela/asignaturas/layout.tsx", [
+      index("routes/escuela/asignaturas/listado.tsx"),
     ]),
 
     // ===============================

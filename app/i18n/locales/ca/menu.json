@@ -41,5 +41,7 @@
   "chat": "Xat",
   "departments": "Departaments",
   "students": "Alumnes",
-  "teachers": "Professors"
+  "teachers": "Professors",
+  "subjects": "Assignatures",
+  "groupClasses": "Classes grupal"
 }
