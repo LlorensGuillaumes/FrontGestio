@@ -52,9 +52,12 @@ export type MatriculaAlumno = {
   nombre: string;
   apellido1: string | null;
   apellido2: string | null;
+  ImportePreMatricula?: number | null;
+  ImporteMatricula?: number | null;
   CuotaMensual: number;
   Estado: string;
   FechaAlta: string;
+  FechaBaja: string | null;
   Activo: number;
 };
 
@@ -64,19 +67,24 @@ export type ClaseRecurrenteDetalle = ClaseRecurrente & {
 
 export type Matricula = {
   id: number;
-  IdClaseRecurrente: number;
+  IdClaseRecurrente: number | null;
+  IdClaseGrupal: number | null;
   NombreClase: string;
   Tipo: string;
   DiaSemana?: number;
   HoraInicio?: string;
   NombreProfesor: string | null;
+  NombreInstrumento: string | null;
   IdCliente: number;
   nombre: string;
   apellido1: string | null;
   apellido2: string | null;
+  ImportePreMatricula?: number | null;
+  ImporteMatricula?: number | null;
   CuotaMensual: number;
   Estado: string;
   FechaAlta: string;
+  FechaFin: string | null;
   FechaBaja: string | null;
   Activo: number;
 };
@@ -206,11 +214,13 @@ export async function deleteClaseRecurrente(id: number) {
 // =========================================================
 // Matrículas
 // =========================================================
-export async function fetchMatriculas(params?: { idClase?: number; idCliente?: number; soloActivas?: boolean }) {
+export async function fetchMatriculas(params?: { idClase?: number; idCliente?: number; idServicio?: number; idProfesional?: number; soloActivas?: boolean }) {
   const { data } = await api.get<{ data: Matricula[]; totalCount: number }>("/matriculas", {
     params: {
       idClase: params?.idClase,
       idCliente: params?.idCliente,
+      idServicio: params?.idServicio,
+      idProfesional: params?.idProfesional,
       soloActivas: params?.soloActivas !== false ? 1 : 0,
     },
   });
